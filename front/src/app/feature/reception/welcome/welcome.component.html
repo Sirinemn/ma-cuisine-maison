@@ -1,0 +1,16 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> Landing Page</title>
+  </head>
+  <body>
+    <div class="welcome"  *ngIf="user">
+        <h1>Bienvenue {{user.pseudo}}</h1>
+        <button mat-raised-button class="btn" (click)="logOut()">
+          <mat-icon>logout</mat-icon>
+          <span >Se déconnecter</span>
+        </button>
+    </div>
+  </body>
+</html>
