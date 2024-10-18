@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>fr.sirine</groupId>
-	<artifactId>starter</artifactId>
+	<artifactId>ma-cuisine-maison</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>starter-api</name>
 	<description>mon projet personnel Spring Boot </description>
@@ -180,7 +180,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>fr.sirine.starter.MonStarter</mainClass>
+					<mainClass>fr.sirine.MaCuisineMaison</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

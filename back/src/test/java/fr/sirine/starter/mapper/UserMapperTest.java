@@ -1,6 +1,6 @@
 package fr.sirine.starter.mapper;
 
-import fr.sirine.starter.MonStarter;
+import fr.sirine.MaCuisineMaison;
 import fr.sirine.starter.dto.UserDto;
 import fr.sirine.starter.user.User;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = MonStarter.class)
+@SpringBootTest(classes = MaCuisineMaison.class)
 class UserMapperTest {
 
     @Autowired

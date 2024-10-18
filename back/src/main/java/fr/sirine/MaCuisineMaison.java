@@ -1,4 +1,4 @@
-package fr.sirine.starter;
+package fr.sirine;
 
 import fr.sirine.starter.role.RoleRepository;
 import fr.sirine.starter.role.Role;
@@ -12,11 +12,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableAsync
-public class MonStarter {
+public class MaCuisineMaison {
 
 	public static void main(String[] args) {
 
-		SpringApplication.run(MonStarter.class, args);
+		SpringApplication.run(MaCuisineMaison.class, args);
 	}
 	@Bean
 	public CommandLineRunner runner(RoleRepository roleRepository) {

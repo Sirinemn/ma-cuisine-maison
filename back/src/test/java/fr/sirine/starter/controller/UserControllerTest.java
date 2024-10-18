@@ -1,6 +1,6 @@
 package fr.sirine.starter.controller;
 
-import fr.sirine.starter.MonStarter;
+import fr.sirine.MaCuisineMaison;
 import fr.sirine.starter.dto.UserDto;
 import fr.sirine.starter.mapper.UserMapper;
 import fr.sirine.starter.user.User;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest(classes = MonStarter.class)
+@SpringBootTest(classes = MaCuisineMaison.class)
 @AutoConfigureMockMvc
 class UserControllerTest {
 
