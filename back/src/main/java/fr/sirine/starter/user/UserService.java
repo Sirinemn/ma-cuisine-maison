@@ -37,10 +37,9 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void updateUser(Integer id, UserDto userDto){
+    public void updateUser(Integer id, User user){
         User initialUser = userRepository.findById(id).orElse(null);
         if (initialUser!= null) {
-            User user = userMapper.toEntity(userDto);
             initialUser.setPseudo(user.getPseudo());
             initialUser.setEmail(user.getEmail());
             initialUser.setFirstname(user.getFirstname());

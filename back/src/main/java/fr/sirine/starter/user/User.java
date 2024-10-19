@@ -3,6 +3,8 @@ package fr.sirine.starter.user;
 import fr.sirine.starter.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -47,6 +49,9 @@ public class User implements UserDetails, Principal {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.SET_NULL) // ou CASCADE = { CascadeType.PERSIST, CascadeType.MERGE }
+    private List<Token> tokens;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
