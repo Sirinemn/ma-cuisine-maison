@@ -7,6 +7,8 @@ import { RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { NgIf, AsyncPipe } from '@angular/common';
+import { HeaderComponent } from "./components/header/header.component";
+import { FooterComponent } from "./components/footer/footer.component";
 
 @Component({
     selector: 'app-root',
@@ -14,17 +16,19 @@ import { NgIf, AsyncPipe } from '@angular/common';
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [
-        NgIf,
-        MatIconModule,
-        MatSidenavModule,
-        RouterLinkActive,
-        RouterLink,
-        RouterOutlet,
-        AsyncPipe,
-    ],
+    NgIf,
+    MatIconModule,
+    MatSidenavModule,
+    RouterLinkActive,
+    RouterLink,
+    RouterOutlet,
+    AsyncPipe,
+    HeaderComponent,
+    FooterComponent
+],
 })
 export class AppComponent {
-  title = 'Mon starter';
+  title = 'Ma Cuisine Maison';
   public user!:User;
 
   constructor(

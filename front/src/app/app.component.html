@@ -1,2 +1,9 @@
+<div *ngIf="$isLogged() | async">
+    <app-header></app-header>
+</div>
 
 <router-outlet></router-outlet>
+
+<div *ngIf="$isLogged() | async">
+    <app-footer></app-footer>
+</div>

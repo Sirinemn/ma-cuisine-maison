@@ -1,0 +1,31 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+  
+  .category-select {
+    margin-left: 10px;
+    margin-bottom: 0;
+    vertical-align: middle;
+    min-width: 100px; /* Réduire la largeur minimale */
+    max-width: 150px; /* Limiter la largeur maximale */
+  }
+  
+  a[mat-icon-button] {
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  
+  a[mat-button] {
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  
+  button[mat-icon-button] {
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+
+  
+  
+  
+  
