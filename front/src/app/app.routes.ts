@@ -8,7 +8,9 @@ export const routes: Routes = [
   { 
     path: '',
      component: HomeComponent ,
-    
+     canActivate: [UnauthGuard], 
+     loadChildren : ()=> 
+      import('./feature/auth/auth.routes').then((r) => r.auth_routes) 
   },
   {
     path: 'auth',

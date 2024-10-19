@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../interface/user';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from '../feature/auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +12,25 @@ export class SessionService {
   public user: User | undefined;
 
   private isLoggedSubject = new BehaviorSubject<boolean>(this.isLogged);
+  constructor(private authService: AuthService) {
+    const token = localStorage.getItem('token');
 
+    if (token) {
+      this.isLogged = true;
+      this.authService.me().subscribe(
+        (user: User) => {
+          this.user = user;
+          this.next();
+        },
+        () => {
+          this.logOut();
+        }
+      );
+    }
+  }
   public $isLogged(): Observable<boolean> {
     return this.isLoggedSubject.asObservable();
+    
   }
 
   public logIn(user: User): void {
@@ -24,7 +41,6 @@ export class SessionService {
 
   public logOut(): void {
     localStorage.removeItem('token');
-    localStorage.removeItem('userID');
     this.user = undefined;
     this.isLogged = false;
     this.next();

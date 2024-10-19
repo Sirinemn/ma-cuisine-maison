@@ -59,7 +59,6 @@ export class LoginComponent implements OnDestroy {
           });
       },
       (error) => {
-        console.log(error);
         this.errorMessage = error.error.error;
       }
     );
