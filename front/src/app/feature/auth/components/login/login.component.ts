@@ -1,12 +1,12 @@
 import { Component, OnDestroy } from '@angular/core';
 import { LoginRequest } from '../../interfaces/login-request';
 import { Subscription } from 'rxjs';
-import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { SessionService } from 'src/app/service/session.service';
+import { SessionService } from '../../../../service/session.service';
 import { Router } from '@angular/router';
-import { SessionInformation } from 'src/app/interface/session-information';
-import { User } from 'src/app/interface/user';
+import { SessionInformation } from '../../../../interface/session-information';
+import { User } from '../../../../interface/user';
 import { NgIf } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,21 +34,20 @@ export class LoginComponent implements OnDestroy {
   public hide = true;
   public httpSubscription!: Subscription;
   public errorMessage: string = '';
-  
-  
-
-  public form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.min(3)]],
-  });
+  public form: FormGroup;
 
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
     private sessionService: SessionService,
-  ) {    console.log(this.sessionService.isLogged);
+  ) {  
+      this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.min(3)]],
+    });
   }
+
 
   public submit(): void {
     const loginRequest = this.form.value as LoginRequest;
@@ -57,6 +56,7 @@ export class LoginComponent implements OnDestroy {
         localStorage.setItem('token', response.token);
         this.authService.me()
           .subscribe((user: User) => {
+            console.log('User from me:', user); // Vérification de l'utilisateur retourné
             this.sessionService.logIn(user);
             this.router.navigate(['reception/welcome']);
           });

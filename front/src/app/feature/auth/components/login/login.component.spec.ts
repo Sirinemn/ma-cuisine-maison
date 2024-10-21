@@ -6,9 +6,9 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginRequest } from '../../interfaces/login-request';
 import { AuthService } from '../../services/auth.service';
-import { SessionInformation } from 'src/app/interface/session-information';
 import { of, throwError } from 'rxjs';
-import { SessionService } from 'src/app/service/session.service';
+import { SessionInformation } from '../../../../interface/session-information';
+import { SessionService}from '../../../../service/session.service'
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -23,6 +23,7 @@ describe('LoginComponent', () => {
     token: 'fake-token',
     userId: 1,
     pseudo: 'pseudo',
+    roles:[]
 
   };
   beforeEach(() => {

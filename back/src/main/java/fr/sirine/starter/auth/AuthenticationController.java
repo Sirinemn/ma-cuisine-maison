@@ -1,6 +1,7 @@
 package fr.sirine.starter.auth;
 
 
+import fr.sirine.starter.mapper.UserMapper;
 import fr.sirine.starter.user.User;
 import fr.sirine.starter.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,6 +25,7 @@ public class AuthenticationController {
 
     public final AuthenticationService authenticationService;
     public final UserService userService;
+    private final UserMapper userMapper;
     @Operation(summary = "Inscrire un utilisateur")
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -48,7 +50,7 @@ public class AuthenticationController {
     }
     @Operation(summary = "Récupérer l'utilisateur connecté à l'application")
     @GetMapping("/me")
-    public ResponseEntity<?> currentUserName(Authentication authentication)  {
+    public ResponseEntity<?> currentUserName(Authentication authentication) throws IOException {
         // Vérifier que l'utilisateur est authentifié
         if (authentication == null || !authentication.isAuthenticated()) {
             // Retourner 401 Unauthorized si l'utilisateur n'est pas authentifié
@@ -65,6 +67,6 @@ public class AuthenticationController {
         }
 
         // Renvoyer l'utilisateur trouvé
-        return ResponseEntity.ok(optionalUser);
+        return ResponseEntity.ok(userMapper.toDto(optionalUser));
     }
 }

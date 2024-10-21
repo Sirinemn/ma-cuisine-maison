@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WelcomeComponent } from './welcome.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { SessionService } from 'src/app/service/session.service';
+import { SessionService } from '../../../service/session.service';
 import { Router } from '@angular/router';
 
 describe('WelcomeComponent', () => {

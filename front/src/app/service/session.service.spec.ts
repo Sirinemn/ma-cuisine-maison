@@ -2,17 +2,25 @@ import { TestBed } from '@angular/core/testing';
 
 import { SessionService } from './session.service';
 import { User } from '../interface/user';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('SessionService', () => {
   let service: SessionService;
   let mockUser: User ={
     id: 1,
     pseudo: "pseudo",
-    email: "test@mail.fr"
+    email: "test@mail.fr",
+    roles: []
   }
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(), // Nouvelle API pour les clients HTTP
+        provideHttpClientTesting(), // Nouvelle API pour les tests HTTP
+      ]
+    });
     service = TestBed.inject(SessionService);
   });
 

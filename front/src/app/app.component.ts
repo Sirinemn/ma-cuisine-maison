@@ -30,6 +30,7 @@ import { FooterComponent } from "./components/footer/footer.component";
 export class AppComponent {
   title = 'Ma Cuisine Maison';
   public user!:User;
+  public userRole!:string[];
 
   constructor(
     private authService: AuthService,
@@ -48,7 +49,8 @@ export class AppComponent {
     this.authService.me().subscribe({
     next:  (user: User) => {
         this.sessionService.logIn(user);
-        this.user=user;
+        this.user = user;
+        this.userRole = user.roles;
       },
      error: (err) => {
       if (err.status === 401) {

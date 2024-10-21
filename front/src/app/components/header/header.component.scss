@@ -1,31 +1,36 @@
 .spacer {
-    flex: 1 1 auto;
-  }
-  
-  .category-select {
-    margin-left: 10px;
-    margin-bottom: 0;
-    vertical-align: middle;
-    min-width: 100px; /* Réduire la largeur minimale */
-    max-width: 150px; /* Limiter la largeur maximale */
-  }
-  
-  a[mat-icon-button] {
-    margin-left: 10px;
-    vertical-align: middle;
-  }
-  
-  a[mat-button] {
-    margin-left: 10px;
-    vertical-align: middle;
-  }
-  
-  button[mat-icon-button] {
-    margin-left: 10px;
-    vertical-align: middle;
-  }
+  flex: 1 1 auto;
+}
 
-  
-  
-  
-  
+.category-select {
+  margin-left: 10px;
+  margin-bottom: 0;
+  vertical-align: middle;
+  min-width: 100px;
+  max-width: 150px;
+}
+
+a[mat-icon-button], a[mat-button], button[mat-icon-button] {
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+mat-toolbar-row {
+  display: flex;
+  align-items: center; /* S'assurer que tout est aligné verticalement */
+}
+
+mat-toolbar {
+  justify-content: space-between; /* Séparer le contenu à gauche et à droite */
+  background-color: #3f51b5; /* Appliquer la couleur bleue */
+  color: white; /* Assurer que le texte soit en blanc */
+}
+
+a[mat-button] {
+  color: white; /* Assurer que le texte des boutons soit en blanc */
+}
+
+mat-select {
+  background-color: white; /* S'assurer que la liste déroulante soit visible */
+  color: black; /* S'assurer que le texte de la liste déroulante soit lisible */
+}

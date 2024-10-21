@@ -2,6 +2,7 @@ package fr.sirine.starter.auth;
 
 import fr.sirine.starter.email.EmailService;
 import fr.sirine.starter.email.EmailTemplateName;
+import fr.sirine.starter.role.Role;
 import fr.sirine.starter.role.RoleRepository;
 import fr.sirine.starter.security.JwtService;
 import fr.sirine.starter.user.TokenRepository;
@@ -22,6 +23,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -76,6 +78,7 @@ public class AuthenticationService {
                 .userId(user.getId())
                 .pseudo(user.getPseudo())
                 .token(jwtToken)
+                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                 .build();
     }
 

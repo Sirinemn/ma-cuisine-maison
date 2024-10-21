@@ -1,31 +1,44 @@
 .center {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center; /* Centrer le texte */
+  padding: 20px;
+}
+
+.img {
+  height: 150px; /* Taille de l'image ajustée */
+  width: 150px;
+  margin-bottom: 20px; /* Espacement en bas de l'image */
+}
+
+.boutons {
+  display: flex;
+  gap: 20px; /* Espacement entre les boutons */
+}
+
+.btn1, .btn2 {
+  border-radius: 5px;
+  border: 2px solid #000; /* Ajout d'une bordure */
+  padding: 10px 20px; /* Ajout de padding pour les boutons */
+  font-size: 16px; /* Taille de police ajustée */
+}
+
+@media (max-width: 550px) {
   .img {
-    height: 80vh;
-    width: 80vh;
+    width: 100px; /* Taille de l'image ajustée pour mobile */
+    height: 100px;
   }
-  .boutons{
-    display: flex;
-    flex-direction: row;
-    gap: 100px;
+
+  .boutons {
+    flex-direction: column;
+    gap: 10px; /* Espacement réduit entre les boutons */
   }
-  .btn1, .btn2{
-    border-radius: 10px;
-    border-color: black;
+
+  .btn1, .btn2 {
+    width: 100%; /* Les boutons prennent toute la largeur */
+    padding: 15px 0; /* Padding vertical ajusté */
   }
-  @media(max-width: 550px) {
-    img{
-     width: 200px;
-  
-    }
-    .boutons{
-      display: flex;
-      flex-direction: column;
-      gap: 50px;
-    }
-   }
+}

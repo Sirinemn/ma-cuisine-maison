@@ -13,7 +13,6 @@ import { MatButtonModule } from '@angular/material/button';
 export class HomeComponent {
 
   constructor(private router: Router){}
-
   
   connect() {
     this.router.navigate(['auth/login']);

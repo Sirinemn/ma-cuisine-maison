@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { User } from 'src/app/interface/user';
-import { SessionService } from 'src/app/service/session.service';
+import { User } from '../../../interface/user';
 import { NgIf } from '@angular/common';
+import { SessionService } from '../../../service/session.service';
 
 @Component({
   selector: 'app-welcome',
@@ -22,7 +22,6 @@ export class WelcomeComponent implements OnInit{
 
   ngOnInit() {
     this.user = this.sessionService.user!;
-    console.log(this.sessionService.isLogged);
   }
 
   logOut() {

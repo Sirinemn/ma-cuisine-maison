@@ -10,17 +10,30 @@ export class SessionService {
 
   public isLogged = false;
   public user: User | undefined;
+  public userRole!:string[];
 
   private isLoggedSubject = new BehaviorSubject<boolean>(this.isLogged);
 
-  constructor() {
+  constructor( private authService: AuthService) {
     const token = localStorage.getItem('token');
-
     if (token) {
       this.isLogged = true;
-      this.next();
+      this.retrieveUser();
     }
   }
+  
+  public retrieveUser(): void {
+    this.authService.me().subscribe(
+      (user: User) => {
+        this.user = user;
+        this.userRole = user.roles;
+        this.next();
+      },
+      (error) => {
+        console.error("Error retrieving user data", error);
+      }
+    );
+  }  
   
   public $isLogged(): Observable<boolean> {
     return this.isLoggedSubject.asObservable();
@@ -30,6 +43,7 @@ export class SessionService {
   public logIn(user: User): void {
     this.user = user;
     this.isLogged = true;
+    this.userRole = user.roles;
     this.next();
   }
 
