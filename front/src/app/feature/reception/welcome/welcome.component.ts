@@ -22,6 +22,7 @@ export class WelcomeComponent implements OnInit{
 
   ngOnInit() {
     this.user = this.sessionService.user!;
+    console.log(this.sessionService.isLogged);
   }
 
   logOut() {

@@ -12,22 +12,16 @@ export class SessionService {
   public user: User | undefined;
 
   private isLoggedSubject = new BehaviorSubject<boolean>(this.isLogged);
-  constructor(private authService: AuthService) {
+
+  constructor() {
     const token = localStorage.getItem('token');
 
     if (token) {
       this.isLogged = true;
-      this.authService.me().subscribe(
-        (user: User) => {
-          this.user = user;
-          this.next();
-        },
-        () => {
-          this.logOut();
-        }
-      );
+      this.next();
     }
   }
+  
   public $isLogged(): Observable<boolean> {
     return this.isLoggedSubject.asObservable();
     

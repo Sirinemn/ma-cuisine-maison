@@ -6,6 +6,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 describe('AppComponent', () => {
   beforeEach(() => TestBed.configureTestingModule({
+    
     imports: [RouterModule, AppComponent],
     providers: [
       provideHttpClient(), // Nouvelle API pour les clients HTTP
@@ -22,7 +23,7 @@ describe('AppComponent', () => {
   it(`should have as title 'front'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).equal('Ma Cuisine Maison');
+    expect(app.title).toEqual('Ma Cuisine Maison');
   });
 
 });

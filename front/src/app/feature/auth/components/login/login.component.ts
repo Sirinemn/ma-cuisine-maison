@@ -34,6 +34,8 @@ export class LoginComponent implements OnDestroy {
   public hide = true;
   public httpSubscription!: Subscription;
   public errorMessage: string = '';
+  
+  
 
   public form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -45,7 +47,8 @@ export class LoginComponent implements OnDestroy {
     private fb: FormBuilder,
     private router: Router,
     private sessionService: SessionService,
-  ) {}
+  ) {    console.log(this.sessionService.isLogged);
+  }
 
   public submit(): void {
     const loginRequest = this.form.value as LoginRequest;
