@@ -23,6 +23,12 @@ export const routes: Routes = [
       import('./feature/auth/auth.routes').then((r) => r.auth_routes) 
   },
   {
+    path: 'admin',
+    canActivate: [AuthGuard], 
+    loadChildren : ()=> 
+      import('./feature/admin/admin.routes').then((r) => r.admin_routes) 
+  },
+  {
     path: 'reception',
     canActivate: [AuthGuard], 
     loadChildren : ()=> 

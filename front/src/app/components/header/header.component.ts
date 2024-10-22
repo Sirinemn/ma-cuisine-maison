@@ -48,4 +48,7 @@ export class HeaderComponent implements OnInit {
   navigateToMe() {
     this.router.navigate(['/me']);
   }
+  navigateToUserList() {
+    this.router.navigate(['admin/users-list']);
+  }
 }
