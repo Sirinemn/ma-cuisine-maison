@@ -51,22 +51,17 @@ public class AuthenticationController {
     @Operation(summary = "Récupérer l'utilisateur connecté à l'application")
     @GetMapping("/me")
     public ResponseEntity<?> currentUserName(Authentication authentication) throws IOException {
-        // Vérifier que l'utilisateur est authentifié
         if (authentication == null || !authentication.isAuthenticated()) {
-            // Retourner 401 Unauthorized si l'utilisateur n'est pas authentifié
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Utilisateur non authentifié.");
         }
-
-        // Récupérer le nom de l'utilisateur à partir de l'authentification
         String email = authentication.getName();
         User optionalUser = userService.findByEmail(email);
-
-        // Si l'utilisateur n'est pas trouvé dans la base de données, retourner une erreur 404
-        if (optionalUser== null) {
+        if (optionalUser == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Utilisateur non trouvé.");
         }
-
-        // Renvoyer l'utilisateur trouvé
+        if (optionalUser.getFirstname() == null || optionalUser.getLastname() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Prénom et nom de famille sont requis.");
+        }
         return ResponseEntity.ok(userMapper.toDto(optionalUser));
     }
 }

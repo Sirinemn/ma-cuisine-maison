@@ -11,7 +11,10 @@ describe('SessionService', () => {
     id: 1,
     pseudo: "pseudo",
     email: "test@mail.fr",
-    roles: []
+    roles: [],
+    firstname: "first",
+    lastname: "last",
+    dateOfBirth: ""
   }
 
   beforeEach(() => {

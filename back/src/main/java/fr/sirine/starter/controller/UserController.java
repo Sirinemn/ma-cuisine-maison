@@ -33,7 +33,8 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody User user) {
+    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
         userService.updateUser(id, user);
         return new ResponseEntity<>( HttpStatus.OK);
     }

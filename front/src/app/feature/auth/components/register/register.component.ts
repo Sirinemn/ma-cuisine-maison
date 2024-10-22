@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RegisterRequest } from '../../interfaces/register-request';
 import { DatePipe, formatDate, NgIf } from '@angular/common';
@@ -25,21 +25,22 @@ export class RegisterComponent implements OnDestroy{
   
   public errorMessage: string = "";
   public httpSubscription!: Subscription;
+  public form: FormGroup;
 
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router
-  ) {}
-
-  public form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],  
-    lastname: [  '', [Validators.required, Validators.min(4), Validators.max(20)], ],
-    firstname: [  '', [Validators.required, Validators.min(4), Validators.max(20)], ],
-    pseudo: [  '', [Validators.required, Validators.min(4), Validators.max(20)], ],
-    dateOfBirth:  ['',[Validators.required],],
-    password: [ '', [Validators.required, Validators.min(4), Validators.max(40)],],
-  });
+  ) {
+     this.form = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],  
+      lastname: [  '', [Validators.required, Validators.min(4), Validators.max(20)], ],
+      firstname: [  '', [Validators.required, Validators.min(4), Validators.max(20)], ],
+      pseudo: [  '', [Validators.required, Validators.min(4), Validators.max(20)], ],
+      dateOfBirth:  ['',[Validators.required],],
+      password: [ '', [Validators.required, Validators.min(4), Validators.max(40)],],
+    });
+  }
 
   public submit(): void {
 

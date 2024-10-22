@@ -19,6 +19,8 @@ public interface UserMapper extends EntityMapper<UserDto, User> {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(target = "roles", source = "roles", qualifiedByName = "rolesToNames")
+    @Mapping(target = "firstname", defaultValue = "")
+    @Mapping(target = "lastname", defaultValue = "")
     UserDto toDto(User entity) throws IOException;
 
     @Mapping(target = "roles", ignore = true)

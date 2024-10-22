@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,7 +32,9 @@ export class HeaderComponent implements OnInit {
   public userRole: string[] = [];
   public isAdmin: boolean = false;
 
-  constructor(private sessionService: SessionService) { }
+  constructor(private sessionService: SessionService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     if (!this.sessionService.user) {
@@ -42,6 +45,8 @@ export class HeaderComponent implements OnInit {
       this.userRole = this.user.roles || [];
       this.isAdmin = this.userRole.includes('ADMIN');
     }
-
+  }
+  navigateToMe() {
+    this.router.navigate(['/me']);
   }
 }

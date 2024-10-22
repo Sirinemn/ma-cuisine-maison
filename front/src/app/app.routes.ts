@@ -3,14 +3,18 @@ import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { UnauthGuard } from './guards/unauth.guard';
 import { AuthGuard } from './guards/auth.guard';
+import { MeComponent } from './components/me/me.component';
 
 export const routes: Routes = [
   { 
     path: '',
      component: HomeComponent ,
-     canActivate: [UnauthGuard], 
-     loadChildren : ()=> 
-      import('./feature/auth/auth.routes').then((r) => r.auth_routes) 
+     canActivate: [UnauthGuard]
+  },
+  {
+    path: 'me',
+    component: MeComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'auth',

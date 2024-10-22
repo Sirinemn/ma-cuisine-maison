@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -27,7 +28,12 @@ public class UserDto {
     private String pseudo;
 
     private List<String> roles;
-
-
+    @NonNull
+    @Size(max = 50)
+    private String firstname;
+    @NonNull
+    @Size(max = 50)
+    private String lastname;
+    private LocalDateTime dateOfBirth;
 
 }
