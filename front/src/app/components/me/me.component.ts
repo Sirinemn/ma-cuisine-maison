@@ -11,6 +11,7 @@ import { UserService } from '../../service/user.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { MessageResponse } from '../../interface/api/messageResponse.interface';
 
 
 @Component({
@@ -47,7 +48,6 @@ export class MeComponent implements OnInit{
         pseudo: ['', [Validators.required, Validators.minLength(3)]],
         firstname: ['', Validators.required],
         lastname: ['', Validators.required],
-        dateOfBirth: ['', Validators.required]
       });
     }
   
@@ -59,7 +59,6 @@ export class MeComponent implements OnInit{
           pseudo: user.pseudo,
           firstname: user.firstname,
           lastname: user.lastname,
-          dateOfBirth: user.dateOfBirth
         });
       } else {
         console.error('User is undefined in sessionService.');
@@ -69,12 +68,16 @@ export class MeComponent implements OnInit{
     onUpdate(): void {
       if (this.profileForm.valid) {
         const userId = String(this.sessionService.user!.id); 
-        this.userService.updateProfile(this.profileForm.value, userId).subscribe(
-          response => {
-            this.snackBar.open('Profil mis à jour', 'OK', { duration: 2000 });
+        const formData = new FormData();
+        formData.append('pseudo', this.profileForm!.get('pseudo')?.value);
+        formData.append('firstname', this.profileForm!.get('firstname')?.value);
+        formData.append('lastname', this.profileForm!.get('lastname')?.value);
+        this.userService.updateProfile(formData, userId).subscribe(
+          (messageResponse: MessageResponse) => {
+            this.snackBar.open(messageResponse.message, 'OK', { duration: 3000 });
           },
           error => {
-            this.snackBar.open('Erreur de mise à jour', 'OK', { duration: 2000 });
+            this.snackBar.open('Erreur de mise à jour', 'OK', { duration: 3000 });
           }
         );
       }

@@ -4,6 +4,8 @@ import fr.sirine.starter.dto.UserDto;
 import fr.sirine.starter.user.User;
 import fr.sirine.starter.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,8 +36,8 @@ public class UserControllerAdmin {
         return ResponseEntity.ok(user);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody User user) {
-        userService.updateUser(id, user);
+    public ResponseEntity<Void> updateUser(@RequestParam("pseudo") @NotBlank @Size(max = 63) String pseudo, @RequestParam("firstname") @NotBlank @Size(max = 63) String firstname, @RequestParam("lastname") @NotBlank @Size(max = 63) String lastname, @PathVariable Integer id) {
+        userService.updateUser( pseudo, firstname, lastname, id);
         return new ResponseEntity<>( HttpStatus.OK);
     }
 

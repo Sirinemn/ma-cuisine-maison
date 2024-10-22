@@ -1,11 +1,14 @@
 package fr.sirine.starter.controller;
 
+import fr.sirine.cuisine.payload.MessageResponse;
 import fr.sirine.starter.dto.UserDto;
 import fr.sirine.starter.mapper.UserMapper;
 import fr.sirine.starter.user.User;
 import fr.sirine.starter.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +36,10 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Integer id, @RequestBody UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        userService.updateUser(id, user);
-        return new ResponseEntity<>( HttpStatus.OK);
+    public ResponseEntity<MessageResponse> updateUser(@RequestParam("pseudo") @NotBlank @Size(max = 63) String pseudo, @RequestParam("firstname") @NotBlank @Size(max = 63) String firstname, @RequestParam("lastname") @NotBlank @Size(max = 63) String lastname, @PathVariable Integer id) {
+        userService.updateUser(pseudo, firstname, lastname, id);
+        MessageResponse messageResponse = new MessageResponse("Updated with success!");
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

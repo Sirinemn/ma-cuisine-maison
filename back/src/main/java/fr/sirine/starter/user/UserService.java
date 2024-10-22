@@ -37,15 +37,12 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void updateUser(Integer id, User user){
+    public void updateUser(String pseudo, String firstname, String lastname, Integer id){
         User initialUser = userRepository.findById(id).orElse(null);
         if (initialUser!= null) {
-            initialUser.setPseudo(user.getPseudo());
-            initialUser.setEmail(user.getEmail());
-            initialUser.setFirstname(user.getFirstname());
-            initialUser.setPassword(user.getPassword());
-            initialUser.setLastname(user.getLastname());
-            initialUser.setDateOfBirth(user.getDateOfBirth());
+            initialUser.setPseudo(pseudo);
+            initialUser.setFirstname(firstname);
+            initialUser.setLastname(lastname);
             userRepository.save(initialUser);
         }
     }
