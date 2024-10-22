@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AdminUserServiceService } from './admin-user-service.service';
+import { AdminUserService } from './admin-user.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('AdminUserServiceService', () => {
-  let service: AdminUserServiceService;
+  let service: AdminUserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -14,7 +14,7 @@ describe('AdminUserServiceService', () => {
         provideHttpClientTesting(), // Nouvelle API pour les tests HTTP
       ]
     });
-    service = TestBed.inject(AdminUserServiceService);
+    service = TestBed.inject(AdminUserService);
   });
 
   it('should be created', () => {

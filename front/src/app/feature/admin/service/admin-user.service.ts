@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/interface/user';
+import { User } from '../../../interface/user';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminUserServiceService {
+export class AdminUserService {
 
   private pathService = "http://localhost:8080/api/admin/users";
 
@@ -20,8 +20,8 @@ export class AdminUserServiceService {
     return this.httpClient.get<User[]>(this.pathService);
   }
 
-  updateUser(id: number, user: User): Observable<User> {
-    return this.httpClient.put<User>(`${this.pathService}/${id}`, user);
+  updateUser(form: FormData, id: number): Observable<User> {
+    return this.httpClient.put<User>(`${this.pathService}/${id}`, form);
   }
 
   deleteUser(id: number): Observable<void> {

@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,10 +40,12 @@ public class UserService {
 
     public void updateUser(String pseudo, String firstname, String lastname, Integer id){
         User initialUser = userRepository.findById(id).orElse(null);
+        LocalDateTime now = LocalDateTime.now();
         if (initialUser!= null) {
             initialUser.setPseudo(pseudo);
             initialUser.setFirstname(firstname);
             initialUser.setLastname(lastname);
+            initialUser.setLastModifiedDate(now);
             userRepository.save(initialUser);
         }
     }
