@@ -38,7 +38,6 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.sessionService.user) {
-      this.sessionService.retrieveUser(); // Assurer que retrieveUser est appelé
     }
     this.user = this.sessionService.user;
     if (this.user) {

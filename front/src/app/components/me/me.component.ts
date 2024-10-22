@@ -8,6 +8,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SessionService } from '../../service/session.service';
 import { UserService } from '../../service/user.service';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 
 @Component({
@@ -19,7 +22,12 @@ import { UserService } from '../../service/user.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule 
+  ],
+  providers: [ MatDatepickerModule,
+    provideAnimations()
   ],
   templateUrl: './me.component.html',
   styleUrl: './me.component.scss'
@@ -92,3 +100,4 @@ export class MeComponent implements OnInit{
    }
  }
    
+

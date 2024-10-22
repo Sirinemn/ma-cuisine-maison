@@ -3,7 +3,7 @@ import { SessionService } from './service/session.service';
 import { Observable } from 'rxjs';
 import { User } from './interface/user';
 import { AuthService } from './feature/auth/services/auth.service';
-import { RouterLinkActive, RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLinkActive, RouterLink, RouterOutlet, Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { NgIf, AsyncPipe } from '@angular/common';
@@ -29,12 +29,11 @@ import { FooterComponent } from "./components/footer/footer.component";
 })
 export class AppComponent {
   title = 'Ma Cuisine Maison';
-  public user!:User;
-  public userRole!:string[];
 
   constructor(
     private authService: AuthService,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -49,8 +48,7 @@ export class AppComponent {
     this.authService.me().subscribe({
     next:  (user: User) => {
         this.sessionService.logIn(user);
-        this.user = user;
-        this.userRole = user.roles;
+        this.router.navigate(['/reception/welcome'])
       },
      error: (err) => {
       if (err.status === 401) {

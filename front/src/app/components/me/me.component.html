@@ -18,8 +18,11 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Date de naissance</mat-label>
-        <input matInput formControlName="dateOfBirth" type="date">
-      </mat-form-field>
+        <input matInput formControlName="dateOfBirth" [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
       <button mat-raised-button color="primary" type="submit">Mettre à jour</button>
       <button mat-raised-button color="warn" (click)="onDelete()">Supprimer mon compte</button>
     </form>

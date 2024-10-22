@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 import { MeComponent } from './me.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -36,7 +37,8 @@ describe('MeComponent', () => {
         provideHttpClient(), // Nouvelle API pour les clients HTTP
         provideHttpClientTesting(),
         SessionService,
-        UserService
+        UserService,
+        provideAnimations()
       ],
     }).compileComponents();
 

@@ -19,7 +19,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     styleUrls: ['./register.component.scss'],
     standalone: true,
     imports: [MatButtonModule, MatIconModule, MatCardModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, NgIf, MatNativeDateModule ],
-    providers: [ MatDatepickerModule]
 })
 export class RegisterComponent implements OnDestroy{
   

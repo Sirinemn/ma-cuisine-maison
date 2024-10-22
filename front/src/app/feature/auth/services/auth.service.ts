@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RegisterRequest } from '../interfaces/register-request';
 import { catchError, Observable, throwError } from 'rxjs';
-import { User } from 'src/app/interface/user';
-import { SessionInformation } from 'src/app/interface/session-information';
+import { User } from '../../../interface/user';
+import { SessionInformation } from '../../../interface/session-information';
 import { LoginRequest } from '../interfaces/login-request';
 
 @Injectable({
