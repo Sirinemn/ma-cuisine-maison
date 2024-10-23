@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../../interface/user';
+import { MessageResponse } from '../../../interface/api/messageResponse.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +21,8 @@ export class AdminUserService {
     return this.httpClient.get<User[]>(this.pathService);
   }
 
-  updateUser(form: FormData, id: number): Observable<User> {
-    return this.httpClient.put<User>(`${this.pathService}/${id}`, form);
+  updateUser(form: FormData, id: string): Observable<MessageResponse> {
+    return this.httpClient.put<MessageResponse>(`${this.pathService}/${id}`, form);
   }
 
   deleteUser(id: number): Observable<void> {

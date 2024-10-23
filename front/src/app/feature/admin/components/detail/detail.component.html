@@ -1,1 +1,11 @@
-<p>detail works!</p>
+<div class="user-detail">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Profil Utilisateur</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Email:</strong> {{ user?.email }}</p>
+      <p><strong>Pseudo:</strong> {{ user?.pseudo }}</p>
+      <p><strong>Prénom:</strong> {{ user?.firstname }}</p>
+      <p><strong>Nom:</strong> {{ user?.lastname }}</p>
+      <p><strong>Date de naissance:</strong> {{ user?.dateOfBirth | date}}

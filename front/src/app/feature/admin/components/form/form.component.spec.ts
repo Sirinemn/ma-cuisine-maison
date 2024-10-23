@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormComponent } from './form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -8,7 +14,16 @@ describe('FormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormComponent]
+      imports: [FormComponent,
+        ReactiveFormsModule,
+        MatSnackBarModule
+      ],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(), // Nouvelle API pour les clients HTTP
+        provideHttpClientTesting(),
+        provideAnimations()
+      ]
     })
     .compileComponents();
 

@@ -26,6 +26,7 @@ public class UserService {
     }
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().stream().noneMatch(role -> role.getName().equals("ADMIN")))
                 .map(user -> {
                     try {
                         return userMapper.toDto(user);
@@ -34,9 +35,10 @@ public class UserService {
                         return null;
                     }
                 })
-                .filter(Objects::nonNull) // Ensure nulls are filtered out
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
+
 
     public void updateUser(String pseudo, String firstname, String lastname, Integer id){
         User initialUser = userRepository.findById(id).orElse(null);

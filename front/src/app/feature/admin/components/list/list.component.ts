@@ -24,23 +24,23 @@ import { MatButtonModule } from '@angular/material/button';
 export class ListComponent implements OnInit {
   users = new MatTableDataSource<User>();
   displayedColumns: string[] = ['pseudo', 'email', 'actions'];
-  constructor(private userService: AdminUserService, private router: Router) {}
+  constructor(private adminService: AdminUserService, private router: Router) {}
 
   ngOnInit(): void {
-    this.userService.getAllUsers().subscribe(users => {
+    this.adminService.getAllUsers().subscribe(users => {
       this.users.data = users;
     });
   }
   viewUser(id: number): void {
-    this.router.navigate([`/user/${id}`]);
+    this.router.navigate([`admin/user/${id}/view`]);
   }
 
   editUser(id: number): void {
-    this.router.navigate([`/user/${id}`]);
+    this.router.navigate([`admin/user/${id}/edit`]);
   }
 
   deleteUser(id: number): void {
-    this.userService.deleteUser(id).subscribe(() => {
+    this.adminService.deleteUser(id).subscribe(() => {
       this.users.data = this.users.data.filter(user => user.id !== id);
     });
   }

@@ -1,1 +1,22 @@
-<p>form works!</p>
+<div class="user-form">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" readonly>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Pseudo</mat-label>
+        <input matInput formControlName="pseudo">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="firstname">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="lastname">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">Mettre à jour</button>
+    </form>
+  </div>
+  
