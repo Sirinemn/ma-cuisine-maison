@@ -12,6 +12,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageResponse } from '../../interface/api/messageResponse.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -41,7 +43,8 @@ export class MeComponent implements OnInit{
       private sessionService: SessionService,
       private router: Router,
       private snackBar: MatSnackBar,
-      private userService: UserService
+      private userService: UserService,
+      private dialog: MatDialog
     ) {
       this.profileForm = this.fb.group({
         email: [{value: '', disabled: true}, [Validators.required, Validators.email]],
@@ -89,9 +92,10 @@ export class MeComponent implements OnInit{
     }
   
     onDelete(): void {
-      const confirmed = window.confirm('Êtes-vous sûr de vouloir supprimer votre compte?');
-      if (confirmed) {
-        const userId = String(this.sessionService.user!.id);
+      const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+      const userId = String(this.sessionService.user!.id);
+      dialogRef.afterClosed().subscribe(() => {
         this.userService.deleteAccount(userId).subscribe(
           response => {
             this.sessionService.logOut();
@@ -101,7 +105,8 @@ export class MeComponent implements OnInit{
             this.snackBar.open('Erreur de suppression de compte', 'OK', { duration: 2000 });
           }
         );
-      }
+      })
+      
     }    
  }
    

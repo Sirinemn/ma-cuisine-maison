@@ -1,24 +1,25 @@
 <div class="me-container">
-    <form [formGroup]="profileForm" (ngSubmit)="onUpdate()">
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" readonly>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Pseudo</mat-label>
-        <input matInput formControlName="pseudo">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Prénom</mat-label>
-        <input matInput formControlName="firstname">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Nom</mat-label>
-        <input matInput formControlName="lastname">
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">Mettre à jour</button>
-      <button mat-raised-button color="warn" (click)="onDelete()">Supprimer mon compte</button>
-    </form>
-    <button mat-raised-button color="accent" (click)="onLogout()">Se déconnecter</button>
-  </div>
+  <form [formGroup]="profileForm" (ngSubmit)="onUpdate()">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Pseudo</mat-label>
+      <input matInput formControlName="pseudo">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Prénom</mat-label>
+      <input matInput formControlName="firstname">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="lastname">
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Mettre à jour</button>
+    <button mat-button class="btn-delete" (click)="onDelete()">Supprimer mon compte</button>
+  </form>
+  <button mat-raised-button color="accent" (click)="onLogout()">Se déconnecter</button>
+</div>
+
   

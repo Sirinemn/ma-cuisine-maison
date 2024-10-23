@@ -6,6 +6,8 @@ import { CommonModule, NgFor } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../../components/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -24,7 +26,9 @@ import { MatButtonModule } from '@angular/material/button';
 export class ListComponent implements OnInit {
   users = new MatTableDataSource<User>();
   displayedColumns: string[] = ['pseudo', 'email', 'actions'];
-  constructor(private adminService: AdminUserService, private router: Router) {}
+  constructor(private adminService: AdminUserService,
+     private router: Router,
+     public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.adminService.getAllUsers().subscribe(users => {
@@ -40,12 +44,15 @@ export class ListComponent implements OnInit {
   }
 
   deleteUser(id: number): void {
-    const confirmed = window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');
-    if (confirmed) {
-      this.adminService.deleteUser(id).subscribe(() => {
-        this.users.data = this.users.data.filter(user => user.id !== id);
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.adminService.deleteUser(id).subscribe(() => {
+          this.users.data = this.users.data.filter(user => user.id !== id);
+        });
+      }
+    });
   }
 
 }
