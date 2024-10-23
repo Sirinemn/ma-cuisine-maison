@@ -40,12 +40,16 @@ class UserControllerTest {
         int userId = 1;
         User mockUser = new User();
         mockUser.setId(userId);
+        mockUser.setFirstname("John");
+        mockUser.setLastname("Doe");
         mockUser.setPseudo("pseudo");
         mockUser.setEmail("john@mail.fr");
 
         UserDto mockUserDto =  UserDto.builder()
                 .email("john@mail.fr")
                 .id(userId)
+                .firstname("John")
+                .lastname("Doe")
                 .pseudo("pseudo")
                 .build();
 

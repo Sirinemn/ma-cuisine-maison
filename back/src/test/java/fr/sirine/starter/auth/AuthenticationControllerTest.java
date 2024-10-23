@@ -2,6 +2,8 @@ package fr.sirine.starter.auth;
 
 import fr.sirine.MaCuisineMaison;
 
+import fr.sirine.starter.dto.UserDto;
+import fr.sirine.starter.mapper.UserMapper;
 import fr.sirine.starter.user.User;
 import fr.sirine.starter.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -39,7 +43,7 @@ class AuthenticationControllerTest {
     UserService userService;
 
     @MockBean
-    Authentication authentication;
+    UserMapper userMapper;
 
     @Test
     void shouldRegisterSuccessfully() throws Exception {
@@ -71,27 +75,45 @@ class AuthenticationControllerTest {
     void shouldAuthenticateSuccessfully() throws Exception {
         String authenticationRequestJson = "{ \"email\": \"test@example.com\", \"password\": \"password\" }";
 
-        // Simuler la méthode authenticate dans AuthenticationService
-        when(authenticationService.authenticate(any())).thenReturn(new AuthenticationResponse("dummy-jwt-token","pseudo", 1));
+        // Build the expected AuthenticationResponse
+        AuthenticationResponse authResponse = AuthenticationResponse.builder()
+                .token("dummy-jwt-token")
+                .pseudo("pseudo")
+                .userId(1)
+                .roles(List.of("ROLE_USER")) // Assuming roles are returned like this
+                .build();
 
+        // Mock the authenticate method
+        when(authenticationService.authenticate(any())).thenReturn(authResponse);
+
+        // Perform the request and check the response
         mockMvc.perform(post("/auth/authentication")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(authenticationRequestJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("dummy-jwt-token"));
+                .andExpect(jsonPath("$.token").value("dummy-jwt-token"))
+                .andExpect(jsonPath("$.pseudo").value("pseudo"))
+                .andExpect(jsonPath("$.userId").value(1))
+                .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"));
     }
 
     // Test pour obtenir les informations de l'utilisateur courant
     @Test
     @WithMockUser(username = "test@example.com", roles = {"USER"})
     void shouldReturnCurrentUser() throws Exception {
-        // Simuler la méthode findByEmail dans UserService
+        // Mocking user service response
         User user = new User();
         user.setEmail("test@example.com");
         user.setFirstname("John");
         user.setLastname("Doe");
-
         when(userService.findByEmail("test@example.com")).thenReturn(user);
+
+        // Mocking user mapper response
+        UserDto userDto = new UserDto();
+        userDto.setEmail("test@example.com");
+        userDto.setFirstname("John");
+        userDto.setLastname("Doe");
+        when(userMapper.toDto(user)).thenReturn(userDto);
 
         mockMvc.perform(get("/auth/me"))
                 .andExpect(status().isOk())
@@ -99,5 +121,6 @@ class AuthenticationControllerTest {
                 .andExpect(jsonPath("$.firstname").value("John"))
                 .andExpect(jsonPath("$.lastname").value("Doe"));
     }
+
 
 }
