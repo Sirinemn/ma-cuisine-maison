@@ -89,18 +89,20 @@ export class MeComponent implements OnInit{
     }
   
     onDelete(): void {
-      const userId = String(this.sessionService.user!.id);
-      this.userService.deleteAccount(userId).subscribe(
-        response => {
-          this.sessionService.logOut();
-          this.router.navigate(['']);
-        },
-        error => {
-          this.snackBar.open('Erreur de suppression de compte', 'OK', { duration: 2000 });
-        }
-      );
-    
-   }
+      const confirmed = window.confirm('Êtes-vous sûr de vouloir supprimer votre compte?');
+      if (confirmed) {
+        const userId = String(this.sessionService.user!.id);
+        this.userService.deleteAccount(userId).subscribe(
+          response => {
+            this.sessionService.logOut();
+            this.router.navigate(['']);
+          },
+          error => {
+            this.snackBar.open('Erreur de suppression de compte', 'OK', { duration: 2000 });
+          }
+        );
+      }
+    }    
  }
    
 

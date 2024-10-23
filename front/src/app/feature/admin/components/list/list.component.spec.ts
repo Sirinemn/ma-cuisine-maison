@@ -11,7 +11,7 @@ describe('ListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ListComponent],
       providers: [
-        provideHttpClient(), // Nouvelle API pour les clients HTTP
+        provideHttpClient(),
         provideHttpClient(),
       ]
     })

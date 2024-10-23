@@ -1,5 +1,6 @@
 package fr.sirine.cuisine.controller;
 
+import fr.sirine.cuisine.payload.MessageResponse;
 import fr.sirine.starter.dto.UserDto;
 import fr.sirine.starter.mapper.UserMapper;
 import fr.sirine.starter.user.User;
@@ -39,9 +40,10 @@ public class UserControllerAdmin {
         return ResponseEntity.ok(this.userMapper.toDto(user));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@RequestParam("pseudo") @NotBlank @Size(max = 63) String pseudo, @RequestParam("firstname") @NotBlank @Size(max = 63) String firstname, @RequestParam("lastname") @NotBlank @Size(max = 63) String lastname, @PathVariable Integer id) {
+    public ResponseEntity<MessageResponse> updateUser(@RequestParam("pseudo") @NotBlank @Size(max = 63) String pseudo, @RequestParam("firstname") @NotBlank @Size(max = 63) String firstname, @RequestParam("lastname") @NotBlank @Size(max = 63) String lastname, @PathVariable Integer id) {
         userService.updateUser( pseudo, firstname, lastname, id);
-        return new ResponseEntity<>( HttpStatus.OK);
+        MessageResponse messageResponse = new MessageResponse("Updated with success!");
+        return new ResponseEntity<>( messageResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

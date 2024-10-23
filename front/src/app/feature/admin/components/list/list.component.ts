@@ -40,9 +40,12 @@ export class ListComponent implements OnInit {
   }
 
   deleteUser(id: number): void {
-    this.adminService.deleteUser(id).subscribe(() => {
-      this.users.data = this.users.data.filter(user => user.id !== id);
-    });
+    const confirmed = window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur?');
+    if (confirmed) {
+      this.adminService.deleteUser(id).subscribe(() => {
+        this.users.data = this.users.data.filter(user => user.id !== id);
+      });
+    }
   }
 
 }
