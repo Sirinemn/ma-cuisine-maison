@@ -46,7 +46,7 @@ class UserServiceTest {
     UserDto initialUserDto = UserDto.builder()
             .id(1)
             .email("john@mail.fr")
-            .roles(Arrays.asList("USER"))
+            .roles(List.of("USER"))
             .pseudo("JohnD")
             .lastname("Doe")
             .firstname("John")
@@ -54,18 +54,18 @@ class UserServiceTest {
             .build();
 
     @Test
-    public void should_return_all_user() throws IOException {
+    public void should_return_all_users() throws IOException {
         Role adminRole = new Role();
         adminRole.setName("ADMIN");
         Role userRole = new Role();
         userRole.setName("USER");
-        this.initialUser.setRoles(Arrays.asList(userRole));
+        this.initialUser.setRoles(List.of(userRole));
 
         User adminUser = User.builder()
                 .id(2)
                 .email("admin@example.com")
                 .pseudo("admin")
-                .roles(Arrays.asList(adminRole))
+                .roles(List.of(adminRole))
                 .build();
 
         when(userRepository.findAll()).thenReturn(Arrays.asList(initialUser, adminUser));
