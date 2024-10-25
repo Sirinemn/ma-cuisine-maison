@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +14,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageResponse } from '../../interface/api/messageResponse.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -35,8 +36,9 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   templateUrl: './me.component.html',
   styleUrl: './me.component.scss'
 })
-export class MeComponent implements OnInit{
+export class MeComponent implements OnInit, OnDestroy{
     profileForm: FormGroup;
+    private httpSubscriptions: Subscription[] = [];
   
     constructor(
       private fb: FormBuilder,
@@ -81,14 +83,14 @@ export class MeComponent implements OnInit{
           formData.append('firstname', firstname);
           formData.append('lastname', lastname);
           
-          this.userService.updateProfile(formData, userId).subscribe(
+          this.httpSubscriptions.push(this.userService.updateProfile(formData, userId).subscribe(
             (messageResponse: MessageResponse) => {
               this.snackBar.open(messageResponse.message, 'OK', { duration: 3000 });
             },
             error => {
               this.snackBar.open('Erreur de mise à jour', 'OK', { duration: 3000 });
             }
-          );
+          ));
         }
       }
     }    
@@ -103,7 +105,7 @@ export class MeComponent implements OnInit{
 
       const userId = String(this.sessionService.user!.id);
       dialogRef.afterClosed().subscribe(() => {
-        this.userService.deleteAccount(userId).subscribe(
+        this.httpSubscriptions.push(this.userService.deleteAccount(userId).subscribe(
           response => {
             this.sessionService.logOut();
             this.router.navigate(['']);
@@ -111,10 +113,12 @@ export class MeComponent implements OnInit{
           error => {
             this.snackBar.open('Erreur de suppression de compte', 'OK', { duration: 2000 });
           }
-        );
-      })
-      
-    }    
+        ));
+      })     
+    }   
+    ngOnDestroy(): void {
+      this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
+    } 
  }
    
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminUserService } from '../../service/admin-user.service';
@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MessageResponse } from '../../../../interface/api/messageResponse.interface';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-form',
   standalone: true,
@@ -26,14 +27,14 @@ import { MessageResponse } from '../../../../interface/api/messageResponse.inter
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
-export class FormComponent {
+export class FormComponent implements OnDestroy{
   userForm: FormGroup;
-  
+  private httpSubscriptions: Subscription[] = [];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private adminService: AdminUserService,
-    private router: Router,
     private snackBar: MatSnackBar
   ) {
     this.userForm = this.fb.group({
@@ -46,9 +47,9 @@ export class FormComponent {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.adminService.getUserById(id).subscribe(user => {
+    this.httpSubscriptions.push(this.adminService.getUserById(id).subscribe(user => {
       this.userForm.patchValue(user);
-    });
+    }));
   }
 
   onSubmit(): void {
@@ -58,15 +59,17 @@ export class FormComponent {
       formData.append('pseudo', this.userForm!.get('pseudo')?.value);
       formData.append('firstname', this.userForm!.get('firstname')?.value);
       formData.append('lastname', this.userForm!.get('lastname')?.value);
-      this.adminService.updateUser(formData, userId).subscribe(
+      this.httpSubscriptions.push(this.adminService.updateUser(formData, userId).subscribe(
         (messageResponse: MessageResponse) => {
           this.snackBar.open(messageResponse.message, 'OK', { duration: 3000 });
         },
         error => {
           this.snackBar.open('Erreur de mise à jour', 'OK', { duration: 3000 });
         }
-      );
+      ));
     }
   }  
-
+  ngOnDestroy(): void {
+    this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
+  } 
 }
