@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminUserService } from '../../service/admin-user.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'
@@ -11,6 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MessageResponse } from '../../../../interface/api/messageResponse.interface';
 import { Subscription } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-form',
   standalone: true,
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
     MatDatepickerModule,
@@ -69,6 +71,9 @@ export class FormComponent implements OnDestroy{
       ));
     }
   }  
+  public back() {
+    window.history.back();
+  }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
   } 

@@ -15,6 +15,7 @@ import { MessageResponse } from '../../interface/api/messageResponse.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { Subscription } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -25,6 +26,7 @@ import { Subscription } from 'rxjs';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
     MatDatepickerModule,
@@ -69,7 +71,11 @@ export class MeComponent implements OnInit, OnDestroy{
         console.error('User is undefined in sessionService.');
       }
     }
-  
+    
+    public back() {
+      window.history.back();
+    }
+
     onUpdate(): void {
       if (this.profileForm.valid) {
         const pseudo = this.profileForm.get('pseudo')?.value;

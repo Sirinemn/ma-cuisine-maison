@@ -38,6 +38,9 @@ export class ListComponent implements OnInit, OnDestroy {
       this.users.data = users;
     }));
   }
+  public back() {
+    window.history.back();
+  }
   viewUser(id: number): void {
     this.router.navigate([`admin/user/${id}/view`]);
   }

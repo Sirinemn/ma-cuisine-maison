@@ -1,3 +1,7 @@
+<div fxLayout="row" fxLayoutAlign="start center">
+  <button mat-icon-button (click)="back()">
+      <mat-icon>arrow_back</mat-icon>
+  </button>
 <div class="me-container">
   <form [formGroup]="profileForm" (ngSubmit)="onUpdate()">
     <mat-form-field>
@@ -17,8 +21,8 @@
       <input matInput formControlName="lastname">
     </mat-form-field>
     <button mat-raised-button color="primary" type="submit">Mettre à jour</button>
-    <button mat-button class="btn-delete" (click)="onDelete()">Supprimer mon compte</button>
   </form>
+  <button mat-button class="btn-delete" (click)="onDelete()">Supprimer mon compte</button>
   <button mat-raised-button color="accent" (click)="onLogout()">Se déconnecter</button>
 </div>
 

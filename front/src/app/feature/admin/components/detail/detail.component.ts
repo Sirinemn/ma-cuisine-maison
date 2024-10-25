@@ -5,6 +5,7 @@ import { User } from '../../../../interface/user';
 import { DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -12,7 +13,8 @@ import { Subscription } from 'rxjs';
   standalone: true,
   imports: [
     DatePipe,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
@@ -29,9 +31,10 @@ export class DetailComponent implements OnDestroy {
       this.user = user;
     }));
   }
+  public back() {
+    window.history.back();
+  }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
   } 
 }  
-
-
