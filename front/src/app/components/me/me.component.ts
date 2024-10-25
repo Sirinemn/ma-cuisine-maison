@@ -70,21 +70,28 @@ export class MeComponent implements OnInit{
   
     onUpdate(): void {
       if (this.profileForm.valid) {
-        const userId = String(this.sessionService.user!.id); 
-        const formData = new FormData();
-        formData.append('pseudo', this.profileForm!.get('pseudo')?.value);
-        formData.append('firstname', this.profileForm!.get('firstname')?.value);
-        formData.append('lastname', this.profileForm!.get('lastname')?.value);
-        this.userService.updateProfile(formData, userId).subscribe(
-          (messageResponse: MessageResponse) => {
-            this.snackBar.open(messageResponse.message, 'OK', { duration: 3000 });
-          },
-          error => {
-            this.snackBar.open('Erreur de mise à jour', 'OK', { duration: 3000 });
-          }
-        );
+        const pseudo = this.profileForm.get('pseudo')?.value;
+        const firstname = this.profileForm.get('firstname')?.value;
+        const lastname = this.profileForm.get('lastname')?.value;
+    
+        if (pseudo && firstname && lastname) {
+          const userId = String(this.sessionService.user!.id);
+          const formData = new FormData();
+          formData.append('pseudo', pseudo);
+          formData.append('firstname', firstname);
+          formData.append('lastname', lastname);
+          
+          this.userService.updateProfile(formData, userId).subscribe(
+            (messageResponse: MessageResponse) => {
+              this.snackBar.open(messageResponse.message, 'OK', { duration: 3000 });
+            },
+            error => {
+              this.snackBar.open('Erreur de mise à jour', 'OK', { duration: 3000 });
+            }
+          );
+        }
       }
-    }
+    }    
   
     onLogout(): void {
       this.sessionService.logOut();
