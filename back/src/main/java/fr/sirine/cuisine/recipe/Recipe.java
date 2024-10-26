@@ -5,7 +5,6 @@ import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.starter.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import java.util.List;
 
 @Getter

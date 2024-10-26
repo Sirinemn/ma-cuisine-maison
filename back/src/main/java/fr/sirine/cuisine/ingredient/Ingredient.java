@@ -3,7 +3,6 @@ package fr.sirine.cuisine.ingredient;
 import fr.sirine.cuisine.recipe.Recipe;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
