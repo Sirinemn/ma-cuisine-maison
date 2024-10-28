@@ -79,7 +79,7 @@ describe('FormComponent', () => {
 
   it('should submit valid form and show success message', () => {
     component.userForm.setValue({
-      email: 'newtest@mail.com',
+      email: 'test@mail.com',
       pseudo: 'newuser',
       firstname: 'Jane',
       lastname: 'Doe'
@@ -118,6 +118,6 @@ describe('FormComponent', () => {
     component.onSubmit();
 
     expect(mockAdminService.updateUser).toHaveBeenCalled();
-    //expect(mockSnackBar.open).toHaveBeenCalledWith('Erreur de mise à jour', 'OK', { duration: 3000 });
+    expect(mockSnackBar.open).toHaveBeenCalledWith('Erreur de mise à jour', 'OK', { duration: 3000 });
   });
 });

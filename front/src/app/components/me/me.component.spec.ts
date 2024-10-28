@@ -68,6 +68,7 @@ describe('MeComponent', () => {
 
       ],
     }).compileComponents();
+    
 
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
@@ -105,7 +106,7 @@ describe('MeComponent', () => {
     expect(mockUserService.updateProfile).toHaveBeenCalledWith(expect.any(FormData), '1');
 
     // Vérifie si snackBar.open a été appelé avec le message de succès
-    //expect(mockSnackBar.open).toHaveBeenCalledWith('Profile updated successfully!', 'OK', { duration: 3000 });
+    expect(mockSnackBar.open).toHaveBeenCalledWith('Profile updated successfully!', 'OK', { duration: 3000 });
   });  
 
   it('should log out the user and navigate to login', () => {

@@ -1,5 +1,5 @@
 module.exports = {
-  
+  setupFiles: ['jest-canvas-mock'],
     moduleNameMapper: {
       '@core/(.*)': '<rootDir>/src/app/core/$1',
     },

@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <span>Accueil</span>
     <span class="spacer"></span>
-    <a *ngIf="isAdmin" mat-button (click)="navigateToUserList()">Liste des utilisateurs</a>
+    <a *ngIf="isAdmin" mat-button (click)="navigateToUserList()" id="list">Liste des utilisateurs</a>
     <a mat-button href="/add-recipe">Ajouter une recette</a>
     <mat-select placeholder="Catégories" class="category-select">
       <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
@@ -10,7 +10,7 @@
     <button mat-icon-button aria-label="Search">
       <mat-icon>search</mat-icon>
     </button>
-    <a mat-icon-button aria-label="User profile" (click)="navigateToMe()">
+    <a mat-icon-button id = "profile" aria-label="User profile" (click)="navigateToMe()">
       <mat-icon>account_circle</mat-icon>
     </a>
   </mat-toolbar-row>

@@ -39,7 +39,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './me.component.scss'
 })
 export class MeComponent implements OnInit, OnDestroy{
-    profileForm: FormGroup;
+    public profileForm: FormGroup;
     private httpSubscriptions: Subscription[] = [];
   
     constructor(
@@ -77,7 +77,7 @@ export class MeComponent implements OnInit, OnDestroy{
     }
 
     onUpdate(): void {
-      if (this.profileForm.valid) {
+      if (this.profileForm.valid && this.profileForm) {
         const pseudo = this.profileForm.get('pseudo')?.value;
         const firstname = this.profileForm.get('firstname')?.value;
         const lastname = this.profileForm.get('lastname')?.value;
