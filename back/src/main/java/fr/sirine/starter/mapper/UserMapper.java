@@ -23,11 +23,20 @@ public interface UserMapper extends EntityMapper<UserDto, User> {
     @Mapping(target = "lastname", defaultValue = "")
     UserDto toDto(User entity) throws IOException;
 
-    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "roles", source = "roles", qualifiedByName = "namesToRoles")
     User toEntity(UserDto dto);
 
     @Named("rolesToNames")
     default List<String> rolesToNames(List<Role> roles) {
         return roles.stream().map(Role::getName).collect(Collectors.toList());
+    }
+
+    @Named("namesToRoles")
+    default List<Role> namesToRoles(List<String> names) {
+        return names.stream().map(name -> {
+            Role role = new Role();
+            role.setName(name);
+            return role;
+        }).collect(Collectors.toList());
     }
 }

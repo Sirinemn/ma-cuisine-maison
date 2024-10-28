@@ -2,6 +2,7 @@ package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.ingredient.IngredientDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,14 +21,14 @@ public class RecipeDto {
     private int cookingTime;
     private int servings;
 
-    private List<Ingredient> ingredients; // Utilisation de DTO pour les ingrédients
+    private List<IngredientDto> ingredients;
     @NotNull
     private Integer userId;
     private String userPseudo;
 
     @NotNull
     private Integer categoryId;
-    private RecipeCategory categoryName;
+    private String categoryName;
 
     private String imageUrl;
     private String thumbnailUrl;

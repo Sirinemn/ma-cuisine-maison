@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(classes = MaCuisineMaison.class)
 @AutoConfigureMockMvc
-public class UserControllerAdminTest {
+public class UserControllerAdminIT {
 
     @Autowired
     private MockMvc mockMvc;

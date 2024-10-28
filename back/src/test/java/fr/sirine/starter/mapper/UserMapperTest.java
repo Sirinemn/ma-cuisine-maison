@@ -1,56 +1,76 @@
 package fr.sirine.starter.mapper;
 
-import fr.sirine.MaCuisineMaison;
 import fr.sirine.starter.dto.UserDto;
 import fr.sirine.starter.user.User;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import fr.sirine.starter.role.Role;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest(classes = MaCuisineMaison.class)
-class UserMapperTest {
+import java.util.List;
+import java.util.stream.Collectors;
 
-    @Autowired
-    private  UserMapper userMapper;
+@ExtendWith(MockitoExtension.class)
+public class UserMapperTest {
+
+    @InjectMocks
+    private UserMapperImpl userMapper; // Utiliser l'implémentation générée par MapStruct
+
+    private User user;
+    private UserDto userDto;
+    private Role role;
+
+    @BeforeEach
+    public void setUp() {
+        role = new Role();
+        role.setName("USER");
+
+        user = User.builder()
+                .id(1)
+                .email("john@mail.fr")
+                .pseudo("JohnD")
+                .firstname("John")
+                .lastname("Doe")
+                .roles(List.of(role))
+                .build();
+
+        userDto = UserDto.builder()
+                .id(1)
+                .email("john@mail.fr")
+                .pseudo("JohnD")
+                .firstname("John")
+                .lastname("Doe")
+                .roles(List.of("USER"))
+                .build();
+    }
 
     @Test
-    public void shouldMapUsertoUserDto() throws IOException {
-        LocalDateTime rightNow = LocalDateTime.now();
-        User initialUser = new User();
-        initialUser.setId(1);
-        initialUser.setEmail("john@mail.fr");
-        initialUser.setEnabled(true);
-        initialUser.setAccountLocked(true);
-        initialUser.setFirstname("John");
-        initialUser.setLastname("Doe");
-        initialUser.setPseudo("JohnD");
-        initialUser.setCreatedDate(rightNow);
+    public void testToDto() throws IOException {
+        UserDto result = userMapper.toDto(user);
 
-        UserDto userDto = userMapper.toDto(initialUser);
-
-        assertEquals(initialUser.getPseudo(), userDto.getPseudo());
-        assertEquals(initialUser.getEmail(), userDto.getEmail());
-        assertEquals(initialUser.getId(), userDto.getId());
+        assertEquals(user.getEmail(), result.getEmail());
+        assertEquals(user.getPseudo(), result.getPseudo());
+        assertEquals(user.getId(), result.getId());
+        assertEquals(user.getRoles().stream().map(Role::getName).collect(Collectors.toList()), result.getRoles());
     }
+
     @Test
-    public void shouldMapUserStotoUser() throws IOException {
-        UserDto userDto = new UserDto();
-                userDto.setId(1);
-                userDto.setEmail("john@mail.fr");
-                userDto.setPseudo("JohnD");
+    public void testToEntity() throws IOException {
+        User result = userMapper.toEntity(userDto);
 
-        User user = userMapper.toEntity(userDto);
-
-        assertEquals(userDto.getPseudo(), user.getPseudo());
-        assertEquals(userDto.getEmail(), user.getEmail());
-        assertEquals(userDto.getId(), user.getId());
+        assertEquals(userDto.getEmail(), result.getEmail());
+        assertEquals(userDto.getPseudo(), result.getPseudo());
+        assertEquals(userDto.getId(), result.getId());
+        assertEquals(userDto.getRoles().stream().map(String::valueOf).collect(Collectors.toList()), result.getRoles().stream().map(Role::getName).collect(Collectors.toList()));
     }
-
 
 }

@@ -29,7 +29,7 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
             @Mapping(source = "recipe.user.pseudo", target = "userPseudo"),
             @Mapping(source = "recipe.user.id", target = "userId"),
             @Mapping(expression = "java(recipe.getCategory().getId())", target = "categoryId"),
-            @Mapping(expression = "java(recipe.getCategory().getName())", target = "categoryName")
+            @Mapping(expression = "java(recipe.getCategory().getName().toString())", target = "categoryName")
     })
     public abstract RecipeDto toDto(Recipe recipe);
 }
