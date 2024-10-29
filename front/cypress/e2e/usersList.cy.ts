@@ -2,10 +2,8 @@
 
 describe('Users List', () => {
     it('login as admin', () => {
-      // Visite la page de login
       cy.visit('/auth/login');
   
-      // Intercepte la requête de login
       cy.intercept('POST', '/api/auth/authentication', (req) => {
         req.reply({
           statusCode: 200,
@@ -15,7 +13,6 @@ describe('Users List', () => {
         });
       }).as('loginRequest');
   
-      // Intercepte la requête pour obtenir les infos de l'utilisateur
       cy.intercept('GET', '/api/auth/me', {
         statusCode: 200,
         body: {
@@ -28,9 +25,6 @@ describe('Users List', () => {
           dateOfBirth: '2000-01-01'
         }
       }).as('getUser');
-
-  
-      cy.get('#list').should('exist').click();
   
       cy.intercept('GET', '/api/admin/users', [
         {
@@ -52,9 +46,12 @@ describe('Users List', () => {
           dateOfBirth: '2000-01-01'
         }
       ]).as('users');
+      cy.get('#list').should('exist').click();
     
       // Vérifie que l'URL a bien changé
       cy.url().should('include', '/admin/users');
+      cy.contains("test1");
+      cy.contains("test2");
     });
   });
   
