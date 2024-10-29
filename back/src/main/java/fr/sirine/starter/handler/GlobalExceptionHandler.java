@@ -93,6 +93,18 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(ExternalApiException.class)
+    public ResponseEntity<ExceptionResponse> handleExternalApiException(ExternalApiException exp) {
+        return ResponseEntity
+                .status(exp.getStatus())
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorDescription("Erreur lors de l'appel à l'API externe")
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exp) {
         exp.printStackTrace();
