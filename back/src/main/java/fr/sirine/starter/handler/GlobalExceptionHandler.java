@@ -1,5 +1,6 @@
 package fr.sirine.starter.handler;
 
+import fr.sirine.cuisine.image.ImageProcessingException;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -100,6 +101,18 @@ public class GlobalExceptionHandler {
                 .body(
                         ExceptionResponse.builder()
                                 .businessErrorDescription("Erreur lors de l'appel à l'API externe")
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ExceptionHandler(ImageProcessingException.class)
+    public ResponseEntity<ExceptionResponse> handleImageProcessingException(ImageProcessingException exp) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorDescription("Erreur lors de la sauvegarde de l'image")
                                 .error(exp.getMessage())
                                 .build()
                 );
