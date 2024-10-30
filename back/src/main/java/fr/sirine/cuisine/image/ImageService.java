@@ -27,7 +27,7 @@ public class ImageService {
     public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
-    public Void saveImage(MultipartFile file, Recipe recipe) {
+    public Image saveImage(MultipartFile file, Recipe recipe) {
         try{
             String imageName = file.getOriginalFilename();
             String fileName = System.currentTimeMillis() + "_origin_" + imageName;
@@ -52,10 +52,11 @@ public class ImageService {
                     .recipe(recipe)
                     .build();
             this.imageRepository.save(image);
+            return image;
         } catch (IOException e){
             throw new ImageProcessingException("Une erreur est survenue lors de la sauvegarde de l'image.", e);
         }
-        return null;
+
     }
 
     private BufferedImage createThumbnail(BufferedImage original) {

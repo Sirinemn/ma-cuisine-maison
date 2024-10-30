@@ -56,4 +56,8 @@ public class IngredientService {
         ingredientRepository.saveAll(ingredients);
         return ingredients;
     }
+
+    public void save(Ingredient ingredient) {
+        this.ingredientRepository.save(ingredient);
+    }
 }
