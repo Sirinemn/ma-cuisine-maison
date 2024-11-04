@@ -27,21 +27,18 @@ public class RecipeService {
     private final RecipeMapper recipeMapper;
     private final ImageService imageService;
     private final CategoryService categoryService;
-    private final IngredientService ingredientService;
-    private final IngredientMapper ingredientMapper;
     private final UserService userService;
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, ImageService imageService, CategoryService categoryService, IngredientService ingredientService, IngredientMapper ingredientMapper, UserService userService) {
+    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, ImageService imageService, CategoryService categoryService, UserService userService) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.imageService = imageService;
         this.categoryService = categoryService;
-        this.ingredientService = ingredientService;
-        this.ingredientMapper = ingredientMapper;
+
         this.userService = userService;
     }
 
-    public RecipeDto createRecipe(Integer userId, String categoryName, List<IngredientDto> ingredientDtos, MultipartFile file, RecipeDto recipeDto) {
+    /*public RecipeDto createRecipe(Integer userId, String categoryName, List<IngredientDto> ingredientDtos, MultipartFile file, RecipeDto recipeDto) {
         // Récupération de la catégorie par nom
         Category category = categoryService.findByName(categoryName);
 
@@ -76,7 +73,7 @@ public class RecipeService {
 
         // Retourne la recette créée en Dto
         return recipeMapper.toDto(recipe);
-    }
+    }*/
 
     public List<RecipeDto> findAll(){
          List<Recipe> recipes = recipeRepository.findAll();

@@ -20,7 +20,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @PostMapping("/create")
+    /*@PostMapping("/create")
     public ResponseEntity<RecipeDto> createRecipe(
             @RequestParam("userId") Integer userId,
             @RequestParam("categoryName") String categoryName,
@@ -30,6 +30,6 @@ public class RecipeController {
 
         RecipeDto createdRecipe = recipeService.createRecipe(userId, categoryName, ingredientDtos, file, recipeDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);
-    }
+    }*/
 }
 

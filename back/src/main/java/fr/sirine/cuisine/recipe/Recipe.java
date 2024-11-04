@@ -2,9 +2,12 @@ package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.Category;
 import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.starter.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,12 +32,6 @@ public class Recipe {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(
-            mappedBy = "recipe",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<Ingredient> ingredients;
-
     @ManyToOne(
             cascade = {
                     CascadeType.PERSIST,
@@ -43,8 +40,8 @@ public class Recipe {
     )
     @JoinColumn(name="user_id")
     private User user;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecipeIngredient> ingredients = new ArrayList<>();
 
-    private String imageUrl; // Chemin vers l'image en taille réelle
-    private String thumbnailUrl; // Chemin vers la miniature
 
 }
