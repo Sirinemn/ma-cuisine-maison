@@ -11,12 +11,8 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 public abstract class IngredientMapper implements EntityMapper<IngredientDto, Ingredient> {
 
-    @Autowired
-    RecipeService recipeService;
 
-    @Mapping(target = "recipe", expression = "java(ingredientDto.getRecipeId() != null ? this.recipeService.findById(ingredientDto.getRecipeId()) : null)")
     public abstract Ingredient toEntity(IngredientDto ingredientDto);
 
-    @Mapping(expression = "java(ingredient.getRecipe().getId())", target = "recipeId")
     public abstract IngredientDto toDto(Ingredient ingredient);
 }

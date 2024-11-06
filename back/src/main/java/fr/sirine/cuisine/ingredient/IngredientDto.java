@@ -11,10 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class IngredientDto {
+
     private Integer id;
     private String name;
-    private String quantity;
-    @NotNull
-    private Integer recipeId;
+    private Double quantity;
+    private String unit;
+
 }
 

@@ -1,4 +1,4 @@
-package fr.sirine.starter.handler;
+package fr.sirine.cuisine.exception;
 
 import org.springframework.http.HttpStatus;
 

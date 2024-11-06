@@ -1,5 +1,6 @@
 package fr.sirine.cuisine.image;
 
+import fr.sirine.cuisine.exception.ImageProcessingException;
 import fr.sirine.cuisine.recipe.Recipe;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

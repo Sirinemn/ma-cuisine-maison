@@ -1,7 +1,7 @@
 package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.Category;
-import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.starter.user.User;
 import jakarta.persistence.*;
@@ -40,8 +40,12 @@ public class Recipe {
     )
     @JoinColumn(name="user_id")
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
-
 
 }
