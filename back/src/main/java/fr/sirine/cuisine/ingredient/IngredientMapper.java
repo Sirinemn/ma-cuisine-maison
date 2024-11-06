@@ -14,5 +14,4 @@ public abstract class IngredientMapper implements EntityMapper<IngredientDto, In
 
     public abstract Ingredient toEntity(IngredientDto ingredientDto);
 
-    public abstract IngredientDto toDto(Ingredient ingredient);
 }

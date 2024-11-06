@@ -35,7 +35,6 @@ public class IngredientMapperTest {
         ingredient = Ingredient.builder()
                 .id(1)
                 .name("Name")
-                .recipe(recipe)
                 .build();
 
         ingredientDto = IngredientDto.builder()
@@ -54,12 +53,4 @@ public class IngredientMapperTest {
 
     }
 
-    @Test
-    void testToDto(){
-        IngredientDto result = ingredientMapper.toDto(ingredient);
-
-        assertEquals(ingredient.getId(), result.getId());
-        assertEquals(ingredient.getName(), result.getName());
-
-    }
 }
