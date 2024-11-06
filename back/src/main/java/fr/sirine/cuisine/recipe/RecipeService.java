@@ -22,7 +22,7 @@ public class RecipeService {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
     }
-    public RecipeDto getRecipeById(Integer recipeId) {
+    public RecipeDto getRecipeDtoById(Integer recipeId) {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
 
@@ -51,6 +51,35 @@ public class RecipeService {
                 );
     }
 
+    public Recipe getRecipeById(Integer recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
+
+        List<IngredientDto> ingredientDtos = recipe.getIngredients().stream()
+                .map(ri -> new IngredientDto(
+                        ri.getIngredient().getId(),
+                        ri.getIngredient().getName(),
+                        ri.getQuantity(), // Récupéré depuis RecipeIngredient
+                        ri.getUnit()      // Récupéré depuis RecipeIngredient
+                ))
+                .collect(Collectors.toList());
+
+        RecipeDto recipeDto = new RecipeDto(
+                    recipe.getId(),
+                    recipe.getTitle(),
+                    recipe.getDescription(),
+                    recipe.getCookingTime(),
+                    recipe.getServings(),
+                    recipe.getUser().getId(),
+                    recipe.getUser().getPseudo(),
+                    recipe.getCategory().getId(),
+                    recipe.getCategory().getName().name(),
+                    ingredientDtos,
+                    recipe.getImage() != null ? recipe.getImage().getImageLocation() : null,
+                    recipe.getImage() != null ? recipe.getImage().getThumbnailLocation() : null
+            );
+        return recipeMapper.toEntity(recipeDto);
+    }
     public List<RecipeDto> findAll(){
          List<Recipe> recipes = recipeRepository.findAll();
         return recipes.stream().map(recipeMapper::toDto).collect(Collectors.toList());

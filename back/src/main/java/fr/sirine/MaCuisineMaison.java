@@ -44,6 +44,7 @@ public class MaCuisineMaison {
 				admin.setEmail("admin@mail.fr");
 				admin.setLastname("Last");
 				admin.setFirstname("First");
+				admin.setPseudo("admin");
 				admin.setEnabled(true);
 				admin.setAccountLocked(false);
 				admin.setPassword(passwordEncoder().encode("adminpassword"));
