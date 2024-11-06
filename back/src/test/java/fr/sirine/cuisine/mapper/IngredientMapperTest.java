@@ -35,27 +35,23 @@ public class IngredientMapperTest {
         ingredient = Ingredient.builder()
                 .id(1)
                 .name("Name")
-                .quantity("Quantity")
                 .recipe(recipe)
                 .build();
 
         ingredientDto = IngredientDto.builder()
                 .name("Name")
-                .quantity("Quantity")
-                .recipeId(1)
                 .build();
     }
 
     @Test
     void testToEntity(){
-        when(recipeService.findById(1)).thenReturn(recipe);
+        when(recipeService.getRecipeById(1)).thenReturn(recipe);
 
         Ingredient result = ingredientMapper.toEntity(ingredientDto);
 
         assertEquals(ingredientDto.getId(), result.getId());
         assertEquals(ingredientDto.getName(), result.getName());
-        assertEquals(ingredientDto.getQuantity(), result.getQuantity());
-        assertEquals(ingredientDto.getRecipeId(), result.getRecipe().getId());
+
     }
 
     @Test
@@ -64,8 +60,6 @@ public class IngredientMapperTest {
 
         assertEquals(ingredient.getId(), result.getId());
         assertEquals(ingredient.getName(), result.getName());
-        assertEquals(ingredient.getQuantity(), result.getQuantity());
-        assertEquals(ingredient.getRecipe().getId(), result.getRecipeId());
 
     }
 }

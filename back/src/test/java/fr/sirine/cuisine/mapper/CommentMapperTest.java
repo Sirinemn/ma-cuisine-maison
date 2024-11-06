@@ -56,7 +56,7 @@ public class CommentMapperTest {
     @Test
     void testToEntity(){
         when(userService.findById(2)).thenReturn(user);
-        when(recipeService.findById(3)).thenReturn(recipe);
+        when(recipeService.getRecipeById(3)).thenReturn(recipe);
 
         Comment result = commentMapper.toEntity(commentDto);
 
