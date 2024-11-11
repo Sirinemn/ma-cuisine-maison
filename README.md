@@ -1,6 +1,6 @@
 # Ma Cuisine Maison
 
-**Ma Cuisine Maison** est une application web permettant aux utilisateurs de gérer des recettes culinaires, de commenter celles des autres, et de rechercher des recettes par catégorie. L'application permet également aux utilisateurs d'ajouter des images pour illustrer leurs recettes, offrant une expérience enrichissante et visuelle.
+**Ma Cuisine Maison** est une application web en cours de développement permettant aux utilisateurs de gérer des recettes culinaires, de commenter celles des autres, et de rechercher des recettes par catégorie. L'application permet également aux utilisateurs d'ajouter des images pour illustrer leurs recettes, offrant une expérience enrichissante et visuelle.
 
 ## Table des matières
 
