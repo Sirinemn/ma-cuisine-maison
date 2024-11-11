@@ -39,7 +39,7 @@
 Assurez-vous d'avoir installé les logiciels suivants sur votre machine :
 
 - [Node.js](https://nodejs.org/) (pour Angular)
-- [Java 11](https://www.oracle.com/java/technologies/javase-jdk21-downloads.html)
+- [Java 21](https://www.oracle.com/java/technologies/javase-jdk21-downloads.html)
 - [Maven](https://maven.apache.org/)
 - [Docker](https://www.docker.com/)
 - [MySQL](https://www.mysql.com/)
@@ -71,7 +71,7 @@ Assurez-vous d'avoir installé les logiciels suivants sur votre machine :
     ```bash
     cd front
     ng serve
-   L\'application sera disponible à l\'adresse : http://localhost:4200.
+   L'application sera disponible à l'adresse : http://localhost:4200.
 3. **Démarrer le back-end :**
     ```bash
     cd back
