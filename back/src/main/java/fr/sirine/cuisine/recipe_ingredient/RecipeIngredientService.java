@@ -23,7 +23,7 @@ public class RecipeIngredientService {
     }
 
     public List<RecipeIngredient> getIngredientsForRecipe(Integer recipeId) {
-        // Exemple : méthode pour récupérer les ingrédients d'une recette donnée
+        // récupérer les ingrédients d'une recette donnée
         return recipeIngredientRepository.findAll()
                 .stream()
                 .filter(ri -> ri.getRecipe().getId().equals(recipeId))

@@ -1,7 +1,6 @@
 package fr.sirine.cuisine.image;
 
 import fr.sirine.cuisine.exception.ImageProcessingException;
-import fr.sirine.cuisine.recipe.Recipe;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ImageService {
@@ -28,7 +28,7 @@ public class ImageService {
     public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
-    public Image saveImage(MultipartFile file, Recipe recipe) {
+    public Image saveImage(MultipartFile file) {
         try{
             String imageName = file.getOriginalFilename();
             String fileName = System.currentTimeMillis() + "_origin_" + imageName;
@@ -50,7 +50,6 @@ public class ImageService {
                     .thumbnailLocation(thumbnailPath)
                     .createdAt(LocalDateTime.now())
                     .modifiedAt(LocalDateTime.now())
-                    .recipe(recipe)
                     .build();
             this.imageRepository.save(image);
             return image;
@@ -66,5 +65,9 @@ public class ImageService {
         BufferedImage thumbnail = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         thumbnail.getGraphics().drawImage(original, 0, 0, width, height, null);
         return thumbnail;
+    }
+
+    public List<Image> getImagesByRecipeId(Integer recipeId) {
+        return imageRepository.findByRecipeId(recipeId);
     }
 }

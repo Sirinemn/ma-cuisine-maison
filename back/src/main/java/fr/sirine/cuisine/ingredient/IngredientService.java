@@ -1,6 +1,8 @@
 package fr.sirine.cuisine.ingredient;
 
 import fr.sirine.cuisine.exception.ExternalApiException;
+import fr.sirine.cuisine.recipe.Recipe;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

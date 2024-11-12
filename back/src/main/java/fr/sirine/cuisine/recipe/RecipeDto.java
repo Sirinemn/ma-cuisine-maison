@@ -30,7 +30,7 @@ public class RecipeDto {
     private Integer categoryId;
     private String categoryName;
 
-    private List<IngredientDto> ingredients; // Liste des ingrédients dans la recette
+    private List<IngredientDto> ingredients; 
 
     @NotNull
     private String imageUrl;

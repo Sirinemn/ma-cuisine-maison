@@ -28,7 +28,7 @@ public class MaCuisineMaison {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-		@Bean
+	@Bean
 	public CommandLineRunner runner(RoleRepository roleRepository, UserRepository userRepository) {
 		return args -> {
 			if (roleRepository.findByName("USER").isEmpty()) {
@@ -38,12 +38,11 @@ public class MaCuisineMaison {
 				roleRepository.save(Role.builder().name("ADMIN").build());
 			}
 
-			if (userRepository.findByFirstname("admin").isEmpty()) {
+			if (userRepository.findByEmail("admin@mail.fr").isEmpty()) {
 				User admin = new User();
 				admin.setFirstname("admin");
 				admin.setEmail("admin@mail.fr");
 				admin.setLastname("Last");
-				admin.setFirstname("First");
 				admin.setPseudo("admin");
 				admin.setEnabled(true);
 				admin.setAccountLocked(false);
@@ -54,4 +53,5 @@ public class MaCuisineMaison {
 			}
 		};
 	}
+
 }

@@ -1,6 +1,5 @@
 package fr.sirine.cuisine.ingredient;
 
-import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,4 +25,7 @@ public class Ingredient {
 
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> recipes = new ArrayList<>();
+
+    public Ingredient(String name) {
+    }
 }
