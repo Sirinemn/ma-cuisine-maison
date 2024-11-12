@@ -27,10 +27,9 @@ public class RecipeDto {
     private String userPseudo;
 
     @NotNull
-    private Integer categoryId;
     private String categoryName;
 
-    private List<IngredientDto> ingredients; 
+    private List<IngredientDto> ingredients;
 
     @NotNull
     private String imageUrl;

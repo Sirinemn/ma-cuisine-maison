@@ -26,7 +26,7 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
 
     @Mappings({
             @Mapping(target = "user", expression = "java(recipeDto.getUserId() != null ? userService.findById(recipeDto.getUserId()) : null)"),
-            @Mapping(target = "category", expression = "java(recipeDto.getCategoryId() != null ? categoryService.findById(recipeDto.getCategoryId()) : null)"),
+            @Mapping(target = "category", expression = "java(recipeDto.getCategoryName() != null ? categoryService.findByName(recipeDto.getCategoryName()) : null)"),
             @Mapping(target = "ingredients", ignore = true) // Assurez-vous de gérer les ingrédients séparément si nécessaire
     })
     public abstract Recipe toEntity(RecipeDto recipeDto);
@@ -34,7 +34,6 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
     @Mappings({
             @Mapping(source = "recipe.user.pseudo", target = "userPseudo"),
             @Mapping(source = "recipe.user.id", target = "userId"),
-            @Mapping(expression = "java(recipe.getCategory() != null ? recipe.getCategory().getId() : null)", target = "categoryId"),
             @Mapping(expression = "java(recipe.getCategory() != null ? recipe.getCategory().getName().name() : null)", target = "categoryName"),
             @Mapping(target = "ingredients", ignore = true) // Gérez les ingrédients séparément si besoin
     })
