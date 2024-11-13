@@ -27,7 +27,7 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
     @Mappings({
             @Mapping(target = "user", expression = "java(recipeDto.getUserId() != null ? userService.findById(recipeDto.getUserId()) : null)"),
             @Mapping(target = "category", expression = "java(recipeDto.getCategoryName() != null ? categoryService.findByName(recipeDto.getCategoryName()) : null)"),
-            @Mapping(target = "ingredients", ignore = true) // Assurez-vous de gérer les ingrédients séparément si nécessaire
+            @Mapping(target = "ingredients", ignore = true) // gérer les ingrédients séparément si nécessaire
     })
     public abstract Recipe toEntity(RecipeDto recipeDto);
 
@@ -39,7 +39,7 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
     })
     public abstract RecipeDto toDto(Recipe recipe);
 
-    // Optionnel : Méthode utilitaire pour convertir la liste des ingrédients si nécessaire
+    //  Méthode utilitaire pour convertir la liste des ingrédients si nécessaire
     protected List<IngredientDto> mapIngredients(List<RecipeIngredient> recipeIngredients) {
         return recipeIngredients.stream()
                 .map(ri -> new IngredientDto(

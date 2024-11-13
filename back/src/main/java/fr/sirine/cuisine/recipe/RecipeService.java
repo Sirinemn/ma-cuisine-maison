@@ -5,6 +5,7 @@ import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.ingredient.IngredientRepository;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -21,22 +22,30 @@ public class RecipeService {
     private final RecipeMapper recipeMapper;
     private final IngredientRepository ingredientRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
+    private final RecipeIngredientMapper recipeIngredientMapper;
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository) {
+    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, RecipeIngredientMapper recipeIngredientMapper) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.ingredientRepository = ingredientRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
+        this.recipeIngredientMapper = recipeIngredientMapper;
     }
 
 
-    public Recipe createRecipe(RecipeDto recipeDto) {
+    public Recipe createRecipe(String title, String description, int cookingTime, int servings,
+                               Integer userId, String categoryName, List<IngredientDto> ingredientDtos
+                               ) {
         // Convert RecipeDto to Recipe entity
-        Recipe recipe = recipeMapper.toEntity(recipeDto);
-        recipe = recipeRepository.save(recipe);
+        // Créer l'objet Recipe
+        Recipe recipe = new Recipe();
+        recipe.setTitle(title);
+        recipe.setDescription(description);
+        recipe.setCookingTime(cookingTime);
+        recipe.setServings(servings);
 
         // Create and save RecipeIngredient entities
-        for (IngredientDto ingredientDto : recipeDto.getIngredients()) {
+        for (IngredientDto ingredientDto : recipeIngredientMapper.toDto(recipe.getIngredients())) {
             Ingredient ingredient = ingredientRepository.findByName(ingredientDto.getName())
                     .orElseGet(() -> ingredientRepository.save(new Ingredient(ingredientDto.getName())));
 
