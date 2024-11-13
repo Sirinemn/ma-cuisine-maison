@@ -2,10 +2,10 @@ package fr.sirine.cuisine.controller;
 
 import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
-import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
 import fr.sirine.cuisine.recipe.RecipeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,17 +28,11 @@ public class RecipeController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Recipe> createRecipe(
-            @RequestParam String title,
-            @RequestParam String description,
-            @RequestParam int cookingTime,
-            @RequestParam int servings,
-            @RequestParam Integer userId,
-            @RequestParam String categoryName,
-            @RequestParam List<IngredientDto> ingredients,
+            @RequestPart("recipeDto") @Valid RecipeDto recipeDto,
             @RequestPart(required = false) MultipartFile imageFile) {
 
         // Créer la recette en utilisant le service
-        Recipe createdRecipe = recipeService.createRecipe(title, description, cookingTime, servings, userId, categoryName, ingredients);
+        Recipe createdRecipe = recipeService.createRecipe(recipeDto);
 
         // Sauvegarder l'image et l'associer à la recette si elle existe
         if (imageFile != null && !imageFile.isEmpty()) {

@@ -3,6 +3,7 @@ package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientDto;
+import fr.sirine.cuisine.ingredient.IngredientMapper;
 import fr.sirine.cuisine.ingredient.IngredientRepository;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
@@ -20,46 +21,38 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
-    private final IngredientRepository ingredientRepository;
-    private final RecipeIngredientRepository recipeIngredientRepository;
-    private final RecipeIngredientMapper recipeIngredientMapper;
+    private final IngredientMapper ingredientMapper;
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository, RecipeIngredientMapper recipeIngredientMapper) {
+
+    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
-        this.ingredientRepository = ingredientRepository;
-        this.recipeIngredientRepository = recipeIngredientRepository;
-        this.recipeIngredientMapper = recipeIngredientMapper;
+        this.ingredientMapper = ingredientMapper;
+
     }
 
-
-    public Recipe createRecipe(String title, String description, int cookingTime, int servings,
-                               Integer userId, String categoryName, List<IngredientDto> ingredientDtos
-                               ) {
-        // Convert RecipeDto to Recipe entity
-        // Créer l'objet Recipe
+    public Recipe createRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
-        recipe.setTitle(title);
-        recipe.setDescription(description);
-        recipe.setCookingTime(cookingTime);
-        recipe.setServings(servings);
+        recipe.setTitle(recipeDto.getTitle());
+        recipe.setDescription(recipeDto.getDescription());
+        recipe.setCookingTime(recipeDto.getCookingTime());
+        recipe.setServings(recipeDto.getServings());
 
-        // Create and save RecipeIngredient entities
-        for (IngredientDto ingredientDto : recipeIngredientMapper.toDto(recipe.getIngredients())) {
-            Ingredient ingredient = ingredientRepository.findByName(ingredientDto.getName())
-                    .orElseGet(() -> ingredientRepository.save(new Ingredient(ingredientDto.getName())));
+        // Mapper et ajouter les ingrédients
+        List<RecipeIngredient> ingredients = recipeDto.getIngredients().stream()
+                .map(ingredientDto -> {
+                    RecipeIngredient recipeIngredient = new RecipeIngredient();
+                    recipeIngredient.setIngredient(ingredientMapper.toEntity(ingredientDto));
+                    recipeIngredient.setQuantity(ingredientDto.getQuantity());
+                    recipeIngredient.setUnit(ingredientDto.getUnit());
+                    recipeIngredient.setRecipe(recipe); // Associer la recette
+                    return recipeIngredient;
+                })
+                .collect(Collectors.toList());
+        recipe.setIngredients(ingredients);
 
-            RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-                    .recipe(recipe)
-                    .ingredient(ingredient)
-                    .quantity(ingredientDto.getQuantity())
-                    .unit(ingredientDto.getUnit())
-                    .build();
-
-            recipeIngredientRepository.save(recipeIngredient);
-        }
-
-        return recipe;
+        // Enregistrer la recette avec les ingrédients associés
+        return recipeRepository.save(recipe);
     }
 
     public List<RecipeDto> getAllRecipes() {
