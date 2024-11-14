@@ -1,6 +1,7 @@
 package fr.sirine.cuisine.ingredient;
 
 import fr.sirine.cuisine.exception.ExternalApiException;
+import fr.sirine.cuisine.payload.IngredientRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import  org.springframework.http.HttpStatusCode;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,12 +52,22 @@ public class IngredientService {
                 .block();
     }
 
-    public List<Ingredient> saveIngredients(List<IngredientDto> ingredientsDto) {
-        List<Ingredient> ingredients = ingredientsDto.stream()
-                .map(ingredientMapper::toEntity)
-                .collect(Collectors.toList());
+    public List<Ingredient> processIngredients(List<IngredientRequest> ingredientRequests) {
+        List<Ingredient> ingredients = new ArrayList<>();
 
-        ingredientRepository.saveAll(ingredients);
+        for (IngredientRequest ingredientRequest : ingredientRequests) {
+            // Vérifier si l'ingrédient existe dans la base de données
+            Ingredient ingredient = ingredientRepository.findByName(ingredientRequest.getName())
+                    .orElseGet(() -> {
+                        // Créer un nouvel ingrédient s'il n'existe pas
+                        Ingredient newIngredient = new Ingredient();
+                        newIngredient.setName(ingredientRequest.getName());
+                        return ingredientRepository.save(newIngredient);
+                    });
+
+            ingredients.add(ingredient);
+        }
+
         return ingredients;
     }
 

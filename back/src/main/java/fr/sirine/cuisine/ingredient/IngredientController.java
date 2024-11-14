@@ -23,10 +23,4 @@ public class IngredientController {
         return ResponseEntity.ok(ingredientNames);
     }
 
-    // Endpoint pour enregistrer l'ingrédient sélectionné dans la base de données
-    @PostMapping("/save")
-    public ResponseEntity<Void> saveIngredient(@RequestBody List<IngredientDto> ingredientsDto) {
-        List<Ingredient> savedIngredients = ingredientService.saveIngredients(ingredientsDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 }
