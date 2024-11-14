@@ -2,10 +2,18 @@ package fr.sirine.cuisine.controller;
 
 import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
+import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.ingredient.IngredientDto;
+import fr.sirine.cuisine.ingredient.IngredientService;
+import fr.sirine.cuisine.payload.IngredientRequest;
+import fr.sirine.cuisine.payload.MessageResponse;
+import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
+import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.cuisine.recipe.RecipeService;
-import jakarta.validation.Valid;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recipes")
@@ -20,27 +29,56 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final ImageService imageService;
+    private final IngredientService ingredientService;
+    private final RecipeIngredientService recipeIngredientService;
 
-    public RecipeController(RecipeService recipeService, ImageService imageService) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, RecipeIngredientService recipeIngredientService, RecipeMapper recipeMapper, RecipeIngredientMapper recipeIngredientMapper) {
         this.recipeService = recipeService;
         this.imageService = imageService;
+        this.ingredientService = ingredientService;
+        this.recipeIngredientService = recipeIngredientService;
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Recipe> createRecipe(
-            @RequestPart("recipeDto") @Valid RecipeDto recipeDto,
+    public ResponseEntity<MessageResponse> createRecipe(
+            @ModelAttribute RecipeRequest recipeRequest,
+            @RequestParam List<IngredientRequest> ingredientRequests,
             @RequestPart(required = false) MultipartFile imageFile) {
+        // Process ingredients
+        List<Ingredient> ingredients = ingredientService.processIngredients(ingredientRequests);
 
-        // Créer la recette en utilisant le service
-        Recipe createdRecipe = recipeService.createRecipe(recipeDto);
+        // Create Recipe object from RecipeRequest
+        RecipeDto recipeDto = new RecipeDto();
+        recipeDto.setTitle(recipeRequest.getTitle());
+        recipeDto.setDescription(recipeRequest.getDescription());
+        recipeDto.setCookingTime(recipeRequest.getCookingTime());
+        recipeDto.setServings(recipeRequest.getServings());
+        recipeDto.setUserId(recipeRequest.getUserId());
+        recipeDto.setUserPseudo(recipeRequest.getUserPseudo());
+        recipeDto.setCategoryName(recipeRequest.getCategoryName());
+        recipeDto.setIngredients(ingredientRequests.stream().map(req -> {
+            IngredientDto dto = new IngredientDto();
+            dto.setName(req.getName());
+            dto.setQuantity(req.getQuantity());
+            dto.setUnit(req.getUnit());
+            return dto;
+        }).collect(Collectors.toList()));
 
-        // Sauvegarder l'image et l'associer à la recette si elle existe
+        // Process image and set URLs
         if (imageFile != null && !imageFile.isEmpty()) {
             Image image = imageService.saveImage(imageFile);
-            image.setRecipe(createdRecipe);
+            recipeDto.setImageThumbUrl(image.getThumbnailLocation());
+            recipeDto.setImageUrl(image.getImageLocation());
         }
 
-        return new ResponseEntity<>(createdRecipe, HttpStatus.CREATED);
+        // Save the recipe
+        Recipe recipe = recipeService.createRecipe(recipeDto);
+
+        // Create and save RecipeIngredients
+        recipeIngredientService.createAndSaveRecipeIngredients(ingredients, recipe, ingredientRequests);
+
+        MessageResponse messageResponse = new MessageResponse("Recipe added with success!");
+        return new ResponseEntity<>( messageResponse, HttpStatus.OK);
     }
 
 }
