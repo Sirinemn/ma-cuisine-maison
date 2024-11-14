@@ -14,6 +14,7 @@ import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.cuisine.recipe.RecipeService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +42,11 @@ public class RecipeController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageResponse> createRecipe(
-            @ModelAttribute RecipeRequest recipeRequest,
-            @RequestParam List<IngredientRequest> ingredientRequests,
+            @Valid @ModelAttribute RecipeRequest recipeRequest,
+            @Valid @RequestParam List<@Valid IngredientRequest> ingredientRequests,
             @RequestPart(required = false) MultipartFile imageFile) {
+        try {
+
         // Process ingredients
         List<Ingredient> ingredients = ingredientService.processIngredients(ingredientRequests);
 
@@ -79,6 +82,9 @@ public class RecipeController {
 
         MessageResponse messageResponse = new MessageResponse("Recipe added with success!");
         return new ResponseEntity<>( messageResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new MessageResponse("An error occurred: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
