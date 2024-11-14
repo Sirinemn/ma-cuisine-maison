@@ -12,8 +12,10 @@ public class RecipeRequest {
 
     private String title;
     private String description;
-    private int cookingTime;
-    private int servings;
+    @NotNull(message = "Cooking time are required")
+    private Integer cookingTime;
+    @NotNull(message = "Servings are required")
+    private Integer servings;
 
     @NotNull
     private Integer userId;

@@ -42,8 +42,8 @@ public class RecipeController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageResponse> createRecipe(
-            @Valid @ModelAttribute RecipeRequest recipeRequest,
-            @Valid @RequestParam List<@Valid IngredientRequest> ingredientRequests,
+            @Valid @RequestPart RecipeRequest recipeRequest,
+            @Valid @RequestPart List<@Valid IngredientRequest> ingredientRequests,
             @RequestPart(required = false) MultipartFile imageFile) {
         try {
 

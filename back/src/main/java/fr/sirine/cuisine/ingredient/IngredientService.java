@@ -1,10 +1,12 @@
 package fr.sirine.cuisine.ingredient;
 
+import fr.sirine.cuisine.exception.DuplicateResourceException;
 import fr.sirine.cuisine.exception.ExternalApiException;
 import fr.sirine.cuisine.payload.IngredientRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -53,23 +55,24 @@ public class IngredientService {
     }
 
     public List<Ingredient> processIngredients(List<IngredientRequest> ingredientRequests) {
-        List<Ingredient> ingredients = new ArrayList<>();
-
-        for (IngredientRequest ingredientRequest : ingredientRequests) {
-            // Vérifier si l'ingrédient existe dans la base de données
-            Ingredient ingredient = ingredientRepository.findByName(ingredientRequest.getName())
-                    .orElseGet(() -> {
-                        // Créer un nouvel ingrédient s'il n'existe pas
-                        Ingredient newIngredient = new Ingredient();
-                        newIngredient.setName(ingredientRequest.getName());
-                        return ingredientRepository.save(newIngredient);
-                    });
-
-            ingredients.add(ingredient);
-        }
-
-        return ingredients;
+        return ingredientRequests.stream()
+                .map(ingredientRequest -> {
+                    // Vérifier si l'ingrédient existe dans la base de données
+                    return ingredientRepository.findByName(ingredientRequest.getName())
+                            .orElseGet(() -> {
+                                // Créer un nouvel ingrédient s'il n'existe pas
+                                Ingredient newIngredient = new Ingredient();
+                                newIngredient.setName(ingredientRequest.getName());
+                                try {
+                                    return ingredientRepository.save(newIngredient);
+                                } catch (DataIntegrityViolationException e) {
+                                    throw new DuplicateResourceException("L'ingrédient '" + ingredientRequest.getName() + "' existe déjà.");
+                                }
+                            });
+                })
+                .collect(Collectors.toList());
     }
+
 
     public void save(Ingredient ingredient) {
         this.ingredientRepository.save(ingredient);
