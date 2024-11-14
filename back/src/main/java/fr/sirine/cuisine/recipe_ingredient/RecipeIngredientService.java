@@ -1,7 +1,11 @@
 package fr.sirine.cuisine.recipe_ingredient;
 
+import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.payload.IngredientRequest;
+import fr.sirine.cuisine.recipe.Recipe;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,8 +18,24 @@ public class RecipeIngredientService {
         this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    public RecipeIngredient addRecipeIngredient(RecipeIngredient recipeIngredient) {
-        return recipeIngredientRepository.save(recipeIngredient);
+    public List<RecipeIngredient> createAndSaveRecipeIngredients(List<Ingredient> ingredients, Recipe recipe, List<IngredientRequest> ingredientRequests) {
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+        for (int i = 0; i < ingredients.size(); i++) {
+            Ingredient ingredient = ingredients.get(i);
+            IngredientRequest ingredientRequest = ingredientRequests.get(i);
+
+            RecipeIngredient recipeIngredient = new RecipeIngredient();
+            recipeIngredient.setRecipe(recipe);
+            recipeIngredient.setIngredient(ingredient);
+            recipeIngredient.setQuantity(ingredientRequest.getQuantity());
+            recipeIngredient.setUnit(ingredientRequest.getUnit());
+
+            recipeIngredients.add(recipeIngredient);
+        }
+
+        // Enregistrer tous les RecipeIngredient
+        return recipeIngredientRepository.saveAll(recipeIngredients);
     }
 
     public void deleteRecipeIngredient(Integer id) {
