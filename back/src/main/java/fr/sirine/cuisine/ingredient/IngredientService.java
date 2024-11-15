@@ -57,7 +57,6 @@ public class IngredientService {
                     // Vérifier si l'ingrédient existe déjà dans la base de données
                     Optional<Ingredient> existingIngredient = ingredientRepository.findByName(ingredientRequest.getName());
                     if (existingIngredient.isPresent()) {
-                        System.out.println("Recherche de l'ingrédient in if bloc: " + ingredientRequest.getName());
                         // Retourner l'ingrédient existant
                         return existingIngredient.get();
 
@@ -66,7 +65,6 @@ public class IngredientService {
                         // Créer un nouvel ingrédient s'il n'existe pas
                         Ingredient newIngredient = new Ingredient();
                         newIngredient.setName(ingredientRequest.getName());
-                        System.out.println("Tentative d'enregistrement d'un nouvel ingrédient : " + newIngredient.getName());
                         return ingredientRepository.save(newIngredient);
                     }
                 })
