@@ -1,6 +1,7 @@
 package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.CategoryService;
+import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", imports = {RecipeCategory.class})
 public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
 
     @Autowired

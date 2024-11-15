@@ -72,6 +72,7 @@ public class RecipeController {
             Image image = imageService.saveImage(imageFile);
             recipeDto.setImageThumbUrl(image.getThumbnailLocation());
             recipeDto.setImageUrl(image.getImageLocation());
+            recipeDto.setImageId(image.getId());
         }
 
         // Save the recipe

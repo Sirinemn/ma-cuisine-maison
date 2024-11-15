@@ -12,9 +12,7 @@ public class CategoryService {
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
-    public Category findByName(String name){
-        return this.categoryRepository.findByName(name);
-    }
+
     public Category findById(Integer id){
         return this.categoryRepository.findById(id).orElse(null);
     }

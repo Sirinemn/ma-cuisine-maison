@@ -61,7 +61,6 @@ public class IngredientService {
                         return existingIngredient.get();
 
                     } else {
-                        System.out.println("Recherche de l'ingrédient in else bloc : " + ingredientRequest.getName());
                         // Créer un nouvel ingrédient s'il n'existe pas
                         Ingredient newIngredient = new Ingredient();
                         newIngredient.setName(ingredientRequest.getName());
