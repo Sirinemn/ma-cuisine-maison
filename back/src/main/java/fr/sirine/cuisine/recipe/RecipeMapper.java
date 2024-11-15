@@ -1,6 +1,7 @@
 package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.CategoryService;
+import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.starter.mapper.EntityMapper;
@@ -24,8 +25,12 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    ImageService imageService;
+
     @Mappings({
             @Mapping(target = "user", expression = "java(recipeDto.getUserId() != null ? userService.findById(recipeDto.getUserId()) : null)"),
+            @Mapping(target = "image", expression = "java(recipeDto.getImageId() != null ? imageService.findById(recipeDto.getImageId()) : null)"),
             @Mapping(target = "category", expression = "java(recipeDto.getCategoryName() != null ? categoryService.findByName(recipeDto.getCategoryName()) : null)"),
             @Mapping(target = "ingredients", ignore = true) // gérer les ingrédients séparément si nécessaire
     })
@@ -34,6 +39,7 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
     @Mappings({
             @Mapping(source = "recipe.user.pseudo", target = "userPseudo"),
             @Mapping(source = "recipe.user.id", target = "userId"),
+            @Mapping(source = "recipe.image.id", target = "imageId"),
             @Mapping(expression = "java(recipe.getCategory() != null ? recipe.getCategory().getName().name() : null)", target = "categoryName"),
             @Mapping(target = "ingredients", ignore = true) // Gérez les ingrédients séparément si besoin
     })

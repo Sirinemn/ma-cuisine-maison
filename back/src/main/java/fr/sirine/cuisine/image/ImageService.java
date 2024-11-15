@@ -70,4 +70,7 @@ public class ImageService {
     public List<Image> getImagesByRecipeId(Integer recipeId) {
         return imageRepository.findByRecipeId(recipeId);
     }
+    public Image findById(Integer id){
+        return this.imageRepository.findById(id).orElse(null);
+    }
 }

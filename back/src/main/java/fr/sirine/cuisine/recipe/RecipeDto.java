@@ -32,6 +32,7 @@ public class RecipeDto {
     private List<IngredientDto> ingredients;
 
     @NotNull
+    private Integer imageId;
     private String imageUrl;
     private String imageThumbUrl;
 

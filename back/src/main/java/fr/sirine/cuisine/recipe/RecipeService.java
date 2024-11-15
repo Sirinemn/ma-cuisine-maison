@@ -27,15 +27,11 @@ public class RecipeService {
         this.ingredientMapper = ingredientMapper;
         this.ingredientService = ingredientService;
     }
+
     @Transactional
     public Recipe createRecipe(RecipeDto recipeDto) {
-        Recipe recipe = new Recipe();
-        recipe.setTitle(recipeDto.getTitle());
-        recipe.setDescription(recipeDto.getDescription());
-        recipe.setCookingTime(recipeDto.getCookingTime());
-        recipe.setServings(recipeDto.getServings());
+        Recipe recipe = recipeMapper.toEntity(recipeDto);
 
-        // Mapper et ajouter les ingrédients en utilisant IngredientService
         List<RecipeIngredient> ingredients = recipeDto.getIngredients().stream()
                 .map(ingredientDto -> {
                     Ingredient ingredient = ingredientService.findOrCreateIngredient(ingredientDto.getName());
@@ -44,14 +40,13 @@ public class RecipeService {
                     recipeIngredient.setIngredient(ingredient);
                     recipeIngredient.setQuantity(ingredientDto.getQuantity());
                     recipeIngredient.setUnit(ingredientDto.getUnit());
-                    recipeIngredient.setRecipe(recipe); // Associer la recette
+                    recipeIngredient.setRecipe(recipe);
                     return recipeIngredient;
                 })
                 .collect(Collectors.toList());
 
         recipe.setIngredients(ingredients);
 
-        // Enregistrer la recette avec les ingrédients associés
         return recipeRepository.save(recipe);
     }
 
