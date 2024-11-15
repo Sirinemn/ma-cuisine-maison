@@ -18,7 +18,9 @@ public class RecipeIngredientService {
         this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
-    public List<RecipeIngredient> createAndSaveRecipeIngredients(List<Ingredient> ingredients, Recipe recipe, List<IngredientRequest> ingredientRequests) {
+    public void createAndSaveRecipeIngredients(List<Ingredient> ingredients,
+                                               Recipe recipe,
+                                               List<IngredientRequest> ingredientRequests) {
         List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
         for (int i = 0; i < ingredients.size(); i++) {
@@ -35,8 +37,9 @@ public class RecipeIngredientService {
         }
 
         // Enregistrer tous les RecipeIngredient
-        return recipeIngredientRepository.saveAll(recipeIngredients);
+        recipeIngredientRepository.saveAll(recipeIngredients);
     }
+
 
     public void deleteRecipeIngredient(Integer id) {
         recipeIngredientRepository.deleteById(id);

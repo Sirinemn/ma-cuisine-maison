@@ -1,13 +1,9 @@
 package fr.sirine.cuisine.recipe;
 
-
 import fr.sirine.cuisine.ingredient.Ingredient;
-import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.ingredient.IngredientMapper;
-import fr.sirine.cuisine.ingredient.IngredientRepository;
+import fr.sirine.cuisine.ingredient.IngredientService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
-import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
-import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +18,16 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
     private final IngredientMapper ingredientMapper;
+    private final IngredientService ingredientService;
 
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper) {
+    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.ingredientMapper = ingredientMapper;
-
+        this.ingredientService = ingredientService;
     }
-
+    @Transactional
     public Recipe createRecipe(RecipeDto recipeDto) {
         Recipe recipe = new Recipe();
         recipe.setTitle(recipeDto.getTitle());
@@ -38,17 +35,20 @@ public class RecipeService {
         recipe.setCookingTime(recipeDto.getCookingTime());
         recipe.setServings(recipeDto.getServings());
 
-        // Mapper et ajouter les ingrédients
+        // Mapper et ajouter les ingrédients en utilisant IngredientService
         List<RecipeIngredient> ingredients = recipeDto.getIngredients().stream()
                 .map(ingredientDto -> {
+                    Ingredient ingredient = ingredientService.findOrCreateIngredient(ingredientDto.getName());
+
                     RecipeIngredient recipeIngredient = new RecipeIngredient();
-                    recipeIngredient.setIngredient(ingredientMapper.toEntity(ingredientDto));
+                    recipeIngredient.setIngredient(ingredient);
                     recipeIngredient.setQuantity(ingredientDto.getQuantity());
                     recipeIngredient.setUnit(ingredientDto.getUnit());
                     recipeIngredient.setRecipe(recipe); // Associer la recette
                     return recipeIngredient;
                 })
                 .collect(Collectors.toList());
+
         recipe.setIngredients(ingredients);
 
         // Enregistrer la recette avec les ingrédients associés

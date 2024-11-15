@@ -1,20 +1,17 @@
 package fr.sirine.cuisine.ingredient;
 
-import fr.sirine.cuisine.exception.DuplicateResourceException;
 import fr.sirine.cuisine.exception.ExternalApiException;
 import fr.sirine.cuisine.payload.IngredientRequest;
-import fr.sirine.cuisine.recipe.Recipe;
-import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import  org.springframework.http.HttpStatusCode;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,28 +50,34 @@ public class IngredientService {
                 .collectList()
                 .block();
     }
-
+    @Transactional
     public List<Ingredient> processIngredients(List<IngredientRequest> ingredientRequests) {
         return ingredientRequests.stream()
                 .map(ingredientRequest -> {
-                    // Vérifier si l'ingrédient existe dans la base de données
-                    return ingredientRepository.findByName(ingredientRequest.getName())
-                            .orElseGet(() -> {
-                                // Créer un nouvel ingrédient s'il n'existe pas
-                                Ingredient newIngredient = new Ingredient();
-                                newIngredient.setName(ingredientRequest.getName());
-                                try {
-                                    return ingredientRepository.save(newIngredient);
-                                } catch (DataIntegrityViolationException e) {
-                                    throw new DuplicateResourceException("L'ingrédient '" + ingredientRequest.getName() + "' existe déjà.");
-                                }
-                            });
+                    // Vérifier si l'ingrédient existe déjà dans la base de données
+                    Optional<Ingredient> existingIngredient = ingredientRepository.findByName(ingredientRequest.getName());
+                    if (existingIngredient.isPresent()) {
+                        System.out.println("Recherche de l'ingrédient in if bloc: " + ingredientRequest.getName());
+                        // Retourner l'ingrédient existant
+                        return existingIngredient.get();
+
+                    } else {
+                        System.out.println("Recherche de l'ingrédient in else bloc : " + ingredientRequest.getName());
+                        // Créer un nouvel ingrédient s'il n'existe pas
+                        Ingredient newIngredient = new Ingredient();
+                        newIngredient.setName(ingredientRequest.getName());
+                        System.out.println("Tentative d'enregistrement d'un nouvel ingrédient : " + newIngredient.getName());
+                        return ingredientRepository.save(newIngredient);
+                    }
                 })
                 .collect(Collectors.toList());
     }
-
-
-    public void save(Ingredient ingredient) {
-        this.ingredientRepository.save(ingredient);
+    public Ingredient findOrCreateIngredient(String name) {
+        return ingredientRepository.findByName(name)
+                .orElseGet(() -> {
+                    Ingredient newIngredient = new Ingredient();
+                    newIngredient.setName(name);
+                    return ingredientRepository.save(newIngredient);
+                });
     }
 }
