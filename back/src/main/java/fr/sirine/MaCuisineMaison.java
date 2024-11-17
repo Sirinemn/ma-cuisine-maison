@@ -1,5 +1,8 @@
 package fr.sirine;
 
+import fr.sirine.cuisine.category.Category;
+import fr.sirine.cuisine.category.CategoryRepository;
+import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.starter.role.RoleRepository;
 import fr.sirine.starter.role.Role;
 import fr.sirine.starter.user.User;
@@ -29,15 +32,16 @@ public class MaCuisineMaison {
 		return new BCryptPasswordEncoder();
 	}
 	@Bean
-	public CommandLineRunner runner(RoleRepository roleRepository, UserRepository userRepository) {
+	public CommandLineRunner runner(RoleRepository roleRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
 		return args -> {
+			// Initialiser les rôles
 			if (roleRepository.findByName("USER").isEmpty()) {
 				roleRepository.save(Role.builder().name("USER").build());
 			}
 			if (roleRepository.findByName("ADMIN").isEmpty()) {
 				roleRepository.save(Role.builder().name("ADMIN").build());
 			}
-
+			// Initialiser l'utilisateur admin
 			if (userRepository.findByEmail("admin@mail.fr").isEmpty()) {
 				User admin = new User();
 				admin.setFirstname("admin");
@@ -50,6 +54,14 @@ public class MaCuisineMaison {
 				Role adminRole = roleRepository.findByName("ADMIN").orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
 				admin.setRoles(new ArrayList<>(Collections.singleton(adminRole)));
 				userRepository.save(admin);
+			}
+			// Initialiser les catégories
+			for (RecipeCategory recipeCategory : RecipeCategory.values()) {
+				if (!categoryRepository.existsByName(recipeCategory)) {
+					Category category = new Category();
+					category.setName(recipeCategory);
+					categoryRepository.save(category);
+				}
 			}
 		};
 	}
