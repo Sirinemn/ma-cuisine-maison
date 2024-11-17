@@ -14,6 +14,10 @@ import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.cuisine.recipe.RecipeService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +30,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recipes")
+@Tag(name = "Recipe Controller", description = "Recipe Management")
 public class RecipeController {
 
     private final RecipeService recipeService;
@@ -40,7 +45,12 @@ public class RecipeController {
         this.recipeIngredientService = recipeIngredientService;
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "Create a new recipe", description = "Creates a new recipe with ingredients and image")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Recipe added with success!"),
+            @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @PostMapping(name= "/add",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageResponse> createRecipe(
             @Valid @RequestPart RecipeRequest recipeRequest,
             @Valid @RequestPart List<@Valid IngredientRequest> ingredientRequests,

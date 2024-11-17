@@ -33,7 +33,8 @@ public class CategoryService {
             return existingCategory.get();
         } else {
             // Créer et enregistrer une nouvelle catégorie si elle n'existe pas
-            Category newCategory = new Category(); newCategory.setName(recipeCategory);
+            Category newCategory = new Category();
+            newCategory.setName(recipeCategory);
             return categoryRepository.save(newCategory);
         }
     }
