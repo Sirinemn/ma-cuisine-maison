@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @SpringBootTest(classes = MaCuisineMaison.class)
 @AutoConfigureMockMvc
 class UserControllerIT {

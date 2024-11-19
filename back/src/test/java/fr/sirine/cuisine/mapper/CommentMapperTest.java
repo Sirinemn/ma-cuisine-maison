@@ -10,25 +10,26 @@ import fr.sirine.starter.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CommentMapperTest {
-
     @InjectMocks
-    private CommentMapper commentMapper;
+    private CommentMapper commentMapper = Mappers.getMapper(CommentMapper.class);
 
     @Mock
     private UserService userService;
 
     @Mock
     private RecipeService recipeService;
-
     private User user;
     private Comment comment;
     private CommentDto commentDto;

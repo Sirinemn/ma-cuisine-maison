@@ -8,11 +8,12 @@ import fr.sirine.cuisine.category.CategoryService;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
 import fr.sirine.cuisine.category.RecipeCategory;
-import fr.sirine.cuisine.recipe.RecipeMapperImpl;
+import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.starter.user.User;
 import fr.sirine.starter.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public class RecipeMapperTest {
 
     @InjectMocks
-    private RecipeMapperImpl recipeMapper;
+    private RecipeMapper recipeMapper = Mappers.getMapper(RecipeMapper.class);
 
     @Mock
     private UserService userService;
@@ -58,15 +59,14 @@ public class RecipeMapperTest {
                 .servings(4)
                 .userId(1)
                 .userPseudo("testuser")
-                .categoryId(1)
-                .categoryName("DESSERTS")
+                .categoryName("DESSERT")
                 .build();
     }
 
     @Test
     public void testToEntity() {
         when(userService.findById(1)).thenReturn(user);
-        when(categoryService.findById(1)).thenReturn(category);
+        when(categoryService.findByName("DESSERT")).thenReturn(category);
 
         Recipe result = recipeMapper.toEntity(recipeDto);
 
@@ -75,7 +75,6 @@ public class RecipeMapperTest {
         assertEquals(recipeDto.getCookingTime(), result.getCookingTime());
         assertEquals(recipeDto.getServings(), result.getServings());
         assertEquals(recipeDto.getUserId(), result.getUser().getId());
-        assertEquals(recipeDto.getCategoryId(), result.getCategory().getId());
     }
 
     @Test
@@ -87,6 +86,5 @@ public class RecipeMapperTest {
         assertEquals(recipe.getCookingTime(), result.getCookingTime());
         assertEquals(recipe.getServings(), result.getServings());
         assertEquals(recipe.getUser().getId(), result.getUserId());
-        assertEquals(recipe.getCategory().getId(), result.getCategoryId());
     }
 }

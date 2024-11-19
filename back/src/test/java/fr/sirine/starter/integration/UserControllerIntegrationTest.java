@@ -30,8 +30,6 @@ public class UserControllerIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserMapper userMapper;
 
     @BeforeEach
     public void setup() {

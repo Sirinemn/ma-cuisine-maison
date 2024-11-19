@@ -161,14 +161,13 @@
 				<version>0.8.9</version>
 				<executions>
 					<execution>
-						<id>default-prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
-						<phase>test</phase>
+						<phase>initialize</phase>
 					</execution>
 					<execution>
-						<id>default-report</id>
+						<id>report</id>
 						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
@@ -181,8 +180,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
 				<configuration>
-					<argLine>-javaagent:${settings.localRepository}/org/jacoco/org.jacoco.agent/0.8.9/org.jacoco.agent-0.8.9-runtime.jar=destfile=${project.build.directory}/jacoco.exec</argLine>
-					<argLine> -Dspring.profiles.active=test</argLine> <!-- Add this within the existing argLine configuration -->
+					<argLine> -Dspring.profiles.active=test</argLine>
 				</configuration>
 			</plugin>
 			<plugin>
