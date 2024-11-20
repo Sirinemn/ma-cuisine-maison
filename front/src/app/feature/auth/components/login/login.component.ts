@@ -62,7 +62,11 @@ export class LoginComponent implements OnDestroy {
           });
       },
       (error) => {
-        this.errorMessage = error.error.error;
+        if (error && error.error && error.error.error) {
+          this.errorMessage = error.error.error;
+        } else {
+          this.errorMessage = "An unknown error occurred";
+        }
       }
     );
   }

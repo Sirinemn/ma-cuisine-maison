@@ -15,25 +15,7 @@ export class SessionService {
   private isLoggedSubject = new BehaviorSubject<boolean>(this.isLogged);
 
   constructor( private authService: AuthService) {
-   /* const token = localStorage.getItem('token');
-    if (token) {
-      this.isLogged = true;
-      this.retrieveUser();
-    }*/
   }
-  
-/*  public retrieveUser(): void {
-    this.authService.me().subscribe(
-      (user: User) => {
-        this.user = user;
-        this.userRole = user.roles;
-        this.next();
-      },
-      (error) => {
-        console.error("Error retrieving user data", error);
-      }
-    );
-  } */ 
   
   public $isLogged(): Observable<boolean> {
     return this.isLoggedSubject.asObservable();

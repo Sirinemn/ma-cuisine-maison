@@ -42,17 +42,21 @@ export class RegisterComponent implements OnDestroy{
   }
 
   public submit(): void {
-
     const registerRequest = this.form.value as RegisterRequest;
-
+  
     this.httpSubscription = this.authService.register(registerRequest).subscribe(
       () => { 
-        this.router.navigate(['auth/activate-account'])
+        this.router.navigate(['auth/activate-account']);
       }, 
-      (error )=> {
-        this.errorMessage= error.error.error;
-    });
-  }
+      (error) => {
+        if (error && error.error && error.error.error) {
+          this.errorMessage = error.error.error;
+        } else {
+          this.errorMessage = "An unknown error occurred";
+        }
+      }
+    );
+  }  
 
   public back() {
     window.history.back();
