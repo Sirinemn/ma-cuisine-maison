@@ -110,6 +110,7 @@ export class MeComponent implements OnInit, OnDestroy{
       const dialogRef = this.dialog.open(ConfirmDialogComponent);
 
       const userId = String(this.sessionService.user!.id);
+      console.log(userId);
       dialogRef.afterClosed().subscribe(() => {
         this.httpSubscriptions.push(this.userService.deleteAccount(userId).subscribe(
           response => {
@@ -121,7 +122,8 @@ export class MeComponent implements OnInit, OnDestroy{
           }
         ));
       })     
-    }   
+    }  
+     
     ngOnDestroy(): void {
       this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
     } 
