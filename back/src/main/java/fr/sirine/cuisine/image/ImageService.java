@@ -67,7 +67,7 @@ public class ImageService {
         return thumbnail;
     }
 
-    public List<Image> getImagesByRecipeId(Integer recipeId) {
+    public Image getImagesByRecipeId(Integer recipeId) {
         return imageRepository.findByRecipeId(recipeId);
     }
     public Image findById(Integer id){
