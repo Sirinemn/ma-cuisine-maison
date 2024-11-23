@@ -21,12 +21,10 @@ public class IngredientService {
     private String apiKey;
 
     private final WebClient webClient;
-    private final IngredientMapper ingredientMapper;
     private final IngredientRepository ingredientRepository;
 
-    public IngredientService(WebClient webClient, IngredientMapper ingredientMapper, IngredientRepository ingredientRepository) {
+    public IngredientService(WebClient webClient, IngredientRepository ingredientRepository) {
         this.webClient = webClient;
-        this.ingredientMapper = ingredientMapper;
         this.ingredientRepository = ingredientRepository;
     }
 
