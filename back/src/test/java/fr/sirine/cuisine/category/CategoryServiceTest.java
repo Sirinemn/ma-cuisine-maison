@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +28,8 @@ public class CategoryServiceTest {
         categoryService.findById(id);
         verify(categoryRepository, times(1)).findById(id);
     }
-    @Test public void testFindByNameExistingCategory() {
+    @Test
+    void testFindByNameExistingCategory() {
         String categoryName = "DESSERTS";
         RecipeCategory recipeCategory = RecipeCategory.DESSERTS;
         Category category = new Category();
@@ -36,5 +38,18 @@ public class CategoryServiceTest {
         Category result = categoryService.findByName(categoryName);
         assertNotNull(result);
         assertEquals(recipeCategory, result.getName());
+    }
+    @Test
+    void getAllCategoriesTest() {
+        RecipeCategory recipeCategory = RecipeCategory.ENTREES;
+        Category category = Category.builder()
+                .name(recipeCategory)
+                .build();
+        when(categoryRepository.findAll()).thenReturn(List.of(category));
+
+        List<String> result = categoryService.getAllCategories();
+
+        verify(categoryRepository, times(1)).findAll();
+        assertEquals(result.get(0), "ENTREES");
     }
 }

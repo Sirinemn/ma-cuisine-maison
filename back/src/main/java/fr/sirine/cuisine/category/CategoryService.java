@@ -3,6 +3,7 @@ package fr.sirine.cuisine.category;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +38,9 @@ public class CategoryService {
             newCategory.setName(recipeCategory);
             return categoryRepository.save(newCategory);
         }
+    }
+
+    public List<String> getAllCategories() {
+        return categoryRepository.findAll().stream().map(Category::getName).map(RecipeCategory::name).toList();
     }
 }
