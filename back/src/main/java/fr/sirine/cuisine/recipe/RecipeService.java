@@ -17,14 +17,12 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
-    private final IngredientMapper ingredientMapper;
     private final IngredientService ingredientService;
 
 
     public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
-        this.ingredientMapper = ingredientMapper;
         this.ingredientService = ingredientService;
     }
 
