@@ -62,7 +62,7 @@ public class RecipeServiceTest {
 
         Recipe result = recipeService.getRecipeById(id);
 
-        assertEquals(result.getTitle(), "title");
+        assertEquals("title", result.getTitle());
     }
 
     @Test public void testCreateRecipe() {
