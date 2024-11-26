@@ -12,14 +12,15 @@ import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
 import fr.sirine.cuisine.recipe.RecipeService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,35 +47,14 @@ public class RecipeControllerIT {
     @MockBean
     RecipeIngredientService recipeIngredientService;
 
-    @BeforeEach
-    public void setUp() {
-        IngredientRequest ingredientRequest = IngredientRequest.builder()
-                .name("Tomate")
-                .unit("gr")
-                .quantity(100.0)
-                .build();
-        Ingredient ingredient = Ingredient.builder()
-                .name("Tomate")
-                .build();
-        RecipeRequest recipeRequest = RecipeRequest.builder()
-                .categoryName("DESSERTS")
-                .cookingTime(15)
-                .description("description")
-                .servings(5)
-                .title("Pasta")
-                .userId(1)
-                .userPseudo("Pseudo")
-                .build();
-    }
     @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
     void createRecipeTest() throws Exception {
+        // Préparation des données
         IngredientRequest ingredientRequest = IngredientRequest.builder()
                 .name("Tomate")
                 .unit("gr")
                 .quantity(100.0)
-                .build();
-        Ingredient ingredient = Ingredient.builder()
-                .name("Tomate")
                 .build();
         RecipeRequest recipeRequest = RecipeRequest.builder()
                 .categoryName("DESSERTS")
@@ -87,16 +67,33 @@ public class RecipeControllerIT {
                 .build();
         MockMultipartFile file = new MockMultipartFile("imageFile", "test.jpg", "image/jpeg", "some image".getBytes());
 
-        when(ingredientService.processIngredients(anyList())).thenReturn(List.of(ingredient));
-        when(imageService.saveImage(any(MultipartFile.class))).thenReturn(any(Image.class));
-        when(recipeService.createRecipe(any(RecipeDto.class))).thenReturn(any(Recipe.class));
+        // Sérialisation des objets JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        MockMultipartFile recipeRequestPart = new MockMultipartFile(
+                "recipeRequest",
+                "",
+                "application/json",
+                objectMapper.writeValueAsBytes(recipeRequest)
+        );
+        MockMultipartFile ingredientRequestsPart = new MockMultipartFile(
+                "ingredientRequests",
+                "",
+                "application/json",
+                objectMapper.writeValueAsBytes(Collections.singletonList(ingredientRequest))
+        );
+
+        // Mock des services
+        when(ingredientService.processIngredients(anyList())).thenReturn(List.of(new Ingredient()));
+        when(imageService.saveImage(any(MultipartFile.class))).thenReturn(new Image());
+        when(recipeService.createRecipe(any(RecipeDto.class))).thenReturn(new Recipe());
         doNothing().when(recipeIngredientService).createAndSaveRecipeIngredients(anyList(), any(), anyList());
 
-        mockMvc.perform(multipart("/add")
-                .file(file)
-                .param("recipeRequest", new ObjectMapper().writeValueAsString(recipeRequest))
-                .param("ingredientRequests", new ObjectMapper().writeValueAsString(Collections.singletonList(ingredientRequest)))
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+        // Envoi de la requête
+        mockMvc.perform(multipart("/recipes/add")
+                        .file(file)
+                        .file(recipeRequestPart)
+                        .file(ingredientRequestsPart)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Recipe added with success!"));
     }
