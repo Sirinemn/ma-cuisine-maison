@@ -50,7 +50,7 @@ public class RecipeController {
             @ApiResponse(code = 200, message = "Recipe added with success!"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @PostMapping(value= "/add",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/add",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageResponse> createRecipe(
             @Valid @RequestPart RecipeRequest recipeRequest,
             @Valid @RequestPart List<@Valid IngredientRequest> ingredientRequests,
