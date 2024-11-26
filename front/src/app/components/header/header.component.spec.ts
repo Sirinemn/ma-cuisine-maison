@@ -2,13 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
 import { SessionService } from '../../service/session.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
   let mockSessionService: Partial<SessionService>;
+  let mockActivatedRoute = {
+    params: of({})
+  }
 
   beforeEach(async () => {
     mockSessionService = {
@@ -17,10 +21,13 @@ describe('HeaderComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [HeaderComponent],
+      imports: [HeaderComponent,
+      ],
       providers: [
-        { provide: SessionService, useValue: mockSessionService }
-      ]
+        { provide: SessionService,  useValue: mockSessionService},
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+      ],
+      
     }).compileComponents
 
     fixture = TestBed.createComponent(HeaderComponent);
