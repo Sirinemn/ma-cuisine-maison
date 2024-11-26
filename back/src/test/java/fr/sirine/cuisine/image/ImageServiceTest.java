@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +26,13 @@ public class ImageServiceTest {
 
     @Test
     void testSaveImage() throws IOException {
-        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", "some image".getBytes());
+        // Charge un fichier image valide à partir des ressources de test
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("test-images/test.jpg");
+        assertNotNull(inputStream, "L'image de test est introuvable.");
+
+        // Crée un MockMultipartFile avec le contenu de l'image
+        MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", inputStream);
 
         Image savedImage = new Image();
         savedImage.setName("test.jpg");
@@ -37,6 +44,7 @@ public class ImageServiceTest {
         assertEquals("test.jpg", image.getName());
         verify(imageRepository, times(1)).save(any(Image.class));
     }
+
     @Test public void testFindById() {
         Image image = new Image();
         image.setId(1);

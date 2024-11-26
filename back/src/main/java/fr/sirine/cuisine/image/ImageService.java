@@ -40,6 +40,9 @@ public class ImageService {
 
             // Génère et sauvegarde la miniature
             BufferedImage img = ImageIO.read(file.getInputStream());
+            if (img == null) {
+                throw new ImageProcessingException("Le fichier fourni n'est pas une image valide.");
+            }
             BufferedImage thumbnail = createThumbnail(img);
             ImageIO.write(thumbnail, "jpg", new File(thumbnailPath));
 
