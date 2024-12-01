@@ -3,6 +3,7 @@ import { RecipeFormComponent } from './recipe-form.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { RecipeService } from '../../service/recipe.service';
 import { of } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('RecipeFormComponent', () => {
   let component: RecipeFormComponent;
@@ -21,8 +22,9 @@ describe('RecipeFormComponent', () => {
       ],
       providers: [
         { provide: RecipeService, useValue: mockRecipeService },
-        provideAnimations()
-
+        provideAnimations(),
+        provideHttpClient(), // Nouvelle API pour les clients HTTP
+        provideHttpClient(), // Nouvelle API pour les tests HTTP
       ],
     }).compileComponents();
 
@@ -35,3 +37,4 @@ describe('RecipeFormComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

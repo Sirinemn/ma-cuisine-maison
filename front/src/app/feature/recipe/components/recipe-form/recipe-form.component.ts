@@ -8,6 +8,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { SessionService } from '../../../../service/session.service';
+import { User } from '../../../../interface/user';
+import { RecipeRequest } from '../../interface/api/recipeRequest';
 
 @Component({
   selector: 'app-recipe-form',
@@ -29,10 +32,11 @@ export class RecipeFormComponent implements OnInit {
   recipeForm: FormGroup;
   ingredientsForm: FormGroup;
   imageFile: File | null = null;
-  categories: string[] = ['Desserts', 'Plats principaux', 'Entrées', 'Boissons'];
+  user!: User;
+  categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
   ingredientList: { name: string, quantity: number, unit: string }[] = [];
 
-  constructor(private fb: FormBuilder, private recipeService: RecipeService) {
+  constructor(private fb: FormBuilder, private recipeService: RecipeService, private sessionService: SessionService) {
     this.recipeForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
@@ -66,8 +70,12 @@ export class RecipeFormComponent implements OnInit {
 
   submitForm(): void {
     if (this.recipeForm.valid && this.ingredientList.length > 0) {
-      const recipeRequest = this.recipeForm.value;
+      const recipeRequest = this.recipeForm.value as RecipeRequest;
+      this.user = this.sessionService.user!;
+      recipeRequest.userId = this.user.id!;
+      recipeRequest.userPseudo = this.user.pseudo;
       const ingredientRequests = this.ingredientList;
+      console.log(recipeRequest, ingredientRequests);
       this.recipeService.addRecipe(recipeRequest, ingredientRequests, this.imageFile!).subscribe(
         response => {
           console.log(response.message);

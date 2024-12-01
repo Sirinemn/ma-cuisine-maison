@@ -71,7 +71,7 @@ public class RecipeController {
         recipeDto.setCategoryName(recipeRequest.getCategoryName());
         recipeDto.setIngredients(ingredientRequests.stream().map(req -> {
             IngredientDto dto = new IngredientDto();
-            dto.setName(req.getName());
+            dto.setName(req.getIngredientName());
             dto.setQuantity(req.getQuantity());
             dto.setUnit(req.getUnit());
             return dto;

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Builder
 public class IngredientRequest {
 
-    private String name;
+    private String ingredientName;
     private Double quantity;
     private String unit;
 }
