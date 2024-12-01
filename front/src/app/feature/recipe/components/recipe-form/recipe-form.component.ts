@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { SessionService } from '../../../../service/session.service';
 import { User } from '../../../../interface/user';
 import { RecipeRequest } from '../../interface/api/recipeRequest';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-recipe-form',
@@ -29,6 +31,7 @@ import { RecipeRequest } from '../../interface/api/recipeRequest';
   styleUrls: ['./recipe-form.component.scss']
 })
 export class RecipeFormComponent implements OnInit {
+  private httpSubscriptions: Subscription[] = [];
   recipeForm: FormGroup;
   ingredientsForm: FormGroup;
   imageFile: File | null = null;
@@ -36,7 +39,11 @@ export class RecipeFormComponent implements OnInit {
   categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
   ingredientList: { name: string, quantity: number, unit: string }[] = [];
 
-  constructor(private fb: FormBuilder, private recipeService: RecipeService, private sessionService: SessionService) {
+  constructor(private fb: FormBuilder,
+     private recipeService: RecipeService,
+     private sessionService: SessionService,
+     private snackBar: MatSnackBar
+    ) {
     this.recipeForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
@@ -75,10 +82,9 @@ export class RecipeFormComponent implements OnInit {
       recipeRequest.userId = this.user.id!;
       recipeRequest.userPseudo = this.user.pseudo;
       const ingredientRequests = this.ingredientList;
-      console.log(recipeRequest, ingredientRequests);
-      this.recipeService.addRecipe(recipeRequest, ingredientRequests, this.imageFile!).subscribe(
+      this.httpSubscriptions.push(this.recipeService.addRecipe(recipeRequest, ingredientRequests, this.imageFile!).subscribe(
         response => {
-          console.log(response.message);
+          this.snackBar.open(response.message, 'OK', { duration: 3000 });
           // Réinitialise les formulaires et la liste d'ingrédients après soumission réussie
           this.recipeForm.reset();
           this.ingredientsForm.reset();
@@ -88,7 +94,7 @@ export class RecipeFormComponent implements OnInit {
         error => {
           console.error('There was an error!', error);
         }
-      );
+      ));
     } else {
       console.warn('Formulaire de recette invalide ou aucun ingrédient ajouté');
     }
