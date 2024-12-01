@@ -37,6 +37,7 @@ export class RecipeFormComponent implements OnInit {
   imageFile: File | null = null;
   user!: User;
   categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
+  unities: string[] = ['Tasse', 'Gramme', 'Pièce', 'Cl', 'Ml', 'Litre', 'Cuillère à soupe', 'Cuillère à café', 'Sachet'];
   ingredientList: { name: string, quantity: number, unit: string }[] = [];
 
   constructor(private fb: FormBuilder,
