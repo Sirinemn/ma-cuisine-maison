@@ -57,42 +57,44 @@ public class RecipeController {
             @RequestPart(value = "imageFile",required = false) MultipartFile imageFile) {
         try {
 
-        // Process ingredients
-        List<Ingredient> ingredients = ingredientService.processIngredients(ingredientRequests);
+            // Process ingredients
+            List<Ingredient> ingredients = ingredientService.processIngredients(ingredientRequests);
 
-        // Create Recipe object from RecipeRequest
-        RecipeDto recipeDto = new RecipeDto();
-        recipeDto.setTitle(recipeRequest.getTitle());
-        recipeDto.setDescription(recipeRequest.getDescription());
-        recipeDto.setCookingTime(recipeRequest.getCookingTime());
-        recipeDto.setServings(recipeRequest.getServings());
-        recipeDto.setUserId(recipeRequest.getUserId());
-        recipeDto.setUserPseudo(recipeRequest.getUserPseudo());
-        recipeDto.setCategoryName(recipeRequest.getCategoryName());
-        recipeDto.setIngredients(ingredientRequests.stream().map(req -> {
-            IngredientDto dto = new IngredientDto();
-            dto.setName(req.getIngredientName());
-            dto.setQuantity(req.getQuantity());
-            dto.setUnit(req.getUnit());
-            return dto;
-        }).collect(Collectors.toList()));
+            // Create Recipe object from RecipeRequest
+            RecipeDto recipeDto = new RecipeDto();
+            recipeDto.setTitle(recipeRequest.getTitle());
+            recipeDto.setDescription(recipeRequest.getDescription());
+            recipeDto.setCookingTime(recipeRequest.getCookingTime());
+            recipeDto.setServings(recipeRequest.getServings());
+            recipeDto.setUserId(recipeRequest.getUserId());
+            recipeDto.setUserPseudo(recipeRequest.getUserPseudo());
+            recipeDto.setCategoryName(recipeRequest.getCategoryName());
+            recipeDto.setIngredients(ingredientRequests.stream().map(req -> {
+                IngredientDto dto = new IngredientDto();
+                dto.setName(req.getIngredientName());
+                dto.setQuantity(req.getQuantity());
+                dto.setUnit(req.getUnit());
+                return dto;
+            }).collect(Collectors.toList()));
 
-        // Process image and set URLs
-        if (imageFile != null && !imageFile.isEmpty()) {
-            Image image = imageService.saveImage(imageFile);
-            recipeDto.setImageThumbUrl(image.getThumbnailLocation());
-            recipeDto.setImageUrl(image.getImageLocation());
-            recipeDto.setImageId(image.getId());
-        }
+            // Process image and set URLs
+            Image image = null;
+            if (imageFile != null && !imageFile.isEmpty()) {
+                image = imageService.saveImage(imageFile);
+                recipeDto.setImageThumbUrl(image.getThumbnailLocation());
+                recipeDto.setImageUrl(image.getImageLocation());
+                recipeDto.setImageId(image.getId());
+            }
 
-        // Save the recipe
-        Recipe recipe = recipeService.createRecipe(recipeDto);
+            // Save the recipe
+            Recipe recipe = recipeService.createRecipe(recipeDto);
+            assert image != null;
+            image.setRecipe(recipe);
+            // Create and save RecipeIngredients
+            recipeIngredientService.createAndSaveRecipeIngredients(ingredients, recipe, ingredientRequests);
 
-        // Create and save RecipeIngredients
-        recipeIngredientService.createAndSaveRecipeIngredients(ingredients, recipe, ingredientRequests);
-
-        MessageResponse messageResponse = new MessageResponse("Recipe added with success!");
-        return new ResponseEntity<>( messageResponse, HttpStatus.OK);
+            MessageResponse messageResponse = new MessageResponse("Recipe added with success!");
+            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new MessageResponse("An error occurred: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }

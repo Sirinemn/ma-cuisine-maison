@@ -59,7 +59,7 @@ public class IngredientServiceTest {
     @Test
     void testProcessIngredients() {
         IngredientRequest request = IngredientRequest.builder()
-                .name("Tomate")
+                .ingredientName("Tomate")
                 .build();
         Ingredient existingIngredient = new Ingredient();
         existingIngredient.setName("Tomato");

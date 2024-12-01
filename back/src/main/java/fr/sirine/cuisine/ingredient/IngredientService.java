@@ -53,7 +53,7 @@ public class IngredientService {
         return ingredientRequests.stream()
                 .map(ingredientRequest -> {
                     // Vérifier si l'ingrédient existe déjà dans la base de données
-                    Optional<Ingredient> existingIngredient = ingredientRepository.findByName(ingredientRequest.getName());
+                    Optional<Ingredient> existingIngredient = ingredientRepository.findByName(ingredientRequest.getIngredientName());
                     if (existingIngredient.isPresent()) {
                         // Retourner l'ingrédient existant
                         return existingIngredient.get();
@@ -61,7 +61,7 @@ public class IngredientService {
                     } else {
                         // Créer un nouvel ingrédient s'il n'existe pas
                         Ingredient newIngredient = new Ingredient();
-                        newIngredient.setName(ingredientRequest.getName());
+                        newIngredient.setName(ingredientRequest.getIngredientName());
                         return ingredientRepository.save(newIngredient);
                     }
                 })
