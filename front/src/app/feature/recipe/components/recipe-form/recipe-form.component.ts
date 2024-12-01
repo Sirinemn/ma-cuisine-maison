@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RecipeService } from '../../service/recipe.service';
 import { CommonModule } from '@angular/common';
@@ -30,14 +30,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.scss']
 })
-export class RecipeFormComponent implements OnInit {
+export class RecipeFormComponent implements OnDestroy {
   private httpSubscriptions: Subscription[] = [];
   recipeForm: FormGroup;
   ingredientsForm: FormGroup;
   imageFile: File | null = null;
   user!: User;
   categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
-  unities: string[] = ['Tasse', 'Gramme', 'Pièce', 'Cl', 'Ml', 'Litre', 'Cuillère à soupe', 'Cuillère à café', 'Sachet'];
+  unities: string[] = ['Tasse', 'Gramme', 'Pièce', 'Cl', 'Ml', 'Litre', 'Cuillère à soupe', 'Cuillère à café', 'Sachet', 'Pincée'];
   ingredientList: { name: string, quantity: number, unit: string }[] = [];
 
   constructor(private fb: FormBuilder,
@@ -59,8 +59,6 @@ export class RecipeFormComponent implements OnInit {
       unit: ['', Validators.required]
     });
   }
-
-  ngOnInit(): void {}
 
   onFileChange(event: any): void {
     if (event.target.files.length > 0) {
@@ -97,11 +95,14 @@ export class RecipeFormComponent implements OnInit {
         }
       ));
     } else {
-      console.warn('Formulaire de recette invalide ou aucun ingrédient ajouté');
+      this.snackBar.open('Formulaire de recette invalide ou aucun ingrédient ajouté', 'OK', { duration: 3000 });
     }
   }
 
   public back() {
     window.history.back();
   }
+  ngOnDestroy(): void {
+    this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
+  } 
 }
