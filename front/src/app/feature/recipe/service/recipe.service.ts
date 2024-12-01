@@ -10,7 +10,7 @@ import { MessageResponse } from '../../../interface/api/messageResponse.interfac
 })
 export class RecipeService {
 
-  private pathService = 'http://localhost:8080/api/recipes';
+  private pathService = 'http://localhost:8080/api';
 
   constructor(private httpClient: HttpClient) { }
 
@@ -25,6 +25,9 @@ export class RecipeService {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
 
-    return this.httpClient.post<MessageResponse>(`${this.pathService}/add`, formData, { headers });
+    return this.httpClient.post<MessageResponse>(`${this.pathService}/recipes/add`, formData, { headers });
+  }
+  public autoComplete(query: string): Observable<string[]>{
+    return this.httpClient.get<string[]>(`${this.pathService}/ingredients/autocomplete?quey=${query}`);
   }
 }

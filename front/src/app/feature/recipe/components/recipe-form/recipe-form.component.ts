@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { SessionService } from '../../../../service/session.service';
 import { User } from '../../../../interface/user';
 import { RecipeRequest } from '../../interface/api/recipeRequest';
-import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, of, Subscription, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -30,11 +30,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.scss']
 })
-export class RecipeFormComponent implements OnDestroy {
+export class RecipeFormComponent implements OnDestroy, OnInit {
   private httpSubscriptions: Subscription[] = [];
   recipeForm: FormGroup;
   ingredientsForm: FormGroup;
-  imageFile: File | null = null;
+  filteredIngredients$: Observable<string[]> = of([]);
+    imageFile: File | null = null;
   user!: User;
   categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
   unities: string[] = ['Tasse', 'Gramme', 'Pièce', 'Cl', 'Ml', 'Litre', 'Cuillère à soupe', 'Cuillère à café', 'Sachet', 'Pincée'];
@@ -58,6 +59,13 @@ export class RecipeFormComponent implements OnDestroy {
       quantity: ['', Validators.required],
       unit: ['', Validators.required]
     });
+  }
+  ngOnInit(): void { 
+    this.filteredIngredients$ = this.ingredientsForm.get('ingredientName')!.valueChanges.pipe( 
+      debounceTime(300), 
+      distinctUntilChanged(), 
+      switchMap(value => this.recipeService.autoComplete(value)) 
+    ); 
   }
 
   onFileChange(event: any): void {
