@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SessionService } from '../../../../service/session.service';
 import { User } from '../../../../interface/user';
 import { RecipeRequest } from '../../interface/api/recipeRequest';
@@ -25,7 +26,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatFormFieldModule,
     MatButtonModule,
     MatCardModule,
-    MatIconModule
+    MatIconModule,
+    MatAutocompleteModule
   ],
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.scss']

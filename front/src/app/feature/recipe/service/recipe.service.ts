@@ -28,6 +28,7 @@ export class RecipeService {
     return this.httpClient.post<MessageResponse>(`${this.pathService}/recipes/add`, formData, { headers });
   }
   public autoComplete(query: string): Observable<string[]>{
-    return this.httpClient.get<string[]>(`${this.pathService}/ingredients/autocomplete?quey=${query}`);
+    console.log(`Query: ${query}`); // Debug
+    return this.httpClient.get<string[]>(`${this.pathService}/ingredients/autocomplete?query=${query}`);
   }
 }
