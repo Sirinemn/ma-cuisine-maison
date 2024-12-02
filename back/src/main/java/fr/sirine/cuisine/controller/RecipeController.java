@@ -44,7 +44,16 @@ public class RecipeController {
         this.ingredientService = ingredientService;
         this.recipeIngredientService = recipeIngredientService;
     }
-
+    @Operation(summary = "Get all recipes", description = "Retrieve a list of all recipes")
+    @GetMapping(value = "/recipes-list")
+    public  List<RecipeDto> getAllRecipes(){
+        return recipeService.getAllRecipes();
+    }
+    @Operation(summary = "Get recipe by ID", description = "Retrieve a recipe by their ID")
+    @GetMapping(value = "/recipe/{id}")
+    public RecipeDto getRecipeById(Integer id) {
+        return recipeService.getRecipeDto(id);
+    }
     @Operation(summary = "Create a new recipe", description = "Creates a new recipe with ingredients and image")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Recipe added with success!"),

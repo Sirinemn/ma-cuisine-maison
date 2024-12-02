@@ -1,5 +1,6 @@
-package fr.sirine.cuisine.ingredient;
+package fr.sirine.cuisine.controller;
 
+import fr.sirine.cuisine.ingredient.IngredientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
