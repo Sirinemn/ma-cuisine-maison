@@ -1,5 +1,7 @@
 package fr.sirine.cuisine.controller;
 
+import fr.sirine.cuisine.category.CategoryService;
+import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
@@ -37,12 +39,14 @@ public class RecipeController {
     private final ImageService imageService;
     private final IngredientService ingredientService;
     private final RecipeIngredientService recipeIngredientService;
+    private final CategoryService categoryService;
 
-    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, RecipeIngredientService recipeIngredientService, RecipeMapper recipeMapper, RecipeIngredientMapper recipeIngredientMapper) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, RecipeIngredientService recipeIngredientService, RecipeMapper recipeMapper, RecipeIngredientMapper recipeIngredientMapper, CategoryService categoryService) {
         this.recipeService = recipeService;
         this.imageService = imageService;
         this.ingredientService = ingredientService;
         this.recipeIngredientService = recipeIngredientService;
+        this.categoryService = categoryService;
     }
     @Operation(summary = "Get all recipes", description = "Retrieve a list of all recipes")
     @GetMapping(value = "/recipes-list")
@@ -53,6 +57,18 @@ public class RecipeController {
     @GetMapping(value = "/recipe/{id}")
     public RecipeDto getRecipeDtoById(@PathVariable Integer id) {
         return recipeService.getRecipeDto(id);
+    }
+
+    @Operation(summary = "Get recipe by category", description = "Retrieve a recipe by their category")
+    @GetMapping(value = "/recipe/category")
+    public List<RecipeDto> getRecipeDtoByCategory(@RequestParam String categoryName) {
+        RecipeCategory category = categoryService.convertToRecipeCategory(categoryName);
+        return recipeService.getRecipesByCategory(category);
+    }
+    @Operation(summary = "Get recipe by user", description = "Retrieve a recipe by their user")
+    @GetMapping(value = "/recipe/user")
+    public List<RecipeDto> getRecipeDtoByUser(@RequestParam Integer userId) {
+        return recipeService.getRecipesByUser(userId);
     }
 
     @Operation(summary = "Create a new recipe", description = "Creates a new recipe with ingredients and image")

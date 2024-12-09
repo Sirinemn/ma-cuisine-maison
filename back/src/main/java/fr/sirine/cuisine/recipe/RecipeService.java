@@ -1,5 +1,6 @@
 package fr.sirine.cuisine.recipe;
 
+import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientMapper;
 import fr.sirine.cuisine.ingredient.IngredientService;
@@ -55,7 +56,18 @@ public class RecipeService {
                 .map(recipeMapper::toDto)
                 .collect(Collectors.toList());
     }
-
+    public List<RecipeDto> getRecipesByCategory(RecipeCategory categoryName) {
+        return recipeRepository.findByCategoryName(categoryName)
+                .stream()
+                .map(recipeMapper::toDto)
+                .collect(Collectors.toList());
+    }
+    public List<RecipeDto> getRecipesByUser(Integer userId) {
+        return recipeRepository.findByUserId(userId)
+                .stream()
+                .map(recipeMapper::toDto)
+                .collect(Collectors.toList());
+    }
     public void deleteRecipe(Integer id) {
         recipeRepository.deleteById(id);
     }

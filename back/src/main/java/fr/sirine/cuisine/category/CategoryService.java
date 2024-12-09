@@ -39,7 +39,13 @@ public class CategoryService {
             return categoryRepository.save(newCategory);
         }
     }
-
+    public RecipeCategory convertToRecipeCategory(String categoryName) {
+        try {
+            return RecipeCategory.valueOf(categoryName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid category name: " + categoryName);
+        }
+    }
     public List<String> getAllCategories() {
         return categoryRepository.findAll().stream().map(Category::getName).map(RecipeCategory::name).toList();
     }
