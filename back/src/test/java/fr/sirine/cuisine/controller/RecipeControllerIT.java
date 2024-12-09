@@ -2,6 +2,7 @@ package fr.sirine.cuisine.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.sirine.MaCuisineMaison;
+import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
@@ -12,8 +13,8 @@ import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
 import fr.sirine.cuisine.recipe.RecipeService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,6 +47,22 @@ public class RecipeControllerIT {
     IngredientService ingredientService;
     @MockBean
     RecipeIngredientService recipeIngredientService;
+    private Recipe recipe;
+    private RecipeDto recipeDto;
+    @BeforeEach
+    void setUp(){
+        recipe = Recipe.builder()
+                .id(1)
+                .title("title")
+                .build();
+        recipeDto = RecipeDto.builder()
+                .id(1)
+                .title("title")
+                .categoryName("ENTREES")
+                .userId(1)
+                .userPseudo("pseudo")
+                .build();
+    }
 
     @Test
     @WithMockUser(username = "user", authorities = {"USER"})
@@ -97,5 +114,41 @@ public class RecipeControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Recipe added with success!"));
     }
+    @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getAllRecipesTest() throws Exception {
+        when(recipeService.getAllRecipes()).thenReturn(List.of(recipeDto));
 
+        mockMvc.perform(get("/recipes/recipes-list"))
+                .andExpect(status().isOk());
+
+    }
+    @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getRecipesByIdTest() throws Exception {
+        when(recipeService.getRecipeDto(1)).thenReturn(recipeDto);
+
+        mockMvc.perform(get("/recipes/recipe/1"))
+                .andExpect(status().isOk());
+
+    }
+    @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getRecipesByUserTest() throws Exception {
+        when(recipeService.getRecipesByUser(1)).thenReturn(List.of(recipeDto));
+
+        mockMvc.perform(get("/recipes/user").param("userId", "1"))
+                .andExpect(status().isOk());
+    }
+    @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void getRecipesByCategoryTest() throws Exception {
+        RecipeCategory recipeCategory = RecipeCategory.valueOf("ENTREES");
+
+        when(recipeService.getRecipesByCategory(recipeCategory)).thenReturn(List.of(recipeDto));
+
+        mockMvc.perform(get("/recipes/category").param("categoryName", "ENTREES"))
+                .andExpect(status().isOk());
+
+    }
 }

@@ -60,15 +60,15 @@ public class RecipeController {
     }
 
     @Operation(summary = "Get recipe by category", description = "Retrieve a recipe by their category")
-    @GetMapping(value = "/recipe/category")
+    @GetMapping(value = "/category")
     public List<RecipeDto> getRecipeDtoByCategory(@RequestParam String categoryName) {
         RecipeCategory category = categoryService.convertToRecipeCategory(categoryName);
         return recipeService.getRecipesByCategory(category);
     }
     @Operation(summary = "Get recipe by user", description = "Retrieve a recipe by their user")
-    @GetMapping(value = "/recipe/user")
-    public List<RecipeDto> getRecipeDtoByUser(@RequestParam Integer userId) {
-        return recipeService.getRecipesByUser(userId);
+    @GetMapping(value = "/user")
+    public List<RecipeDto> getRecipeDtoByUser(@RequestParam String userId) {
+        return recipeService.getRecipesByUser(Integer.parseInt(userId));
     }
 
     @Operation(summary = "Create a new recipe", description = "Creates a new recipe with ingredients and image")
