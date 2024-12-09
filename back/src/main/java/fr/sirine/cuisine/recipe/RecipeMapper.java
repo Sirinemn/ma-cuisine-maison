@@ -45,5 +45,5 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
             @Mapping(target = "categoryName", expression = "java(recipe.getCategory() != null ? recipe.getCategory().getName().name() : null)"),
     })
     public abstract RecipeDto toDto(Recipe recipe);
-    
+
 }
