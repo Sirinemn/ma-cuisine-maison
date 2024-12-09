@@ -1,8 +1,12 @@
 package fr.sirine.cuisine.recipe;
 
+import fr.sirine.cuisine.category.Category;
+import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.ingredient.IngredientService;
+import fr.sirine.starter.user.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,14 +32,43 @@ public class RecipeServiceTest {
     @Mock
     IngredientService ingredientService;
 
+    private Recipe recipe;
+    private RecipeDto recipeDto;
+    private Ingredient ingredient;
+    private RecipeCategory recipeCategory;
+
+    @BeforeEach
+    void setUp() {
+        recipeCategory = RecipeCategory.valueOf("ENTREES");
+
+        Category category = Category.builder()
+                .name(recipeCategory)
+                .build();
+        ingredient = Ingredient.builder()
+                .name("tomate")
+                .build();
+
+        IngredientDto ingredientDto = IngredientDto.builder()
+                .unit("gr")
+                .quantity(100.0)
+                .name("tomate")
+                .build();
+        recipe = Recipe.builder()
+                .id(1)
+                .title("title")
+                .category(category)
+                .build();
+        recipeDto = RecipeDto.builder()
+                .id(1)
+                .title("title")
+                .ingredients(List.of(ingredientDto))
+                .categoryName("ENTREES")
+                .userId(1)
+                .userPseudo("pseudo")
+                .build();
+    }
     @Test
     void getAllRecipesTest() {
-        Recipe recipe = Recipe.builder()
-                .id(1)
-                .build();
-        RecipeDto recipeDto = RecipeDto.builder()
-                .id(1)
-                .build();
         when(recipeRepository.findAll()).thenReturn(List.of(recipe));
         when(recipeMapper.toDto(recipe)).thenReturn(recipeDto);
 
@@ -54,10 +87,7 @@ public class RecipeServiceTest {
     @Test
     void getRecipeByIdTest() {
         Integer id = 1;
-        Recipe recipe = Recipe.builder()
-                .id(1)
-                .title("title")
-                .build();
+
         when(recipeRepository.findById(id)).thenReturn(Optional.ofNullable(recipe));
 
         Recipe result = recipeService.getRecipeById(id);
@@ -66,24 +96,7 @@ public class RecipeServiceTest {
     }
 
     @Test public void testCreateRecipe() {
-        Recipe recipe = Recipe.builder()
-                .id(1)
-                .title("title")
-                .build();
 
-        Ingredient ingredient = Ingredient.builder()
-                .name("tomate")
-                .build();
-
-        IngredientDto ingredientDto = IngredientDto.builder()
-                .unit("gr")
-                .quantity(100.0)
-                .name("tomate")
-                .build();
-        RecipeDto recipeDto = RecipeDto.builder()
-                .id(1)
-                .ingredients(List.of(ingredientDto))
-                .build();
 
         when(recipeMapper.toEntity(any(RecipeDto.class))).thenReturn(recipe);
         when(ingredientService.findOrCreateIngredient(anyString())).thenReturn(ingredient);
@@ -94,5 +107,32 @@ public class RecipeServiceTest {
         assertNotNull(result);
         assertEquals(recipe.getId(), result.getId());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
+    }
+    @Test
+    void getRecipesByCategoryTest() {
+
+        when(recipeMapper.toDto(recipe)).thenReturn(recipeDto);
+        when(recipeRepository.findByCategoryName(recipeCategory)).thenReturn(List.of(recipe));
+
+        List<RecipeDto> result = recipeService.getRecipesByCategory(recipeCategory);
+
+        assertEquals(1, result.get(0).getId());
+        assertEquals("ENTREES", result.get(0).getCategoryName());
+        assertEquals("title", result.get(0).getTitle());
+    }
+    @Test
+    void getRecipesByUserTest() {
+        Integer userId = 1;
+        User user = User.builder()
+                .id(userId)
+                .pseudo("pseudo")
+                .build();
+        when(recipeRepository.findByUserId(1)).thenReturn(List.of(recipe));
+        when(recipeMapper.toDto(recipe)).thenReturn(recipeDto);
+
+        List<RecipeDto> result = recipeService.getRecipesByUser(userId);
+
+        assertEquals(recipeDto.getUserId(), result.get(0).getUserId());
+        assertEquals(recipeDto.getUserPseudo(), result.get(0).getUserPseudo());
     }
 }
