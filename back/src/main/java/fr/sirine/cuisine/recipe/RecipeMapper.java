@@ -41,6 +41,8 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
             @Mapping(source = "recipe.user.pseudo", target = "userPseudo"),
             @Mapping(source = "recipe.user.id", target = "userId"),
             @Mapping(source = "recipe.image.id", target = "imageId"),
+            @Mapping(target = "imageThumbUrl", expression = "java(recipe.getImage()!= null ? recipe.getImage().getThumbnailLocation() : null)"),
+            @Mapping(target = "imageUrl", expression = "java(recipe.getImage()!= null ? recipe.getImage().getImageLocation() : null)"),
             @Mapping(expression = "java(recipe.getCategory() != null ? recipe.getCategory().getName().name() : null)", target = "categoryName"),
             @Mapping(target = "ingredients", ignore = true) // Gérez les ingrédients séparément si besoin
     })
