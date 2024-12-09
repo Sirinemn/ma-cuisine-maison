@@ -5,6 +5,7 @@ import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
 import fr.sirine.starter.mapper.EntityMapper;
 import fr.sirine.starter.user.UserService;
 import org.mapstruct.Mapper;
@@ -29,6 +30,9 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
     @Autowired
     ImageService imageService;
 
+    @Autowired
+    RecipeIngredientService recipeIngredientService;
+
     @Mappings({
             @Mapping(target = "user", expression = "java(recipeDto.getUserId() != null ? userService.findById(recipeDto.getUserId()) : null)"),
             @Mapping(target = "image", expression = "java(recipeDto.getImageId() != null ? imageService.findById(recipeDto.getImageId()) : null)"),
@@ -43,6 +47,7 @@ public abstract class RecipeMapper implements EntityMapper<RecipeDto, Recipe> {
             @Mapping(target = "imageThumbUrl", expression = "java(recipe.getImage()!= null ? recipe.getImage().getThumbnailLocation() : null)"),
             @Mapping(target = "imageUrl", expression = "java(recipe.getImage()!= null ? recipe.getImage().getImageLocation() : null)"),
             @Mapping(target = "categoryName", expression = "java(recipe.getCategory() != null ? recipe.getCategory().getName().name() : null)"),
+            @Mapping(target = "ingredients", expression = "java(recipeIngredientService.getIngredientsForRecipe(recipe.getId()))")
     })
     public abstract RecipeDto toDto(Recipe recipe);
 

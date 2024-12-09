@@ -51,9 +51,10 @@ public class RecipeController {
     }
     @Operation(summary = "Get recipe by ID", description = "Retrieve a recipe by their ID")
     @GetMapping(value = "/recipe/{id}")
-    public RecipeDto getRecipeById(Integer id) {
+    public RecipeDto getRecipeDtoById(@PathVariable Integer id) {
         return recipeService.getRecipeDto(id);
     }
+
     @Operation(summary = "Create a new recipe", description = "Creates a new recipe with ingredients and image")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Recipe added with success!"),

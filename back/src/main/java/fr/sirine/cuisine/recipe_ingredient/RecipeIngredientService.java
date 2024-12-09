@@ -1,6 +1,7 @@
 package fr.sirine.cuisine.recipe_ingredient;
 
 import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.payload.IngredientRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import org.springframework.stereotype.Service;
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 public class RecipeIngredientService {
 
     private final RecipeIngredientRepository recipeIngredientRepository;
+    private final RecipeIngredientMapper recipeIngredientMapper;
 
-    public RecipeIngredientService(RecipeIngredientRepository recipeIngredientRepository) {
+    public RecipeIngredientService(RecipeIngredientRepository recipeIngredientRepository, RecipeIngredientMapper recipeIngredientMapper) {
         this.recipeIngredientRepository = recipeIngredientRepository;
+        this.recipeIngredientMapper = recipeIngredientMapper;
     }
 
     public void createAndSaveRecipeIngredients(List<Ingredient> ingredients,
@@ -45,11 +48,12 @@ public class RecipeIngredientService {
         recipeIngredientRepository.deleteById(id);
     }
 
-    public List<RecipeIngredient> getIngredientsForRecipe(Integer recipeId) {
+    public List<IngredientDto> getIngredientsForRecipe(Integer recipeId) {
         // récupérer les ingrédients d'une recette donnée
         return recipeIngredientRepository.findAll()
                 .stream()
                 .filter(ri -> ri.getRecipe().getId().equals(recipeId))
+                .map(recipeIngredientMapper::toDto)
                 .collect(Collectors.toList());
     }
 

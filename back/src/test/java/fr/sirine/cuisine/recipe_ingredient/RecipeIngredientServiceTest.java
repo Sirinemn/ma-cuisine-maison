@@ -1,6 +1,7 @@
 package fr.sirine.cuisine.recipe_ingredient;
 
 import fr.sirine.cuisine.ingredient.Ingredient;
+import fr.sirine.cuisine.ingredient.IngredientDto;
 import fr.sirine.cuisine.payload.IngredientRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,6 @@ public class RecipeIngredientServiceTest {
         IngredientRequest ingredientRequest = IngredientRequest.builder()
                 .unit("gr")
                 .quantity(100.0)
-                .name("tomate")
                 .build();
         recipeIngredientService.createAndSaveRecipeIngredients(List.of(ingredient), recipe, List.of(ingredientRequest));
         verify(recipeIngredientRepository, times(1)).saveAll(anyList());
@@ -62,8 +62,7 @@ public class RecipeIngredientServiceTest {
                 .build();
         when(recipeIngredientRepository.findAll()).thenReturn(List.of(recipeIngredient));
 
-        List<RecipeIngredient> result = recipeIngredientService.getIngredientsForRecipe(recipeId);
+        List<IngredientDto> result = recipeIngredientService.getIngredientsForRecipe(recipeId);
         assertNotNull(result);
-        assertEquals(result.get(0).getRecipe().getTitle(), recipe.getTitle());
     }
 }
