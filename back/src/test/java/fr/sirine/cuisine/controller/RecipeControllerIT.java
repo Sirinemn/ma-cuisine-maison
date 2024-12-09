@@ -52,7 +52,7 @@ public class RecipeControllerIT {
     void createRecipeTest() throws Exception {
         // Préparation des données
         IngredientRequest ingredientRequest = IngredientRequest.builder()
-                .name("Tomate")
+                .ingredientName("Tomate")
                 .unit("gr")
                 .quantity(100.0)
                 .build();

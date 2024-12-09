@@ -26,6 +26,9 @@ public class RecipeIngredientServiceTest {
     @Mock
     RecipeIngredientRepository recipeIngredientRepository;
 
+    @Mock
+    RecipeIngredientMapper recipeIngredientMapper;
+
     @Test
     void createAndSaveRecipeIngredientsTest(){
         Ingredient ingredient = Ingredient.builder()
@@ -60,9 +63,15 @@ public class RecipeIngredientServiceTest {
         RecipeIngredient recipeIngredient = RecipeIngredient.builder()
                 .recipe(recipe)
                 .build();
+        IngredientDto ingredientDto = IngredientDto.builder()
+                .name("Tomate")
+                .build();
         when(recipeIngredientRepository.findAll()).thenReturn(List.of(recipeIngredient));
-
+        when(recipeIngredientMapper.toDto(recipeIngredient)).thenReturn(ingredientDto);
         List<IngredientDto> result = recipeIngredientService.getIngredientsForRecipe(recipeId);
+
         assertNotNull(result);
+        assertEquals("Tomate", result.get(0).getName());
+        assertEquals(1, result.size());
     }
 }
