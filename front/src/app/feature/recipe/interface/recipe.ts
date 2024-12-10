@@ -11,6 +11,6 @@ export interface Recipe {
     categoryName: string;
     ingredients: [Ingredient];
     imageId: number;
-    imageUrl: string;
-    imageThumbUrl: string;
+    imageName: string;
+    imageThumbName: string;
 }

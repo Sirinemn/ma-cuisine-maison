@@ -74,5 +74,11 @@
       box-shadow: none; /* Pas d'ombre lorsque le bouton est actif */
     }
   }
+  img[mat-card-image] {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0; /* Arrondi en haut si nécessaire */
+  }
   
     

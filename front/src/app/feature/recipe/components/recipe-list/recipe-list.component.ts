@@ -32,6 +32,11 @@ export class RecipeListComponent implements OnInit{
   public viewDetails(recipeId?: number): void{
     this.router.navigate([`recipe/detail/${recipeId}`]);
   }
+  public imgError(event: Event): void {
+    const element = event.target as HTMLImageElement;
+    element.src = 'assets/default-image.jpg'; // Chemin vers une image par défaut
+  }
+  
   public back() {
     window.history.back();
   }
