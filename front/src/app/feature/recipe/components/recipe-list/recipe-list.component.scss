@@ -1,0 +1,78 @@
+.recipe-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .recipe-card {
+    width: 300px;
+    margin: 20px;
+  }
+  
+  mat-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+  
+    mat-card-header {
+      mat-card-title {
+        font-size: 1.4em;
+        font-weight: bold;
+      }
+      mat-card-subtitle {
+        font-size: 1em;
+        color: #6c757d;
+      }
+    }
+  
+    mat-card-content {
+      p {
+        margin: 10px 0;
+      }
+    }
+  
+    img {
+      height: 200px;
+      object-fit: cover;
+    }
+  
+    mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+  
+      button {
+        color: #1976d2;
+      }
+    }
+  }
+  button[mat-icon-button] {
+    background-color: #1976d2; /* Couleur de fond du bouton */
+    color: #ffffff; /* Couleur de l'icône */
+    border-radius: 50%; /* Bouton rond */
+    width: 48px; /* Largeur du bouton */
+    height: 48px; /* Hauteur du bouton */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin: 10px; /* Ajouter une marge autour du bouton */
+  
+    &:hover {
+      background-color: #1565c0; /* Couleur de fond au survol */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Effet d'ombre au survol */
+    }
+  
+    &:active {
+      background-color: #0d47a1; /* Couleur de fond lorsque le bouton est actif */
+      box-shadow: none; /* Pas d'ombre lorsque le bouton est actif */
+    }
+  }
+  
+    
