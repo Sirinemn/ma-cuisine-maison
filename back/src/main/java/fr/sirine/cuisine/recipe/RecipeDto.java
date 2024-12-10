@@ -33,8 +33,8 @@ public class RecipeDto {
 
     @NotNull
     private Integer imageId;
-    private String imageUrl;
-    private String imageThumbUrl;
+    private String imageName;
+    private String imageThumbName;
 
 }
 

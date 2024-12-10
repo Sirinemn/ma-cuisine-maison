@@ -107,8 +107,8 @@ public class RecipeController {
             Image image = null;
             if (imageFile != null && !imageFile.isEmpty()) {
                 image = imageService.saveImage(imageFile);
-                recipeDto.setImageThumbUrl(image.getThumbnailLocation());
-                recipeDto.setImageUrl(image.getImageLocation());
+                recipeDto.setImageThumbName(image.getThumbnailName());
+                recipeDto.setImageName(image.getImageName());
                 recipeDto.setImageId(image.getId());
             }
 
