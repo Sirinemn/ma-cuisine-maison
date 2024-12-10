@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span>Accueil</span>
+    <a mat-button routerLink="/reception/welcome">Accueil</a>
     <span class="spacer"></span>
     <a *ngIf="isAdmin" mat-button (click)="navigateToUserList()" id="list">Liste des utilisateurs</a>
     <a mat-button routerLink="/recipe/add-recipe">Ajouter une recette</a>

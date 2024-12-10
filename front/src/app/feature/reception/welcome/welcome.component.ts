@@ -13,20 +13,7 @@ import { SessionService } from '../../../service/session.service';
   templateUrl: './welcome.component.html',
   styleUrl: './welcome.component.scss'
 })
-export class WelcomeComponent implements OnInit{
+export class WelcomeComponent {
 
-
-  public user!: User;
-
-  constructor(private sessionService: SessionService, private router: Router){}
-
-  ngOnInit() {
-    this.user = this.sessionService.user!;
-  }
-
-  logOut() {
-    this.sessionService.logOut();
-    this.router.navigate(['']);
-  }
 
 }
