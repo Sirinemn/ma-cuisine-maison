@@ -4,6 +4,7 @@ import { RecipeRequest } from '../interface/api/recipeRequest';
 import { IngredientRequest } from '../interface/api/ingredientRequest';
 import { Observable } from 'rxjs';
 import { MessageResponse } from '../../../interface/api/messageResponse.interface';
+import { Recipe } from '../interface/recipe'
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,18 @@ export class RecipeService {
     return this.httpClient.post<MessageResponse>(`${this.pathService}/recipes/add`, formData, { headers });
   }
   public autoComplete(query: string): Observable<string[]>{
-    console.log(`Query: ${query}`); // Debug
     return this.httpClient.get<string[]>(`${this.pathService}/ingredients/autocomplete?query=${query}`);
+  }
+  public getAllRecipes(): Observable<Recipe[]> {
+    return this.httpClient.get<Recipe[]>(`${this.pathService}/recipes/recipes-list`);
+  }
+  public getRecipeById(id: number): Observable<Recipe> {
+    return this.httpClient.get<Recipe>(`${this.pathService}/recipes/recipe/${id}`);
+  }
+  public getRecipeByCategory(categoryName: string): Observable<Recipe[]> {
+    return this.httpClient.get<Recipe[]>(`${this.pathService}/recipes/category?categoryName=${categoryName}`);
+  }
+  public getRecipeByUserId(id: number): Observable<Recipe[]> {
+    return this.httpClient.get<Recipe[]>(`${this.pathService}/recipes/user?userId=${id}`);
   }
 }
