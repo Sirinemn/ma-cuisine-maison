@@ -1,0 +1,62 @@
+.recipe-card {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+  
+    mat-card-header {
+      mat-card-title {
+        font-size: 1.8em;
+        font-weight: bold;
+      }
+      mat-card-subtitle {
+        font-size: 1.2em;
+        color: #6c757d;
+      }
+    }
+  
+    mat-card-content {
+      p {
+        margin: 10px 0;
+        font-size: 1em;
+        color: #333;
+      }
+      ul {
+        padding-left: 20px;
+        list-style-type: disc;
+      }
+    }
+  
+    img {
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px 8px 0 0;
+    }
+  
+    mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 16px;
+  
+      button {
+        color: #ffffff;
+        background-color: #1976d2;
+  
+        &:hover {
+          background-color: #1565c0;
+        }
+  
+        &:active {
+          background-color: #0d47a1;
+        }
+      }
+    }
+  }
+  
