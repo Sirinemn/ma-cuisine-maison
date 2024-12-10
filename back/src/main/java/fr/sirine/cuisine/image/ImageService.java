@@ -33,6 +33,7 @@ public class ImageService {
             String imageName = file.getOriginalFilename();
             String fileName = System.currentTimeMillis() + "_origin_" + imageName;
             String fullImagePath = IMAGE_DIRECTORY_ORIGIN + fileName;
+            String thumbnailName = System.currentTimeMillis() + "_thumb_" + imageName;
             String thumbnailPath = IMAGE_DIRECTORY_THUMB + System.currentTimeMillis() + "_thumb_" + imageName;
 
             // Sauvegarde l'image originale
@@ -49,8 +50,8 @@ public class ImageService {
             // Crée, sauvegarde et retourne l'objet Image
             Image image = Image.builder()
                     .name(imageName)
-                    .imageLocation(fullImagePath)
-                    .thumbnailLocation(thumbnailPath)
+                    .imageName(fileName)
+                    .thumbnailName(thumbnailName)
                     .createdAt(LocalDateTime.now())
                     .modifiedAt(LocalDateTime.now())
                     .build();

@@ -23,9 +23,9 @@ public class Image {
     private String name;
 
     @NotNull
-    private String imageLocation; // Stocke le chemin de l'image
+    private String imageName; // Stocke le chemin de l'image
 
-    private String thumbnailLocation; // Chemin de la miniature
+    private String thumbnailName; // Chemin de la miniature
 
     @NotNull
     private LocalDateTime createdAt;
