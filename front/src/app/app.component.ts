@@ -29,6 +29,7 @@ import { FooterComponent } from "./components/footer/footer.component";
 })
 export class AppComponent {
   title = 'Ma Cuisine Maison';
+  public selectedCategory: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -39,7 +40,10 @@ export class AppComponent {
   public ngOnInit(): void {
     this.autoLog();
   }
-
+  onCategorySelected(category: string | null): void { 
+    this.selectedCategory = category; 
+  }
+  
   public $isLogged(): Observable<boolean> {
     return this.sessionService.$isLogged();
   }

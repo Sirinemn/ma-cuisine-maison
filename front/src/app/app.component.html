@@ -1,6 +1,5 @@
 <div *ngIf="$isLogged() | async">
-    <app-header></app-header>
-</div>
+    <app-header (categorySelected)="onCategorySelected($event)"></app-header></div>
 
 <router-outlet></router-outlet>
 

@@ -1,11 +1,11 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, Input, NgModule, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RecipeService } from '../../service/recipe.service';
 import { Recipe } from '../../interface/recipe';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-list',
@@ -23,11 +23,19 @@ export class RecipeListComponent implements OnInit{
 
   constructor(
     private recipeService: RecipeService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ){}
 
-  ngOnInit(): void {
-      this.recipeList$ = this.recipeService.getAllRecipes();  
+  ngOnInit(): void { 
+    this.route.queryParams.subscribe(params => { 
+      const category = params['category']; 
+      if (category) { 
+        this.recipeList$ = this.recipeService.getRecipeByCategory(category); 
+      } else { 
+        this.recipeList$ = this.recipeService.getAllRecipes(); 
+      } 
+    }); 
   }
   public viewDetails(recipeId?: number): void{
     this.router.navigate([`recipe/detail/${recipeId}`]);

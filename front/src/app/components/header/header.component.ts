@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -28,11 +28,12 @@ import { SessionService } from '../../service/session.service';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  categories: string[] = ['Desserts', 'Plats principaux', 'Entrées', 'Boissons'];
+  categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
   public user: User | undefined;
   public userRole: string[] = [];
   public isAdmin: boolean = false;
   public OnRecipeListPage: boolean = false;
+  @Output() categorySelected = new EventEmitter<string | null>();
 
   constructor(private sessionService: SessionService,
     private router: Router
@@ -50,6 +51,10 @@ export class HeaderComponent implements OnInit {
       this.OnRecipeListPage = this.router.url === '/recipe/list';
     })
   }
+  onCategoryChange(category: string | null): void { 
+    this.router.navigate(['/recipe/list'], { queryParams: { category: category } }); 
+    this.categorySelected.emit(category); 
+}
   navigateToMe() {
     this.router.navigate(['/me']);
   }
