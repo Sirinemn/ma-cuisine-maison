@@ -14,8 +14,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageResponse } from '../../interface/api/messageResponse.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { Recipe } from '../../feature/recipe/interface/recipe';
+import { RecipeService } from '../../feature/recipe/service/recipe.service';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
@@ -30,7 +33,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatSnackBarModule,
     MatDatepickerModule,
-    MatNativeDateModule 
+    MatNativeDateModule,
+    MatCardModule
   ],
   providers: [ MatDatepickerModule,
     provideAnimations()
@@ -41,6 +45,8 @@ import { MatIconModule } from '@angular/material/icon';
 export class MeComponent implements OnInit, OnDestroy{
     public profileForm: FormGroup;
     private httpSubscriptions: Subscription[] = [];
+    private userId!: Number;
+    public recipes$!: Observable<Recipe[]>;
   
     constructor(
       private fb: FormBuilder,
@@ -48,7 +54,8 @@ export class MeComponent implements OnInit, OnDestroy{
       private router: Router,
       private snackBar: MatSnackBar,
       private userService: UserService,
-      private dialog: MatDialog
+      private dialog: MatDialog,
+      private recipeService: RecipeService
     ) {
       this.profileForm = this.fb.group({
         email: [{value: '', disabled: true}, [Validators.required, Validators.email]],
@@ -61,6 +68,8 @@ export class MeComponent implements OnInit, OnDestroy{
     ngOnInit(): void {
       if (this.sessionService.user) {
         const user = this.sessionService.user!;
+        this.userId = user.id!;
+        this.recipes$ = this.recipeService.getRecipeByUserId(+this.userId);
         this.profileForm.patchValue({
           email: user.email,
           pseudo: user.pseudo,
@@ -123,7 +132,9 @@ export class MeComponent implements OnInit, OnDestroy{
         ));
       })     
     }  
-     
+    public viewDetails(recipeId?: number): void{
+      this.router.navigate([`recipe/detail/${recipeId}`]);
+    }
     ngOnDestroy(): void {
       this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
     } 
