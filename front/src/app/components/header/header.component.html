@@ -5,7 +5,7 @@
     <a *ngIf="isAdmin" mat-button (click)="navigateToUserList()" id="list">Liste des utilisateurs</a>
     <a mat-button routerLink="/recipe/add-recipe">Ajouter une recette</a>
     <a mat-button routerLink="/recipe/list">Liste des recette</a>
-    <mat-select placeholder="Catégories" class="category-select">
+    <mat-select *ngIf="OnRecipeListPage" placeholder="Catégories" class="category-select">
       <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
     </mat-select>
     <button mat-icon-button aria-label="Search">

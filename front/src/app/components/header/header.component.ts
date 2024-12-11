@@ -32,6 +32,7 @@ export class HeaderComponent implements OnInit {
   public user: User | undefined;
   public userRole: string[] = [];
   public isAdmin: boolean = false;
+  public OnRecipeListPage: boolean = false;
 
   constructor(private sessionService: SessionService,
     private router: Router
@@ -45,6 +46,9 @@ export class HeaderComponent implements OnInit {
       this.userRole = this.user.roles || [];
       this.isAdmin = this.userRole.includes('ADMIN');
     }
+    this.router.events.subscribe(() => {
+      this.OnRecipeListPage = this.router.url === '/recipe/list';
+    })
   }
   navigateToMe() {
     this.router.navigate(['/me']);
