@@ -14,6 +14,7 @@ import { User } from '../../../../interface/user';
 import { RecipeRequest } from '../../interface/api/recipeRequest';
 import { debounceTime, distinctUntilChanged, Observable, of, Subscription, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-form',
@@ -46,7 +47,8 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
   constructor(private fb: FormBuilder,
      private recipeService: RecipeService,
      private sessionService: SessionService,
-     private snackBar: MatSnackBar
+     private snackBar: MatSnackBar,
+     private router: Router
     ) {
     this.recipeForm = this.fb.group({
       title: ['', Validators.required],
@@ -99,6 +101,7 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
           this.ingredientsForm.reset();
           this.ingredientList = [];
           this.imageFile = null;
+          this.router.navigate(['recipe/list']);
         },
         error => {
           console.error('There was an error!', error);
