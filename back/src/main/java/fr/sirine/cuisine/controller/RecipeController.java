@@ -58,6 +58,12 @@ public class RecipeController {
     public RecipeDto getRecipeDtoById(@PathVariable Integer id) {
         return recipeService.getRecipeDto(id);
     }
+    @Operation(summary = "Delete recipe by ID", description = "Delete a recipe by their ID")
+    @DeleteMapping(value = "/recipe/{id}")
+    public ResponseEntity<Void> deleteRecipeDtoById(@PathVariable Integer id) {
+        recipeService.deleteRecipe(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     @Operation(summary = "Get recipe by category", description = "Retrieve a recipe by their category")
     @GetMapping(value = "/category")
