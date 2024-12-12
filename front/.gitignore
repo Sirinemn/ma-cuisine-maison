@@ -41,4 +41,4 @@ testem.log
 .DS_Store
 Thumbs.db
 # Ignorer les fichiers dans le dossier uploads/images
-uploads/images/
+src/assets/uploads/images/
