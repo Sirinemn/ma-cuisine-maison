@@ -43,4 +43,7 @@ export class RecipeService {
   public getRecipeByUserId(id: number): Observable<Recipe[]> {
     return this.httpClient.get<Recipe[]>(`${this.pathService}/recipes/user?userId=${id}`);
   }
+  public deleteRecipe(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.pathService}/recipes/recipe/${id}`);
+  }
 }

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from '../../service/session.service';
 import { UserService } from '../../service/user.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -55,7 +55,8 @@ export class MeComponent implements OnInit, OnDestroy{
       private snackBar: MatSnackBar,
       private userService: UserService,
       private dialog: MatDialog,
-      private recipeService: RecipeService
+      private recipeService: RecipeService,
+      private activatedRoute: ActivatedRoute
     ) {
       this.profileForm = this.fb.group({
         email: [{value: '', disabled: true}, [Validators.required, Validators.email]],
@@ -69,7 +70,7 @@ export class MeComponent implements OnInit, OnDestroy{
       if (this.sessionService.user) {
         const user = this.sessionService.user!;
         this.userId = user.id!;
-        this.recipes$ = this.recipeService.getRecipeByUserId(+this.userId);
+        this.loadRecipes(+this.userId);
         this.profileForm.patchValue({
           email: user.email,
           pseudo: user.pseudo,
@@ -80,7 +81,9 @@ export class MeComponent implements OnInit, OnDestroy{
         console.error('User is undefined in sessionService.');
       }
     }
-    
+    private loadRecipes(userId: number) {
+      this.recipes$ = this.recipeService.getRecipeByUserId(+this.userId);
+    }
     public back() {
       window.history.back();
     }
@@ -134,6 +137,23 @@ export class MeComponent implements OnInit, OnDestroy{
     }  
     public viewDetails(recipeId?: number): void{
       this.router.navigate([`recipe/detail/${recipeId}`]);
+    }
+    public deleteRecipe(recipeId?: number): void { 
+      const dialogRef = this.dialog.open(ConfirmDialogComponent); 
+      dialogRef.afterClosed().subscribe(confirmed => { 
+        if (confirmed) {
+           this.httpSubscriptions.push(this.recipeService.deleteRecipe(recipeId!).subscribe( response => {
+             this.snackBar.open('Recette supprimée avec succès', 'OK', { duration: 2000 }
+
+             );
+              const userId = +this.activatedRoute.snapshot.paramMap.get('userId')!; 
+              this.loadRecipes(userId); // Recharger les recettes après suppression 
+              }, error => { 
+                this.snackBar.open('Erreur de suppression de recette', 'OK', { duration: 2000 }); 
+              } 
+          )); 
+        } 
+     });
     }
     ngOnDestroy(): void {
       this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
