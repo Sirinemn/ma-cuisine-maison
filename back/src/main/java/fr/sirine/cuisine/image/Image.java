@@ -33,7 +33,12 @@ public class Image {
     @NotNull
     private LocalDateTime modifiedAt;
 
-    @OneToOne
+    @OneToOne(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 }
