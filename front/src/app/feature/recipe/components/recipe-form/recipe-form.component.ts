@@ -101,10 +101,13 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
           this.ingredientsForm.reset();
           this.ingredientList = [];
           this.imageFile = null;
-          this.router.navigate(['recipe/list']);
+          setTimeout(() => {
+            this.router.navigate(['recipe/list']);
+          }, 3000)
         },
         error => {
           console.error('There was an error!', error);
+          this.snackBar.open('Something went wrong please try again later', 'ok', { duration: 4000});
         }
       ));
     } else {
