@@ -29,12 +29,14 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
     public Image saveImage(MultipartFile file) {
-        try{
+        try {
             String imageName = file.getOriginalFilename();
-            String fileName = System.currentTimeMillis() + "_origin_" + imageName;
+            // Générer une seule fois les noms des fichiers
+            String timestamp = String.valueOf(System.currentTimeMillis());
+            String fileName = timestamp + "_origin_" + imageName;
             String fullImagePath = IMAGE_DIRECTORY_ORIGIN + fileName;
-            String thumbnailName = System.currentTimeMillis() + "_thumb_" + imageName;
-            String thumbnailPath = IMAGE_DIRECTORY_THUMB + System.currentTimeMillis() + "_thumb_" + imageName;
+            String thumbnailName = timestamp + "_thumb_" + imageName;
+            String thumbnailPath = IMAGE_DIRECTORY_THUMB + thumbnailName;
 
             // Sauvegarde l'image originale
             Files.write(Paths.get(fullImagePath), file.getBytes());
@@ -57,11 +59,11 @@ public class ImageService {
                     .build();
             this.imageRepository.save(image);
             return image;
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new ImageProcessingException("Une erreur est survenue lors de la sauvegarde de l'image.", e);
         }
-
     }
+
 
     private BufferedImage createThumbnail(BufferedImage original) {
         int width = 150;

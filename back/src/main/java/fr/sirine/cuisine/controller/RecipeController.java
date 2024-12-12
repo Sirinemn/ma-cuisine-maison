@@ -38,14 +38,12 @@ public class RecipeController {
     private final RecipeService recipeService;
     private final ImageService imageService;
     private final IngredientService ingredientService;
-    private final RecipeIngredientService recipeIngredientService;
     private final CategoryService categoryService;
 
-    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, RecipeIngredientService recipeIngredientService, RecipeMapper recipeMapper, RecipeIngredientMapper recipeIngredientMapper, CategoryService categoryService) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService) {
         this.recipeService = recipeService;
         this.imageService = imageService;
         this.ingredientService = ingredientService;
-        this.recipeIngredientService = recipeIngredientService;
         this.categoryService = categoryService;
     }
     @Operation(summary = "Get all recipes", description = "Retrieve a list of all recipes")
@@ -82,14 +80,13 @@ public class RecipeController {
             @ApiResponse(code = 200, message = "Recipe added with success!"),
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
-    @PostMapping(value = "/add",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageResponse> createRecipe(
             @Valid @RequestPart RecipeRequest recipeRequest,
             @Valid @RequestPart List<@Valid IngredientRequest> ingredientRequests,
-            @RequestPart(value = "imageFile",required = false) MultipartFile imageFile) {
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
         try {
-
-            // Process ingredients
+            // Process ingredients - cette partie pourrait être redondante si le traitement est effectué ailleurs
             List<Ingredient> ingredients = ingredientService.processIngredients(ingredientRequests);
 
             // Create Recipe object from RecipeRequest
@@ -120,10 +117,9 @@ public class RecipeController {
 
             // Save the recipe
             Recipe recipe = recipeService.createRecipe(recipeDto);
-            assert image != null;
-            image.setRecipe(recipe);
-            // Create and save RecipeIngredients
-            recipeIngredientService.createAndSaveRecipeIngredients(ingredients, recipe, ingredientRequests);
+            if (image != null) {
+                image.setRecipe(recipe);
+            }
 
             MessageResponse messageResponse = new MessageResponse("Recipe added with success!");
             return new ResponseEntity<>(messageResponse, HttpStatus.OK);
@@ -131,5 +127,6 @@ public class RecipeController {
             return new ResponseEntity<>(new MessageResponse("An error occurred: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }
