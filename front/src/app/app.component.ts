@@ -41,7 +41,7 @@ export class AppComponent {
     this.autoLog();
   }
   onCategorySelected(category: string | null): void { 
-    this.selectedCategory = category; 
+    this.router.navigate(['/recipe/list'], { queryParams: { category: category } }); 
   }
   
   public $isLogged(): Observable<boolean> {

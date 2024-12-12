@@ -48,11 +48,10 @@ export class HeaderComponent implements OnInit {
       this.isAdmin = this.userRole.includes('ADMIN');
     }
     this.router.events.subscribe(() => {
-      this.OnRecipeListPage = this.router.url === '/recipe/list';
+      this.OnRecipeListPage = this.router.url.startsWith('/recipe/list');
     })
   }
   onCategoryChange(category: string | null): void { 
-    this.router.navigate(['/recipe/list'], { queryParams: { category: category } }); 
     this.categorySelected.emit(category); 
 }
   navigateToMe() {
