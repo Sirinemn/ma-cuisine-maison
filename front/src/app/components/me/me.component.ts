@@ -138,23 +138,25 @@ export class MeComponent implements OnInit, OnDestroy{
     public viewDetails(recipeId?: number): void{
       this.router.navigate([`recipe/detail/${recipeId}`]);
     }
-    public deleteRecipe(recipeId?: number): void { 
-      const dialogRef = this.dialog.open(ConfirmDialogComponent); 
-      dialogRef.afterClosed().subscribe(confirmed => { 
+    public deleteRecipe(recipeId?: number): void {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent);
+      dialogRef.afterClosed().subscribe(confirmed => {
         if (confirmed) {
-           this.httpSubscriptions.push(this.recipeService.deleteRecipe(recipeId!).subscribe( response => {
-             this.snackBar.open('Recette supprimée avec succès', 'OK', { duration: 2000 }
-
-             );
-              const userId = +this.activatedRoute.snapshot.paramMap.get('userId')!; 
-              this.loadRecipes(userId); // Recharger les recettes après suppression 
-              }, error => { 
-                this.snackBar.open('Erreur de suppression de recette', 'OK', { duration: 2000 }); 
-              } 
-          )); 
-        } 
-     });
-    }
+          this.httpSubscriptions.push(
+            this.recipeService.deleteRecipe(recipeId!).subscribe({
+              next: (response) => {
+                this.snackBar.open('Recette supprimée avec succès', 'OK', { duration: 2000 });
+                const userId = +this.activatedRoute.snapshot.paramMap.get('userId')!;
+                this.loadRecipes(userId); // Recharger les recettes après suppression       
+              },
+              error: (error) => {
+                this.snackBar.open('Erreur de suppression de recette', 'OK', { duration: 2000 });
+              }
+        })
+          );
+        }
+      });
+    }    
     ngOnDestroy(): void {
       this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
     } 
