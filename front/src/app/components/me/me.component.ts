@@ -157,6 +157,10 @@ export class MeComponent implements OnInit, OnDestroy{
         }
       });
     }    
+    public imgError(event: Event): void {
+      const element = event.target as HTMLImageElement;
+      element.src = 'assets/default-image.jpg'; // Chemin vers une image par défaut
+    }
     ngOnDestroy(): void {
       this.httpSubscriptions.forEach(subscribtion=> subscribtion.unsubscribe());
     } 
