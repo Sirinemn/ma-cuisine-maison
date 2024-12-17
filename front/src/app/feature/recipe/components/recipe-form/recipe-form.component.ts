@@ -106,8 +106,11 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
           }, 3000)
         },
         error => {
-          console.error('There was an error!', error);
-          this.snackBar.open(error.error.message, 'ok', { duration: 4000});
+          if (error.status === 413) {
+            this.snackBar.open('Le fichier téléchargé dépasse la taille maximale autorisée', 'OK', { duration: 3000} )
+          } else {
+            this.snackBar.open('Une erreur est survenue. Veuillez réessayer plus tard.', 'OK', { duration: 3000 });
+          }                
         }
       ));
     } else {
