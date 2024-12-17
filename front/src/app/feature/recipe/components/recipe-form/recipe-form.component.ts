@@ -38,7 +38,7 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
   recipeForm: FormGroup;
   ingredientsForm: FormGroup;
   filteredIngredients$: Observable<string[]> = of([]);
-    imageFile: File | null = null;
+  imageFile: File | null = null;
   user!: User;
   categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
   unities: string[] = ['Tasse', 'Gramme', 'Pièce', 'Cl', 'Ml', 'Litre', 'Cuillère à soupe', 'Cuillère à café', 'Sachet', 'Pincée'];
@@ -108,6 +108,8 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
         error => {
           if (error.status === 413) {
             this.snackBar.open('Le fichier téléchargé dépasse la taille maximale autorisée', 'OK', { duration: 3000} )
+          } else if(error.status === 415) {
+            this.snackBar.open('Le fichier fourni n\'est pas une image valide', 'ok', {duration: 3000 });
           } else {
             this.snackBar.open('Une erreur est survenue. Veuillez réessayer plus tard.', 'OK', { duration: 3000 });
           }                

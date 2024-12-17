@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class ImageService {
@@ -38,14 +37,15 @@ public class ImageService {
             String thumbnailName = timestamp + "_thumb_" + imageName;
             String thumbnailPath = IMAGE_DIRECTORY_THUMB + thumbnailName;
 
+            // Vérification du type de fichier
+            if (!isImageFile(file)) {
+                throw new ImageProcessingException("Le fichier fourni n'est pas une image valide.");
+            }
             // Sauvegarde l'image originale
             Files.write(Paths.get(fullImagePath), file.getBytes());
 
             // Génère et sauvegarde la miniature
             BufferedImage img = ImageIO.read(file.getInputStream());
-            if (img == null) {
-                throw new ImageProcessingException("Le fichier fourni n'est pas une image valide.");
-            }
             BufferedImage thumbnail = createThumbnail(img);
             ImageIO.write(thumbnail, "jpg", new File(thumbnailPath));
 
@@ -63,8 +63,10 @@ public class ImageService {
             throw new ImageProcessingException("Une erreur est survenue lors de la sauvegarde de l'image.", e);
         }
     }
-
-
+    private boolean isImageFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif"));
+    }
     private BufferedImage createThumbnail(BufferedImage original) {
         int width = 150;
         int height = (original.getHeight() * width) / original.getWidth();

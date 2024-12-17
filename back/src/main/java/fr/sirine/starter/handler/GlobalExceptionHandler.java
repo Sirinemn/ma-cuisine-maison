@@ -115,7 +115,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
                         ExceptionResponse.builder()
-                                .businessErrorDescription("Erreur lors de la sauvegarde de l'image")
+                                .businessErrorDescription("Le fichier fourni n'est pas une image valide")
                                 .error(exp.getMessage())
                                 .build()
                 );
