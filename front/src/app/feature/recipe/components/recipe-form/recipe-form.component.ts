@@ -107,7 +107,7 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
         },
         error => {
           console.error('There was an error!', error);
-          this.snackBar.open('Something went wrong please try again later', 'ok', { duration: 4000});
+          this.snackBar.open(error.error.message, 'ok', { duration: 4000});
         }
       ));
     } else {
