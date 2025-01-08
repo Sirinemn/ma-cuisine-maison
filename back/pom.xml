@@ -203,7 +203,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>fr.sirine.starter.MonStarter</mainClass>
+					<mainClass>fr.sirine.cuisine.MaCuisineMaison</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
