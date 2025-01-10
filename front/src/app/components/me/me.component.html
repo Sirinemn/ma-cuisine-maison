@@ -42,7 +42,7 @@
         <p><strong>Portions:</strong> {{ recipe.servings }}</p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-icon-button color="warn" (click)="deleteRecipe(recipe.id)">
+        <button mat-icon-button color="warn" (click)="$event.stopPropagation(); deleteRecipe(recipe.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-card-actions>
