@@ -29,4 +29,8 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
 }

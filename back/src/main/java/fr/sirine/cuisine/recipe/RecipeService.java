@@ -1,6 +1,8 @@
 package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.RecipeCategory;
+import fr.sirine.cuisine.exception.ResourceNotFoundException;
+import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientMapper;
 import fr.sirine.cuisine.ingredient.IngredientService;
@@ -9,7 +11,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -20,12 +21,14 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
     private final IngredientService ingredientService;
+    private final ImageService imageService;
 
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper, IngredientService ingredientService) {
+    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper, IngredientService ingredientService, ImageService imageService) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.ingredientService = ingredientService;
+        this.imageService = imageService;
     }
 
     @Transactional
@@ -68,8 +71,28 @@ public class RecipeService {
                 .map(recipeMapper::toDto)
                 .collect(Collectors.toList());
     }
-    public void deleteRecipe(Integer id) {
-        recipeRepository.deleteById(id);
+    @Transactional
+    public void deleteRecipe(Integer recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
+
+        // First, handle the image if it exists
+        if (recipe.getImage() != null) {
+            String imageName = recipe.getImage().getImageName();
+            String thumbnailName = recipe.getImage().getThumbnailName();
+
+            // Delete physical files
+            imageService.deleteImageFiles(imageName, thumbnailName);
+
+            // Remove the relationship
+            recipe.removeImage();
+        }
+
+        // Clear ingredients
+        recipe.removeIngredients();
+
+        // Delete the recipe (this will cascade to related entities)
+        recipeRepository.delete(recipe);
     }
 
     public Recipe getRecipeById(Integer recipeId) {

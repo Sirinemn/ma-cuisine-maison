@@ -76,6 +76,18 @@ public class ImageService {
         }
     }
 
+    public void deleteImageFiles(String imageName, String thumbnailName) {
+        try {
+            if (imageName != null) {
+                Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_ORIGIN + imageName));
+            }
+            if (thumbnailName != null) {
+                Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_THUMB + thumbnailName));
+            }
+        } catch (IOException e) {
+            throw new ImageProcessingException("Error deleting image files", e);
+        }
+    }
     public Image updateImage(Image image) {
         log.info("Updating image with ID: {}", image.getId());
         image.setModifiedAt(LocalDateTime.now());

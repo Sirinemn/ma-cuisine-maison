@@ -41,11 +41,20 @@ public class Recipe {
     @JoinColumn(name="user_id")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "image_id")
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Image image;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
+    public void removeImage() {
+        if (image != null) {
+            image.setRecipe(null);
+            this.image = null;
+        }
+    }
+    public void removeIngredients() {
+        ingredients.forEach(ingredient -> ingredient.setRecipe(null));
+        ingredients.clear();
+    }
 }
