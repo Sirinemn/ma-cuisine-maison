@@ -94,9 +94,11 @@ public class ImageService {
         try {
             if (imageName != null) {
                 Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_ORIGIN, imageName));
+                log.info("Deleting origin image");
             }
             if (thumbnailName != null) {
                 Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_THUMB, thumbnailName));
+                log.info("Deleting thumb image");
             }
         } catch (IOException e) {
             log.error("Error deleting image files", e);

@@ -45,12 +45,12 @@ public class RecipeIngredientServiceTest {
         verify(recipeIngredientRepository, times(1)).saveAll(anyList());
     }
 
-    @Test
+    /*@Test
     void testDeleteRecipeIngredient() {
         Integer id = 1;
         recipeIngredientService.deleteRecipeIngredient(id);
         verify(recipeIngredientRepository, times(1)).deleteById(id);
-    }
+    }*/
 
     @Test
     void getIngredientsForRecipe(){

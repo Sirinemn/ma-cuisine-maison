@@ -1,11 +1,8 @@
 package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.RecipeCategory;
-import fr.sirine.cuisine.exception.ResourceNotFoundException;
-import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
-import fr.sirine.cuisine.ingredient.IngredientMapper;
 import fr.sirine.cuisine.ingredient.IngredientService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import jakarta.transaction.Transactional;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 @Transactional
 public class RecipeService {
@@ -25,14 +21,12 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
     private final IngredientService ingredientService;
-    private final ImageService imageService;
 
 
-    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientMapper ingredientMapper, IngredientService ingredientService, ImageService imageService) {
+    public RecipeService(RecipeRepository recipeRepository, RecipeMapper recipeMapper, IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.recipeMapper = recipeMapper;
         this.ingredientService = ingredientService;
-        this.imageService = imageService;
     }
 
     @Transactional
