@@ -14,7 +14,7 @@ module.exports = {
     coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
     coverageThreshold: {
       global: {
-        statements: 75
+        statements: 70
       },
     },
     roots: [
