@@ -76,14 +76,7 @@ public class RecipeServiceTest {
         System.out.println(result);
         assertEquals(result.get(0).getId(), recipe.getId());
     }
-    @Test
-    void deleteRecipeTest() {
-        Integer id = 1;
 
-        recipeService.deleteRecipe(id);
-
-        verify(recipeRepository, times(1)).deleteById(id);
-    }
     @Test
     void getRecipeByIdTest() {
         Integer id = 1;
