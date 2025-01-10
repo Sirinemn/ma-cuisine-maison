@@ -33,7 +33,7 @@ public class Image {
     @NotNull
     private LocalDateTime modifiedAt;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 

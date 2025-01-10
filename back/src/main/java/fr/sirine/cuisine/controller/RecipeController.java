@@ -3,6 +3,7 @@ package fr.sirine.cuisine.controller;
 import fr.sirine.cuisine.category.CategoryService;
 import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.exception.ImageProcessingException;
+import fr.sirine.cuisine.exception.ResourceNotFoundException;
 import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
@@ -61,9 +62,29 @@ public class RecipeController {
     }
     @Operation(summary = "Delete recipe by ID", description = "Delete a recipe by their ID")
     @DeleteMapping(value = "/recipe/{id}")
-    public ResponseEntity<Void> deleteRecipeDtoById(@PathVariable Integer id) {
-        recipeService.deleteRecipe(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteRecipeById(@PathVariable Integer id) {
+        try {
+            // First get the recipe to access its image
+            Recipe recipe = recipeService.getRecipeById(id);
+
+            // Store image info before deletion if it exists
+            Image image = recipe.getImage();
+
+            // Delete recipe first
+            recipeService.deleteRecipe(id);
+
+            // If there was an image, delete it after recipe is deleted
+            if (image != null) {
+                imageService.deleteImage(image.getId());
+            }
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            log.error("Error deleting recipe: ", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "Get recipe by category", description = "Retrieve a recipe by their category")

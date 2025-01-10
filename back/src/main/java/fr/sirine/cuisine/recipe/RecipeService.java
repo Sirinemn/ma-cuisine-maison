@@ -2,12 +2,15 @@ package fr.sirine.cuisine.recipe;
 
 import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.exception.ResourceNotFoundException;
+import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientMapper;
 import fr.sirine.cuisine.ingredient.IngredientService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class RecipeService {
+    private static final Logger log = LoggerFactory.getLogger(ImageService.class);
 
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
@@ -72,27 +76,8 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
     @Transactional
-    public void deleteRecipe(Integer recipeId) {
-        Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Recipe not found"));
-
-        // First, handle the image if it exists
-        if (recipe.getImage() != null) {
-            String imageName = recipe.getImage().getImageName();
-            String thumbnailName = recipe.getImage().getThumbnailName();
-
-            // Delete physical files
-            imageService.deleteImageFiles(imageName, thumbnailName);
-
-            // Remove the relationship
-            recipe.removeImage();
-        }
-
-        // Clear ingredients
-        recipe.removeIngredients();
-
-        // Delete the recipe (this will cascade to related entities)
-        recipeRepository.delete(recipe);
+    public void deleteRecipe(Integer id) {
+        recipeRepository.findById(id).ifPresent(recipeRepository::delete);
     }
 
     public Recipe getRecipeById(Integer recipeId) {

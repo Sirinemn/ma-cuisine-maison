@@ -1,10 +1,12 @@
 package fr.sirine.cuisine.image;
 
 import fr.sirine.cuisine.exception.ImageProcessingException;
+import fr.sirine.cuisine.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -76,15 +78,28 @@ public class ImageService {
         }
     }
 
-    public void deleteImageFiles(String imageName, String thumbnailName) {
+    @Transactional
+    public void deleteImage(Integer imageId) {
+        Image image = imageRepository.findById(imageId)
+                .orElseThrow(() -> new ResourceNotFoundException("Image not found"));
+
+        // Delete physical files
+        deleteImageFiles(image.getImageName(), image.getThumbnailName());
+
+        // Delete image entity
+        imageRepository.delete(image);
+    }
+
+    private void deleteImageFiles(String imageName, String thumbnailName) {
         try {
             if (imageName != null) {
-                Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_ORIGIN + imageName));
+                Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_ORIGIN, imageName));
             }
             if (thumbnailName != null) {
-                Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_THUMB + thumbnailName));
+                Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_THUMB, thumbnailName));
             }
         } catch (IOException e) {
+            log.error("Error deleting image files", e);
             throw new ImageProcessingException("Error deleting image files", e);
         }
     }

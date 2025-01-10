@@ -47,14 +47,15 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
-    public void removeImage() {
-        if (image != null) {
-            image.setRecipe(null);
-            this.image = null;
+    public void setImage(Image image) {
+        if (image == null) {
+            if (this.image != null) {
+                this.image.setRecipe(null);
+            }
+        } else {
+            image.setRecipe(this);
         }
+        this.image = image;
     }
-    public void removeIngredients() {
-        ingredients.forEach(ingredient -> ingredient.setRecipe(null));
-        ingredients.clear();
-    }
+
 }
