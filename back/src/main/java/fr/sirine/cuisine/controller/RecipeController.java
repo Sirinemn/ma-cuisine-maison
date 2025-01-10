@@ -2,6 +2,7 @@ package fr.sirine.cuisine.controller;
 
 import fr.sirine.cuisine.category.CategoryService;
 import fr.sirine.cuisine.category.RecipeCategory;
+import fr.sirine.cuisine.exception.ImageProcessingException;
 import fr.sirine.cuisine.image.Image;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
@@ -12,21 +13,21 @@ import fr.sirine.cuisine.payload.MessageResponse;
 import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
-import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.cuisine.recipe.RecipeService;
-import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientMapper;
-import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/recipes")
 @Tag(name = "Recipe Controller", description = "Recipe Management")
 public class RecipeController {
+    private static final Logger log = LoggerFactory.getLogger(ImageService.class);
+
 
     private final RecipeService recipeService;
     private final ImageService imageService;
@@ -82,51 +85,81 @@ public class RecipeController {
     })
     @PostMapping(value = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageResponse> createRecipe(
-            @Valid @RequestPart RecipeRequest recipeRequest,
-            @Valid @RequestPart List<@Valid IngredientRequest> ingredientRequests,
+            @Valid @RequestPart("recipeRequest") RecipeRequest recipeRequest,
+            @Valid @RequestPart("ingredientRequests") List<IngredientRequest> ingredientRequests,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+
         try {
-            // Process ingredients - cette partie pourrait être redondante si le traitement est effectué ailleurs
+            log.info("Receiving recipe creation request for: {}", recipeRequest.getTitle());
+
+            // Validate image if present
+            if (imageFile != null && !imageFile.isEmpty()) {
+                if (!imageFile.getContentType().startsWith("image/")) {
+                    return new ResponseEntity<>(
+                            new MessageResponse("Invalid file type. Only images are allowed."),
+                            HttpStatus.UNSUPPORTED_MEDIA_TYPE
+                    );
+                }
+            }
+
+            // Process ingredients
             List<Ingredient> ingredients = ingredientService.processIngredients(ingredientRequests);
 
-            // Create Recipe object from RecipeRequest
-            RecipeDto recipeDto = new RecipeDto();
-            recipeDto.setTitle(recipeRequest.getTitle());
-            recipeDto.setDescription(recipeRequest.getDescription());
-            recipeDto.setCookingTime(recipeRequest.getCookingTime());
-            recipeDto.setServings(recipeRequest.getServings());
-            recipeDto.setUserId(recipeRequest.getUserId());
-            recipeDto.setUserPseudo(recipeRequest.getUserPseudo());
-            recipeDto.setCategoryName(recipeRequest.getCategoryName());
-            recipeDto.setIngredients(ingredientRequests.stream().map(req -> {
-                IngredientDto dto = new IngredientDto();
-                dto.setName(req.getIngredientName());
-                dto.setQuantity(req.getQuantity());
-                dto.setUnit(req.getUnit());
-                return dto;
-            }).collect(Collectors.toList()));
+            // Create Recipe DTO
+            RecipeDto recipeDto = RecipeDto.builder()
+                    .title(recipeRequest.getTitle())
+                    .description(recipeRequest.getDescription())
+                    .cookingTime(recipeRequest.getCookingTime())
+                    .servings(recipeRequest.getServings())
+                    .userId(recipeRequest.getUserId())
+                    .userPseudo(recipeRequest.getUserPseudo())
+                    .categoryName(recipeRequest.getCategoryName())
+                    .ingredients(ingredientRequests.stream()
+                            .map(req -> IngredientDto.builder()
+                                    .name(req.getIngredientName())
+                                    .quantity(req.getQuantity())
+                                    .unit(req.getUnit())
+                                    .build())
+                            .collect(Collectors.toList()))
+                    .build();
 
-            // Process image and set URLs
+            // Process image if present
             Image image = null;
             if (imageFile != null && !imageFile.isEmpty()) {
-                image = imageService.saveImage(imageFile);
-                recipeDto.setImageThumbName(image.getThumbnailName());
-                recipeDto.setImageName(image.getImageName());
-                recipeDto.setImageId(image.getId());
+                try {
+                    image = imageService.saveImage(imageFile);
+                    recipeDto.setImageThumbName(image.getThumbnailName());
+                    recipeDto.setImageName(image.getImageName());
+                    recipeDto.setImageId(image.getId());
+                } catch (ImageProcessingException e) {
+                    log.error("Error processing image: ", e);
+                    return new ResponseEntity<>(
+                            new MessageResponse("Error processing image: " + e.getMessage()),
+                            HttpStatus.INTERNAL_SERVER_ERROR
+                    );
+                }
             }
 
-            // Save the recipe
+            // Save recipe
             Recipe recipe = recipeService.createRecipe(recipeDto);
+
+            // Update image with recipe reference if exists
             if (image != null) {
                 image.setRecipe(recipe);
+                imageService.updateImage(image);
             }
 
-            MessageResponse messageResponse = new MessageResponse("Recipe added with success!");
-            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+            return new ResponseEntity<>(
+                    new MessageResponse("Recipe added successfully!"),
+                    HttpStatus.OK
+            );
+
         } catch (Exception e) {
-            return new ResponseEntity<>(new MessageResponse("An error occurred: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Error creating recipe: ", e);
+            return new ResponseEntity<>(
+                    new MessageResponse("Error creating recipe: " + e.getMessage()),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
-
-
 }

@@ -1,6 +1,8 @@
 package fr.sirine.cuisine.image;
 
 import fr.sirine.cuisine.exception.ImageProcessingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Service
 public class ImageService {
+    private static final Logger log = LoggerFactory.getLogger(ImageService.class);
 
     @Value("${app.image.folder_path.origine}")
     private String IMAGE_DIRECTORY_ORIGIN;
@@ -29,27 +32,33 @@ public class ImageService {
     }
     public Image saveImage(MultipartFile file) {
         try {
+            log.info("Starting image save process for file: {}", file.getOriginalFilename());
+
             String imageName = file.getOriginalFilename();
-            // Générer une seule fois les noms des fichiers
+            // Generate file names once
             String timestamp = String.valueOf(System.currentTimeMillis());
             String fileName = timestamp + "_origin_" + imageName;
             String fullImagePath = IMAGE_DIRECTORY_ORIGIN + fileName;
             String thumbnailName = timestamp + "_thumb_" + imageName;
             String thumbnailPath = IMAGE_DIRECTORY_THUMB + thumbnailName;
 
-            // Vérification du type de fichier
+            // Verify file type
             if (!isImageFile(file)) {
+                log.error("Invalid image file type for file: {}", imageName);
                 throw new ImageProcessingException("Le fichier fourni n'est pas une image valide.");
             }
-            // Sauvegarde l'image originale
+
+            // Save original image
+            log.debug("Saving original image to path: {}", fullImagePath);
             Files.write(Paths.get(fullImagePath), file.getBytes());
 
-            // Génère et sauvegarde la miniature
+            // Generate and save thumbnail
+            log.debug("Generating thumbnail for image: {}", imageName);
             BufferedImage img = ImageIO.read(file.getInputStream());
             BufferedImage thumbnail = createThumbnail(img);
             ImageIO.write(thumbnail, "jpg", new File(thumbnailPath));
 
-            // Crée, sauvegarde et retourne l'objet Image
+            // Create, save and return Image object
             Image image = Image.builder()
                     .name(imageName)
                     .imageName(fileName)
@@ -57,15 +66,26 @@ public class ImageService {
                     .createdAt(LocalDateTime.now())
                     .modifiedAt(LocalDateTime.now())
                     .build();
-            this.imageRepository.save(image);
-            return image;
+
+            log.info("Saving image metadata to database");
+            return imageRepository.save(image);
+
         } catch (IOException e) {
+            log.error("Error processing image: {}", e.getMessage(), e);
             throw new ImageProcessingException("Une erreur est survenue lors de la sauvegarde de l'image.", e);
         }
     }
+
+    public Image updateImage(Image image) {
+        log.info("Updating image with ID: {}", image.getId());
+        image.setModifiedAt(LocalDateTime.now());
+        return imageRepository.save(image);
+    }
     private boolean isImageFile(MultipartFile file) {
         String contentType = file.getContentType();
-        return contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif"));
+        return contentType != null && (contentType.equals("image/jpeg") ||
+                contentType.equals("image/png") ||
+                contentType.equals("image/gif"));
     }
     private BufferedImage createThumbnail(BufferedImage original) {
         int width = 150;
@@ -75,10 +95,14 @@ public class ImageService {
         return thumbnail;
     }
 
+
     public Image getImagesByRecipeId(Integer recipeId) {
+        log.debug("Fetching image for recipe ID: {}", recipeId);
         return imageRepository.findByRecipeId(recipeId);
     }
-    public Image findById(Integer id){
-        return this.imageRepository.findById(id).orElse(null);
+
+    public Image findById(Integer id) {
+        log.debug("Fetching image by ID: {}", id);
+        return imageRepository.findById(id).orElse(null);
     }
 }
