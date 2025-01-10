@@ -92,16 +92,19 @@ public class ImageService {
 
     private void deleteImageFiles(String imageName, String thumbnailName) {
         try {
+            log.info("Attempting to delete original image: {}", Paths.get(IMAGE_DIRECTORY_ORIGIN, imageName));
+            log.info("Attempting to delete thumbnail image: {}", Paths.get(IMAGE_DIRECTORY_THUMB, thumbnailName));
+
             if (imageName != null) {
                 Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_ORIGIN, imageName));
-                log.info("Deleting origin image");
+                log.info("Successfully deleted origin image: {}", imageName);
             }
             if (thumbnailName != null) {
                 Files.deleteIfExists(Paths.get(IMAGE_DIRECTORY_THUMB, thumbnailName));
-                log.info("Deleting thumb image");
+                log.info("Successfully deleted thumbnail image: {}", thumbnailName);
             }
         } catch (IOException e) {
-            log.error("Error deleting image files", e);
+            log.error("Failed to delete image files for: {}, {}", imageName, thumbnailName, e);
             throw new ImageProcessingException("Error deleting image files", e);
         }
     }

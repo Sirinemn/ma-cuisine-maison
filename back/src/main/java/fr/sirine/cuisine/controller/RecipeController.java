@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 public class RecipeController {
     private static final Logger log = LoggerFactory.getLogger(ImageService.class);
 
-
     private final RecipeService recipeService;
     private final ImageService imageService;
     private final IngredientService ingredientService;
@@ -70,19 +69,21 @@ public class RecipeController {
             // Store image info before deletion if it exists
             Image image = recipe.getImage();
 
-            // Delete recipe first
-            recipeService.deleteRecipe(id);
-
             // If there was an image, delete it after recipe is deleted
             if (image != null) {
+                log.info("Image name: {}, Thumbnail name: {}", image.getImageName(), image.getThumbnailName());
+                log.info("Attempting to delete image with ID: {}", image.getId());
                 imageService.deleteImage(image.getId());
             }
 
+            recipeService.deleteRecipe(id);
+
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ResourceNotFoundException e) {
+            log.error("Recipe not found for ID: {}", id, e);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            log.error("Error deleting recipe: ", e);
+            log.error("Unexpected error during recipe deletion: ", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

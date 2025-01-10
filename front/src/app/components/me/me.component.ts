@@ -150,6 +150,7 @@ export class MeComponent implements OnInit, OnDestroy{
                 this.loadRecipes(userId); // Recharger les recettes après suppression       
               },
               error: (error) => {
+                console.log(error)
                 this.snackBar.open('Erreur de suppression de recette', 'OK', { duration: 2000 });
               }
         })
