@@ -2,6 +2,7 @@ package fr.sirine.cuisine.ingredient;
 
 import fr.sirine.cuisine.exception.ExternalApiException;
 import fr.sirine.cuisine.payload.IngredientRequest;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -74,5 +75,8 @@ public class IngredientService {
                     newIngredient.setName(name);
                     return ingredientRepository.save(newIngredient);
                 });
+    }
+    public boolean isShare(Integer ingredientId) {
+        return ingredientRepository.existsByIngredientId(ingredientId);
     }
 }
