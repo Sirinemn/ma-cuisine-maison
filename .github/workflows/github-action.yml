@@ -2,9 +2,9 @@ name: Continuous integration/Continuous Deployment
 
 on:
     push:
-      branches: [main]
+      branches: [test]
     pull_request:
-      branches: [main]
+      branches: [test]
 
 jobs:
     backend-tests:
