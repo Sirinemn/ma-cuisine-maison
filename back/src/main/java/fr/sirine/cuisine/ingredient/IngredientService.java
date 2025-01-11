@@ -76,7 +76,7 @@ public class IngredientService {
                     return ingredientRepository.save(newIngredient);
                 });
     }
-    public boolean isShare(Integer ingredientId) {
-        return ingredientRepository.existsByIngredientId(ingredientId);
+    public void deleteIngredient(Ingredient ingredient) {
+        ingredientRepository.delete(ingredient);
     }
 }

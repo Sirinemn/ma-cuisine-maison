@@ -15,6 +15,8 @@ import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
 import fr.sirine.cuisine.recipe.RecipeService;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -28,7 +30,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,12 +43,14 @@ public class RecipeController {
     private final ImageService imageService;
     private final IngredientService ingredientService;
     private final CategoryService categoryService;
+    private final RecipeIngredientService recipeIngredientService;
 
-    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService, RecipeIngredientService recipeIngredientService) {
         this.recipeService = recipeService;
         this.imageService = imageService;
         this.ingredientService = ingredientService;
         this.categoryService = categoryService;
+        this.recipeIngredientService = recipeIngredientService;
     }
     @Operation(summary = "Get all recipes", description = "Retrieve a list of all recipes")
     @GetMapping(value = "/recipes-list")
@@ -65,6 +68,14 @@ public class RecipeController {
         try {
             // First get the recipe to access its image
             Recipe recipe = recipeService.getRecipeById(id);
+            // Supprimer chaque ingrédient inutilisé
+            List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
+            for (RecipeIngredient recipeIngredient : recipeIngredients) {
+                Ingredient ingredient = recipeIngredient.getIngredient();
+                if (!recipeIngredientService.isShared(recipeIngredient)) {
+                    ingredientService.deleteIngredient(ingredient);
+                }
+            }
 
             // Store image info before deletion if it exists
             Image image = recipe.getImage();

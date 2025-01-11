@@ -57,5 +57,10 @@ public class RecipeIngredientService {
                 .collect(Collectors.toList());
     }
 
-}
+    public boolean isShared(RecipeIngredient recipeIngredient) {
+        Ingredient ingredient = recipeIngredient.getIngredient();
+            // Vérifier si l'ingrédient est utilisé ailleurs
+        return recipeIngredientRepository.existsByIngredientId(ingredient.getId());
+    }
 
+}
