@@ -71,9 +71,9 @@ public class RecipeController {
 
             // If there was an image, delete it after recipe is deleted
             if (image != null) {
-                log.info("Image name: {}, Thumbnail name: {}", image.getImageName(), image.getThumbnailName());
                 log.info("Attempting to delete image with ID: {}", image.getId());
                 imageService.deleteImage(image.getId());
+                log.info("Image deleted successfully before recipe deletion");
             }
 
             recipeService.deleteRecipe(id);
