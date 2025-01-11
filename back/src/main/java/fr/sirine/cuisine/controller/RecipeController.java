@@ -68,14 +68,6 @@ public class RecipeController {
         try {
             // First get the recipe to access its image
             Recipe recipe = recipeService.getRecipeById(id);
-            // Supprimer chaque ingrédient inutilisé
-            List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
-            for (RecipeIngredient recipeIngredient : recipeIngredients) {
-                Ingredient ingredient = recipeIngredient.getIngredient();
-                if (!recipeIngredientService.isShared(recipeIngredient)) {
-                    ingredientService.deleteIngredient(ingredient);
-                }
-            }
 
             // Store image info before deletion if it exists
             Image image = recipe.getImage();
@@ -86,8 +78,17 @@ public class RecipeController {
                 imageService.deleteImage(image.getId());
                 log.info("Image deleted successfully before recipe deletion");
             }
-
+            
+            List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
             recipeService.deleteRecipe(id);
+            // Supprimer chaque ingrédient inutilisé
+            for (RecipeIngredient recipeIngredient : recipeIngredients) {
+                Ingredient ingredient = recipeIngredient.getIngredient();
+                // If the ingredient is not shared with other recipes, delete it
+                if (!recipeIngredientService.isShared(recipeIngredient)) {
+                    ingredientService.deleteIngredient(ingredient);
+                }
+            }
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (ResourceNotFoundException e) {
