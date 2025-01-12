@@ -45,12 +45,12 @@ public class RecipeIngredientServiceTest {
         verify(recipeIngredientRepository, times(1)).saveAll(anyList());
     }
 
-    /*@Test
+    @Test
     void testDeleteRecipeIngredient() {
         Integer id = 1;
         recipeIngredientService.deleteRecipeIngredient(id);
         verify(recipeIngredientRepository, times(1)).deleteById(id);
-    }*/
+    }
 
     @Test
     void getIngredientsForRecipe(){
@@ -73,5 +73,21 @@ public class RecipeIngredientServiceTest {
         assertNotNull(result);
         assertEquals("Tomate", result.get(0).getName());
         assertEquals(1, result.size());
+    }
+
+    @Test
+    void isSharedTest() {
+        Ingredient ingredient = Ingredient.builder()
+                .id(1)
+                .name("Sugar")
+                .build();
+        RecipeIngredient recipeIngredient = RecipeIngredient.builder()
+                .recipeIngredientId(1)
+                .ingredient(ingredient)
+                .build();
+
+        recipeIngredientService.isShared(recipeIngredient);
+
+        verify(recipeIngredientRepository, times(1)).existsByIngredientId(1);
     }
 }
