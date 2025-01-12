@@ -78,7 +78,7 @@ public class RecipeController {
                 imageService.deleteImage(image.getId());
                 log.info("Image deleted successfully before recipe deletion");
             }
-            
+
             List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
             recipeService.deleteRecipe(id);
             // Supprimer chaque ingrédient inutilisé

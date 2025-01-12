@@ -1,7 +1,6 @@
 package fr.sirine.cuisine.ingredient;
 
 import fr.sirine.cuisine.payload.IngredientRequest;
-import fr.sirine.cuisine.ingredient.IngredientDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,12 +14,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static javax.management.Query.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class IngredientServiceTest {
@@ -86,5 +83,17 @@ public class IngredientServiceTest {
 
         assertNotNull(result);
         assertEquals("Sugar", result.getName());
+    }
+
+    @Test
+    void deleteIngredientTest() {
+        Ingredient ingredient = Ingredient.builder()
+                .id(1)
+                .name("Sugar")
+                .build();
+
+        ingredientService.deleteIngredient(ingredient);
+        verify(ingredientRepository, times(1)).delete(ingredient);
+
     }
 }
