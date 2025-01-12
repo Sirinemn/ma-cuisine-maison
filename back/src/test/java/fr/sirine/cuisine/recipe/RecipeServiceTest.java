@@ -90,7 +90,6 @@ public class RecipeServiceTest {
 
     @Test public void testCreateRecipe() {
 
-
         when(recipeMapper.toEntity(any(RecipeDto.class))).thenReturn(recipe);
         when(ingredientService.findOrCreateIngredient(anyString())).thenReturn(ingredient);
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
@@ -127,5 +126,14 @@ public class RecipeServiceTest {
 
         assertEquals(recipeDto.getUserId(), result.get(0).getUserId());
         assertEquals(recipeDto.getUserPseudo(), result.get(0).getUserPseudo());
+    }
+
+    @Test
+    void deleteRecipeTest() {
+        when(recipeRepository.findById(1)).thenReturn(Optional.of(recipe));
+
+        recipeService.deleteRecipe(1);
+
+        verify(recipeRepository, times(1)).delete(recipe);
     }
 }
