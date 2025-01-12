@@ -114,7 +114,7 @@ public class RecipeControllerIT {
                         .file(ingredientRequestsPart)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Recipe added with success!"));
+                .andExpect(jsonPath("$.message").value("Recipe added successfully!"));
     }
     @Test
     @WithMockUser(username = "user", authorities = {"USER"})

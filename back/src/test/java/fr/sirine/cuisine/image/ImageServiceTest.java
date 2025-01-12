@@ -1,18 +1,23 @@
 package fr.sirine.cuisine.image;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,15 +29,24 @@ public class ImageServiceTest {
 
     @Mock
     private ImageRepository imageRepository;
-
     @Spy
     @InjectMocks
     private ImageService imageService;
+    private static final String TEST_IMAGE_DIRECTORY = "src/test/resources/test-images/original/";
+    private static final String TEST_THUMB_DIRECTORY = "src/test/resources/test-images/thumbnails/";
 
     @BeforeEach
-    void setUp() {
-        ReflectionTestUtils.setField(imageService, "IMAGE_DIRECTORY_ORIGIN", "path/to/origin");
-        ReflectionTestUtils.setField(imageService, "IMAGE_DIRECTORY_THUMB", "path/to/thumb");
+    void setUp() throws IOException {
+        Files.createDirectories(Paths.get(TEST_IMAGE_DIRECTORY));
+        Files.createDirectories(Paths.get(TEST_THUMB_DIRECTORY));
+        ReflectionTestUtils.setField(imageService, "IMAGE_DIRECTORY_ORIGIN", TEST_IMAGE_DIRECTORY);
+        ReflectionTestUtils.setField(imageService, "IMAGE_DIRECTORY_THUMB", TEST_THUMB_DIRECTORY);
+    }
+    @AfterEach
+    void tearDown() throws IOException {
+        // Clean up test directories after each test
+        FileUtils.deleteDirectory(new File(TEST_IMAGE_DIRECTORY));
+        FileUtils.deleteDirectory(new File(TEST_THUMB_DIRECTORY));
     }
 
     @Test
@@ -60,14 +74,14 @@ public class ImageServiceTest {
     void deleteImageTest() {
         Image image = new Image();
         image.setId(1);
-        image.setImageName("testImage.jpg");
+        image.setImageName("test.jpg");
         image.setThumbnailName("testThumbnail.jpg");
 
         when(imageRepository.findById(1)).thenReturn(Optional.of(image));
 
         imageService.deleteImage(1);
 
-        verify(imageService, times(1)).deleteImageFiles("testImage.jpg", "testThumbnail.jpg");
+        verify(imageService, times(1)).deleteImageFiles("test.jpg", "testThumbnail.jpg");
         verify(imageRepository, times(1)).delete(image);
     }
 
