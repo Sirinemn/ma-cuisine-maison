@@ -12,7 +12,9 @@ import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
 import fr.sirine.cuisine.recipe.RecipeService;
+import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
+import io.swagger.models.auth.In;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,5 +152,33 @@ public class RecipeControllerIT {
         mockMvc.perform(get("/recipes/category").param("categoryName", "ENTREES"))
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void deleteRecipeByIdTest() throws Exception {
+        Image image = new Image();
+        image.setId(2);
+        image.setRecipe(recipe);
+        Ingredient ingredient = Ingredient.builder()
+                .id(1)
+                .name("tomate")
+                .build();
+        RecipeIngredient recipeIngredient = RecipeIngredient.builder()
+                .recipeIngredientId(1)
+                .recipe(recipe)
+                .ingredient(ingredient)
+                .build();
+        recipe.setImage(image);
+        recipe.setIngredients(List.of(recipeIngredient));
+
+        when(recipeService.getRecipeById(1)).thenReturn(recipe);
+        doNothing().when(imageService).deleteImage(any(Integer.class));
+        doNothing().when(recipeService).deleteRecipe(1);
+        doNothing().when(ingredientService).deleteIngredient(any(Ingredient.class));
+        when(recipeIngredientService.isShared(any(RecipeIngredient.class))).thenReturn(false);
+
+        mockMvc.perform(delete("/recipes/recipe/1"))
+                .andExpect(status().isNoContent());
     }
 }

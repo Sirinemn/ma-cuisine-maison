@@ -72,7 +72,7 @@ public class RecipeController {
             // Store image info before deletion if it exists
             Image image = recipe.getImage();
 
-            // If there was an image, delete it after recipe is deleted
+            // If there was an image, delete it before recipe is deleted
             if (image != null) {
                 log.info("Attempting to delete image with ID: {}", image.getId());
                 imageService.deleteImage(image.getId());
@@ -81,7 +81,7 @@ public class RecipeController {
 
             List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
             recipeService.deleteRecipe(id);
-            // Supprimer chaque ingrédient inutilisé
+            // Delete every unused ingredient
             for (RecipeIngredient recipeIngredient : recipeIngredients) {
                 Ingredient ingredient = recipeIngredient.getIngredient();
                 // If the ingredient is not shared with other recipes, delete it
