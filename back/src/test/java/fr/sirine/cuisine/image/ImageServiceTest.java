@@ -72,6 +72,16 @@ public class ImageServiceTest {
     }
 
     @Test
+    void updateImageTest() {
+        Image image = new Image();
+        image.setId(1);
+
+        imageService.updateImage(image);
+
+        verify(imageRepository, times(1)).save(image);
+    }
+
+    @Test
     void testFindById() {
         Image image = new Image();
         image.setId(1);
