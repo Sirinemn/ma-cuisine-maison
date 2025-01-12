@@ -1,11 +1,15 @@
 package fr.sirine.cuisine.image;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,8 +25,15 @@ public class ImageServiceTest {
     @Mock
     private ImageRepository imageRepository;
 
+    @Spy
     @InjectMocks
     private ImageService imageService;
+
+    @BeforeEach
+    void setUp() {
+        ReflectionTestUtils.setField(imageService, "IMAGE_DIRECTORY_ORIGIN", "path/to/origin");
+        ReflectionTestUtils.setField(imageService, "IMAGE_DIRECTORY_THUMB", "path/to/thumb");
+    }
 
     @Test
     void testSaveImage() throws IOException {
@@ -45,7 +56,23 @@ public class ImageServiceTest {
         verify(imageRepository, times(1)).save(any(Image.class));
     }
 
-    @Test public void testFindById() {
+    @Test
+    void deleteImageTest() {
+        Image image = new Image();
+        image.setId(1);
+        image.setImageName("testImage.jpg");
+        image.setThumbnailName("testThumbnail.jpg");
+
+        when(imageRepository.findById(1)).thenReturn(Optional.of(image));
+
+        imageService.deleteImage(1);
+
+        verify(imageService, times(1)).deleteImageFiles("testImage.jpg", "testThumbnail.jpg");
+        verify(imageRepository, times(1)).delete(image);
+    }
+
+    @Test
+    void testFindById() {
         Image image = new Image();
         image.setId(1);
         when(imageRepository.findById(1)).thenReturn(Optional.of(image));

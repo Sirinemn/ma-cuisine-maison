@@ -90,7 +90,7 @@ public class ImageService {
         imageRepository.delete(image);
     }
 
-    private void deleteImageFiles(String imageName, String thumbnailName) {
+    protected void deleteImageFiles(String imageName, String thumbnailName) {
         try {
             log.info("Attempting to delete original image: {}", Paths.get(IMAGE_DIRECTORY_ORIGIN, imageName));
             log.info("Attempting to delete thumbnail image: {}", Paths.get(IMAGE_DIRECTORY_THUMB, thumbnailName));
