@@ -93,11 +93,17 @@ describe('RecipeListComponent', () => {
     mockActivatedRoute = {
       queryParams: of({})
     };
-    
-    // Recréez le composant avec les query params mis à jour
-    TestBed.overrideProvider(ActivatedRoute, { useValue: mockActivatedRoute });
-    fixture = TestBed.createComponent(RecipeListComponent);
-    component = fixture.componentInstance;
+    // Recréez le module de test avec les query params mis à jour 
+    TestBed.resetTestingModule(); 
+    TestBed.configureTestingModule({ 
+      imports: [RecipeListComponent], 
+      providers: [ 
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }, 
+        { provide: RecipeService, useValue: mockRecipeService }, 
+        { provide: Router, useValue: mockRouter } 
+      ] }).compileComponents(); 
+      fixture = TestBed.createComponent(RecipeListComponent);
+       component = fixture.componentInstance;
     
     // Initialisez le composant et détectez les changements
     component.ngOnInit();
