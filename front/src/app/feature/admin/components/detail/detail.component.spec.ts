@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DetailComponent } from './detail.component';
-import { ActivatedRoute, ParamMap, provideRouter } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AdminUserService } from '../../service/admin-user.service';
 import { of } from 'rxjs';
 
