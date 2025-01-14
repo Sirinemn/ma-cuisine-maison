@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ListComponent } from './list.component';
-import { provideHttpClient } from '@angular/common/http';
 import { AdminUserService } from '../../service/admin-user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
