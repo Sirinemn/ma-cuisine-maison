@@ -41,6 +41,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach( sub => sub.unsubscribe());
   }
+  getImageUrl(filename: string, type: 'thumb' | 'origine'): string {
+    return `/assets/uploads/images/${type}/${filename}`;
+  }
   public imgError(event: Event): void {
     const element = event.target as HTMLImageElement;
     element.src = 'assets/default-image.jpg'; // Chemin vers une image par défaut
