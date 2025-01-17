@@ -15,8 +15,9 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public void saveComment(Comment comment) {
+    public Comment saveComment(Comment comment) {
         commentRepository.save(comment);
+        return comment;
     }
     public List<Comment> findByRecipeId(Integer recipeId) {
         return commentRepository.findByRecipeId(recipeId);
