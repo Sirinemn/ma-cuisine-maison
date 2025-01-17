@@ -21,4 +21,7 @@ public class CommentService {
     public List<Comment> findByRecipeId(Integer recipeId) {
         return commentRepository.findByRecipeId(recipeId);
     }
+    public void deleteComment(Integer commentId) {
+        commentRepository.findById(commentId).ifPresent(commentRepository::delete);
+    }
 }
