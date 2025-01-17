@@ -17,7 +17,7 @@ export class CommentService {
   public getRecipeComments(id: string): Observable<CommentsResponse> {
     return this.httpClient.get<CommentsResponse>(`${this.pathService}/${id}`);
   }
-  public addComment(comment: Comment) {
+  public addComment(comment: Comment) : Observable<MessageResponse> {
     return this.httpClient.post<MessageResponse>(`${this.pathService}`, comment);
 
   }
