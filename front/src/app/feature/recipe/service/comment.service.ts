@@ -21,5 +21,4 @@ export class CommentService {
     return this.httpClient.post<MessageResponse>(`${this.pathService}`, comment);
 
   }
-
 }

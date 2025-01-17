@@ -50,7 +50,7 @@ public class CommentServiceTest {
     void saveCommentTest() {
         when(commentRepository.save(any(Comment.class))).thenReturn(comment);
 
-        Comment result = commentService.saveComment(comment);
+        Comment result = (Comment) commentService.saveComment(comment);
 
         assertEquals(comment.getId(), result.getId());
         verify(commentRepository, times(1)).save(any(Comment.class));

@@ -1,6 +1,7 @@
 package fr.sirine.cuisine.comment;
 
 import jakarta.transaction.Transactional;
+import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +17,7 @@ public class CommentService {
     }
 
     public Comment saveComment(Comment comment) {
-        commentRepository.save(comment);
-        return comment;
+        return commentRepository.save(comment);
     }
     public List<Comment> findByRecipeId(Integer recipeId) {
         return commentRepository.findByRecipeId(recipeId);

@@ -40,17 +40,18 @@ describe('CommentService', () => {
     expect(req.request.method).toBe('GET');
     req.flush(commentListMock);
   });
-  it(' should add a new comment', () => {
-    const messageResponse: MessageResponse = { 
-      message: 'Comment added with success!' 
-    };
-    service.addComment(commentMock).subscribe( response => {
+  it('should add a new comment', () => {
+    const messageResponse: MessageResponse = { message: 'Comment added with success!' };
+    service.addComment(commentMock).subscribe(response => {
       expect(response.message).toEqual('Comment added with success!');
     });
-    const request = httpMock.expectOne(`${service['pathService']}`);
-    expect(request.request.method).toBe('POST');
-    request.flush(messageResponse);
+  
+    const req = httpMock.expectOne(`${service['pathService']}`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(commentMock); // Verify the request body
+    req.flush(messageResponse); // Provide mock response
   });
+  
 
   it('should be created', () => {
     expect(service).toBeTruthy();
