@@ -9,16 +9,16 @@ import { MessageResponse } from '../../../interface/api/messageResponse.interfac
   providedIn: 'root'
 })
 export class CommentService {
-
   private pathService = 'http://localhost:8080/api/comments';
-  
-  constructor(private httpClient: HttpClient) { }
+
+  constructor(private httpClient: HttpClient) {}
 
   public getRecipeComments(id: string): Observable<CommentsResponse> {
     return this.httpClient.get<CommentsResponse>(`${this.pathService}/${id}`);
   }
-  public addComment(comment: Comment) : Observable<MessageResponse> {
-    return this.httpClient.post<MessageResponse>(`${this.pathService}`, comment);
 
+  public addComment(comment: Comment): Observable<MessageResponse> {
+    return this.httpClient.post<MessageResponse>(`${this.pathService}`, comment);
   }
 }
+
