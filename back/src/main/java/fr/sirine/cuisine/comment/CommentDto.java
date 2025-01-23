@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
+public class  CommentDto {
     private Integer id;
 
     @NotNull
