@@ -8,6 +8,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { CommentService } from '../../service/comment.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommentsResponse } from '../../interface/api/commentsResponse.interface';
+import { SessionService } from '../../../../service/session.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -25,12 +28,21 @@ import { CommentService } from '../../service/comment.service';
 export class RecipeDetailComponent implements OnInit, OnDestroy{
   private httpSubscriptions: Subscription[] = [];
   public recipe!: Recipe;
+  public comments: CommentsResponse;
+  public commentForm: FormGroup;
+  public showCommentsSection: boolean = false;
 
   constructor(
     private recipeService: RecipeService,
     private activateRoute: ActivatedRoute,
-    private commentService: CommentService
-  ){}
+    private commentService: CommentService,
+    private formBuilder: FormBuilder,
+    private sessionService: SessionService
+  ){
+    this.commentForm = this.formBuilder.group({
+      content: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     const id =+ this.activateRoute.snapshot.paramMap.get('id')!;
@@ -40,8 +52,40 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
       )
     )
   }
-  showComments(recipeId: string) {
-    this.commentService.getRecipeComments(recipeId);
+  toggleComments(): void {
+    this.showCommentsSection = !this.showCommentsSection;
+    if (this.showCommentsSection && this.comments === null) {
+      this.loadComments(); // Only load comments when showing for the first time
+    }
+  }
+  loadComments(): void {
+    let recipeId = this.recipe.id?.toString()!;
+    if (this.recipe) {
+      this.httpSubscriptions.push(
+        this.commentService.getRecipeComments(recipeId).subscribe(
+          comments => this.comments = comments
+        )
+      );
+    }
+  }
+  addComment(): void {
+    if (this.commentForm.valid && this.recipe) {
+      const comment = {
+        content: this.commentForm.get('content')?.value,
+        recipeId: this.recipe.id!,
+        userId: this.sessionService.user?.id!,
+        userPseudo: this.sessionService.user?.pseudo!
+      };
+
+      this.httpSubscriptions.push(
+        this.commentService.addComment(comment).subscribe(
+          response => {
+            this.loadComments(); // Reload comments after adding new one
+            this.commentForm.reset(); // Reset form
+          }
+        )
+      );
+    }
   }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach( sub => sub.unsubscribe());
