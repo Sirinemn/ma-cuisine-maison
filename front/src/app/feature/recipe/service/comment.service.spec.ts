@@ -42,8 +42,8 @@ describe('CommentService', () => {
     });
 
     const req = httpMock.expectOne(`${service['pathService']}/1`);
-    expect(req.request.method).toBe('GET'); // Vérifie que la méthode est GET
-    req.flush(commentListMock); // Simule la réponse avec des données fictives
+    expect(req.request.method).toBe('GET'); 
+    req.flush(commentListMock); 
   });
 
   xit('should add a new comment', () => {
@@ -54,12 +54,12 @@ describe('CommentService', () => {
     });
 
     const req = httpMock.expectOne(`${service['pathService']}`);
-    expect(req.request.method).toBe('POST'); // Vérifie que la méthode est POST
-    expect(req.request.body).toEqual(commentMock); // Vérifie que le corps de la requête correspond aux données simulées
-    req.flush(messageResponse); // Simule la réponse avec un message fictif
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(commentMock); 
+    req.flush(messageResponse);
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy(); // Vérifie que le service est correctement créé
+    expect(service).toBeTruthy(); 
   });
 });

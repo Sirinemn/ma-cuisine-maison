@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { CommentService } from '../../service/comment.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -27,7 +28,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
 
   constructor(
     private recipeService: RecipeService,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private commentService: CommentService
   ){}
 
   ngOnInit(): void {
@@ -37,6 +39,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
         resultat => this.recipe = resultat
       )
     )
+  }
+  showComments(recipeId: string) {
+    this.commentService.getRecipeComments(recipeId);
   }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach( sub => sub.unsubscribe());
