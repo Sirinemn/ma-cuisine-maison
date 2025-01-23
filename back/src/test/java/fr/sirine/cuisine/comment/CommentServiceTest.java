@@ -72,4 +72,15 @@ public class CommentServiceTest {
         assertEquals(1, result.size());
         verify(commentRepository, times(1)).findByRecipeId(1);
     }
+    @Test
+    void updateCommentTes() {
+        when(commentRepository.findById(any(Integer.class))).thenReturn(Optional.of(comment));
+        when(commentRepository.save(any(Comment.class))).thenReturn(comment);
+
+        Comment result = commentService.updateComment(1, "new content");
+
+        verify(commentRepository, times(1)).findById(1);
+        verify(commentRepository, times(1)).save(comment);
+        assertEquals("new content", result.getContent());
+    }
 }
