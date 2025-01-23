@@ -15,10 +15,50 @@
           {{ ingredient.quantity }} {{ ingredient.unit }} - {{ ingredient.name }}
         </li>
       </ul>
-    </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button color="primary" (click)="back()">Retour</button>
     </mat-card-actions>
+
+    <button mat-button color="primary" (click)="toggleComments()">
+      {{ showCommentsSection ? 'Hide Comments' : 'Show Comments' }}
+    </button>
+    
+    <!-- Comments section with *ngIf for toggle -->
+    <div class="comments-section" *ngIf="showCommentsSection">
+      <h3>Comments</h3>
+      
+      <!-- Add new comment form -->
+      <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Add a comment</mat-label>
+          <textarea matInput formControlName="content" rows="3"></textarea>
+          <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
+            Comment cannot be empty
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid">
+          Post Comment
+        </button>
+      </form>
+
+      <!-- Display comments -->
+      <div class="comments-list" *ngIf="comments.comment.length > 0">
+        <mat-card class="comment-card" *ngFor="let comment of comments.comment">
+          <mat-card-header>
+            <mat-card-title-group>
+              <mat-card-subtitle>{{ comment.userPseudo }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ comment.createdAt | date:'medium' }}</mat-card-subtitle>
+            </mat-card-title-group>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ comment.content }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      
+      <p *ngIf="comments.comment.length === 0">No comments yet. Be the first to comment!</p>
+    </div>
+  </mat-card-content>
     
   </mat-card>
   

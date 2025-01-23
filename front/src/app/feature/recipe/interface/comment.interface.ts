@@ -4,5 +4,5 @@ export interface Comment {
     userId: number;
     userPseudo?: string;
     recipeId: number;
-
+    createdAt?: string
 }

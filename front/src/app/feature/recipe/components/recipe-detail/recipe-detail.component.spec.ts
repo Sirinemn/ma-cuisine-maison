@@ -4,12 +4,16 @@ import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { RecipeService } from '../../service/recipe.service';
 import { of } from 'rxjs';
+import { CommentService } from '../../service/comment.service';
+import { SessionService } from '../../../../service/session.service';
 
 describe('RecipeDetailComponent', () => {
   let component: RecipeDetailComponent;
   let fixture: ComponentFixture<RecipeDetailComponent>;
   let mockActivatedRoute: Partial<ActivatedRoute>;
   let mockRecipeService: Partial<RecipeService>;
+  let mockCommentService: Partial<CommentService>;
+  let mockSessionService: Partial<SessionService>;
 
 
   beforeEach(async () => {

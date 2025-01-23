@@ -8,9 +8,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { CommentService } from '../../service/comment.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommentsResponse } from '../../interface/api/commentsResponse.interface';
 import { SessionService } from '../../../../service/session.service';
+import { _MatInternalFormField, ErrorStateMatcher } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -20,7 +22,10 @@ import { SessionService } from '../../../../service/session.service';
     MatCardModule,
     MatButtonModule,
     MatIcon,
-    RouterModule
+    RouterModule,
+    MatFormFieldModule,
+    CommonModule,
+    ReactiveFormsModule
   ],
   templateUrl: './recipe-detail.component.html',
   styleUrl: './recipe-detail.component.scss'
@@ -28,7 +33,7 @@ import { SessionService } from '../../../../service/session.service';
 export class RecipeDetailComponent implements OnInit, OnDestroy{
   private httpSubscriptions: Subscription[] = [];
   public recipe!: Recipe;
-  public comments: CommentsResponse;
+  public comments!: CommentsResponse;
   public commentForm: FormGroup;
   public showCommentsSection: boolean = false;
 
