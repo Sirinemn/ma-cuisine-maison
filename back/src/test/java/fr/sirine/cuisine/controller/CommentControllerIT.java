@@ -93,4 +93,12 @@ public class CommentControllerIT {
         mockMvc.perform(delete("/comments/1"))
                 .andExpect(status().isNoContent());
     }
+    @Test
+    @WithMockUser(username = "user", authorities = {"USER"})
+    void updateCommentTest() throws Exception {
+        when(commentService.updateComment(1, "new content")).thenReturn(comment);
+        mockMvc.perform(put("/comments/1").param("content","new content"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Updated with success!"))
+                .andExpect(status().isOk());
+    }
 }

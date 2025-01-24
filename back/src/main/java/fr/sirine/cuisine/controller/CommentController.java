@@ -46,7 +46,7 @@ public class CommentController {
         commentService.deleteComment(Integer.parseInt(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<MessageResponse> updateComment(@PathVariable String id,
                                                          @RequestParam("content") @NotBlank @Size(max = 63) String content) {
         this.commentService.updateComment(Integer.parseInt(id), content);
