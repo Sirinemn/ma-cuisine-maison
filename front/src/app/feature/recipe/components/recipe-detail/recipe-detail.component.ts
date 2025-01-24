@@ -125,7 +125,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
     dialogRef.afterClosed().subscribe(() => {
       this.httpSubscriptions.push(this.commentService.deleteComment(comment.id?.toString()!).subscribe(
         response => {
-          this.snackBar.open(response.message, 'ok', { duration: 2000 });
+          this.snackBar.open("Comment deleted with success", 'ok', { duration: 2000 });
           this.loadComments();
         },
         error => {
