@@ -49,7 +49,7 @@ public class CommentController {
     }
     @PutMapping("/id")
     public ResponseEntity<MessageResponse> updateComment(@PathVariable String id,
-                                                         @RequestParam("pseudo") @NotBlank @Size(max = 63) String content) {
+                                                         @RequestParam("content") @NotBlank @Size(max = 63) String content) {
         this.commentService.updateComment(Integer.parseInt(id), content);
         MessageResponse messageResponse = new MessageResponse("Updated with success!");
         return new ResponseEntity<>(messageResponse, HttpStatus.OK);
