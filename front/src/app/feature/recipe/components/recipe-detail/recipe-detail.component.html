@@ -31,7 +31,7 @@
       <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Add a comment</mat-label>
-          <textarea matInput formControlName="content" rows="3"></textarea>
+          <textarea matInput formControlName="content" rows="2"></textarea>
           <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
             Comment cannot be empty
           </mat-error>
@@ -42,8 +42,8 @@
       </form>
 
       <!-- Display comments -->
-      <div class="comments-list" *ngIf="comments.comment.length > 0">
-        <mat-card class="comment-card" *ngFor="let comment of comments.comment">
+      <div class="comments-list" *ngIf="comments.length > 0">
+        <mat-card class="comment-card" *ngFor="let comment of comments">
           <mat-card-header>
             <mat-card-title-group>
               <mat-card-subtitle>{{ comment.userPseudo }}</mat-card-subtitle>
@@ -56,7 +56,7 @@
         </mat-card>
       </div>
       
-      <p *ngIf="comments.comment.length === 0">No comments yet. Be the first to comment!</p>
+      <p *ngIf="comments.length === 0">No comments yet. Be the first to comment!</p>
     </div>
   </mat-card-content>
     
