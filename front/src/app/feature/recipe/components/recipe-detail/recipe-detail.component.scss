@@ -68,6 +68,7 @@
   .comment-form {
     display: flex;
     flex-direction: row;
+    margin: 10px;
   }
   textarea {
     border-radius: 10px;
@@ -83,7 +84,8 @@
         &:active {
           background-color: #0d47a1;
         }
-        margin-top: 30px;
+        margin-top: 12px;
+        margin-left: 10px;
   }
   .comments-section {
     margin-top: 2rem;
