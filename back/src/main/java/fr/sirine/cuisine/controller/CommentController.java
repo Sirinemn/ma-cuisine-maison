@@ -6,6 +6,8 @@ import fr.sirine.cuisine.comment.CommentMapper;
 import fr.sirine.cuisine.comment.CommentService;
 import fr.sirine.cuisine.payload.CommentResponse;
 import fr.sirine.cuisine.payload.MessageResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +46,12 @@ public class CommentController {
         commentService.deleteComment(Integer.parseInt(id));
         MessageResponse messageResponse = new MessageResponse("Comment deleted with success!");
         return new ResponseEntity<>(messageResponse, HttpStatus.NO_CONTENT);
+    }
+    @PutMapping("/id")
+    public ResponseEntity<MessageResponse> updateComment(@PathVariable String id,
+                                                         @RequestParam("pseudo") @NotBlank @Size(max = 63) String content) {
+        this.commentService.updateComment(Integer.parseInt(id), content);
+        MessageResponse messageResponse = new MessageResponse("Updated with success!");
+        return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 }
