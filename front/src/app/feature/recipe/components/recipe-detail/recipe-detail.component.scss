@@ -95,7 +95,9 @@
     // Add animation for smooth transition
     animation: fadeIn 0.3s ease-in;
   }
-  
+  .comment-card {
+    margin: 5px;
+  }
   @keyframes fadeIn {
     from {
       opacity: 0;
