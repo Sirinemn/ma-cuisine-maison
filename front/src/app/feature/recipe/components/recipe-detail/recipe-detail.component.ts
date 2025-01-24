@@ -10,8 +10,8 @@ import { MatIcon } from '@angular/material/icon';
 import { CommentService } from '../../service/comment.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SessionService } from '../../../../service/session.service';
-import { _MatInternalFormField } from '@angular/material/core';
-import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { Comment } from '../../interface/comment.interface';
 
 @Component({
@@ -26,6 +26,7 @@ import { Comment } from '../../interface/comment.interface';
     MatFormFieldModule,
     CommonModule,
     ReactiveFormsModule,
+    MatInputModule
    ],
   templateUrl: './recipe-detail.component.html',
   styleUrl: './recipe-detail.component.scss'
