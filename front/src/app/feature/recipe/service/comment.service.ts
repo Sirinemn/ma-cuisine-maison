@@ -20,8 +20,11 @@ export class CommentService {
   public addComment(comment: Comment): Observable<MessageResponse> {
     return this.httpClient.post<MessageResponse>(`${this.pathService}`, comment);
   }
-  public deleteComment (commentId: string):  Observable<MessageResponse>{
-    return this.httpClient.delete<MessageResponse>(`${this.pathService}/${commentId}`)
+  public deleteComment (commentId: string): Observable<MessageResponse>{
+    return this.httpClient.delete<MessageResponse>(`${this.pathService}/${commentId}`);
+  }
+  public updateComment (commentId: string, content: string) : Observable<MessageResponse> {
+    return this.httpClient.put<MessageResponse> (`${this.pathService}/${commentId}`, content);
   }
 }
 
