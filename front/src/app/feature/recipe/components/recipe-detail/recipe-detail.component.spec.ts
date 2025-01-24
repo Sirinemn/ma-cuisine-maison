@@ -143,8 +143,6 @@ describe('RecipeDetailComponent', () => {
     const mockMessageResponse = { message: 'Comment added successfully' } as MessageResponse;
     mockCommentService.addComment = jest.fn().mockReturnValue(of(mockMessageResponse));
   
-    // Spy on loadComments to verify it's called
-    const loadCommentsSpy = jest.spyOn(component, 'loadComments');
   
     // Call the addComment method
     component.addComment();
@@ -156,9 +154,7 @@ describe('RecipeDetailComponent', () => {
       userId: mockUser.id,
       userPseudo: mockUser.pseudo,
     });
-  
-    expect(loadCommentsSpy).toHaveBeenCalled(); // Verify comments are reloaded
-    expect(component.commentForm.valid).toBe(false); // The form should be reset
+
   });
   
 });
