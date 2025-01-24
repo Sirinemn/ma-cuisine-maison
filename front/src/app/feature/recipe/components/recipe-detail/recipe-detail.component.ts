@@ -58,24 +58,33 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
       this.recipeService.getRecipeById(id).subscribe(
         resultat => this.recipe = resultat
       )
-    )
+    );
   }
   toggleComments(): void {
     this.showCommentsSection = !this.showCommentsSection;
-    if (this.showCommentsSection && this.comments === null) {
+    if (this.showCommentsSection) {
       this.loadComments(); // Only load comments when showing for the first time
     }
   }
   loadComments(): void {
-    let recipeId = this.recipe.id?.toString()!;
-    if (this.recipe) {
+    const recipeId = this.recipe?.id?.toString();
+    if (recipeId) {
+      console.log('loading comments');
       this.httpSubscriptions.push(
         this.commentService.getRecipeComments(recipeId).subscribe(
-          comments => this.comments = comments.comment
+          (resultat) => {
+            this.comments = resultat?.comments || []; 
+            console.log(resultat)
+          },
+          (error) => {
+            console.error('Failed to load comments', error);
+            this.comments = []; 
+          }
         )
       );
     }
   }
+  
   addComment(): void {
     if (this.commentForm.valid && this.recipe) {
       const comment = {
@@ -91,6 +100,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
             this.snackBar.open(response.message, 'ok', { duration: 2000 })
             this.loadComments(); // Reload comments after adding new one
             this.commentForm.reset(); // Reset form
+          },
+          error => {
+            this.snackBar.open('something bad happened', 'ok', { duration: 2000 })
           }
         )
       );

@@ -48,7 +48,7 @@ describe('RecipeDetailComponent', () => {
     };
     mockCommentService = {
       getRecipeComments: jest.fn().mockReturnValue(of({
-        comment: [
+        comments: [
           {
             id: 1,
             content: "dummy comment",
