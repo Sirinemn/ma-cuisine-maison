@@ -13,6 +13,7 @@ import { SessionService } from '../../../../service/session.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Comment } from '../../interface/comment.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -43,6 +44,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
     private activateRoute: ActivatedRoute,
     private commentService: CommentService,
     private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
     private sessionService: SessionService
   ){
     this.commentForm = this.formBuilder.group({
@@ -86,6 +88,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
       this.httpSubscriptions.push(
         this.commentService.addComment(comment).subscribe(
           response => {
+            this.snackBar.open(response.message, 'ok', { duration: 2000 })
             this.loadComments(); // Reload comments after adding new one
             this.commentForm.reset(); // Reset form
           }
