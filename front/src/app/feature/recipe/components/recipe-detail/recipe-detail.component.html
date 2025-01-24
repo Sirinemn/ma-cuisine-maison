@@ -46,15 +46,28 @@
         <mat-card class="comment-card" *ngFor="let comment of comments">
           <mat-card-header>
             <mat-card-title-group>
-              <mat-card-subtitle>{{ "by "+comment.userPseudo }}</mat-card-subtitle>
-              <mat-card-subtitle>{{ comment.createdAt | date:'medium' }}</mat-card-subtitle>
-            </mat-card-title-group>
+              <mat-card-subtitle>{{ "by " + comment.userPseudo }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ comment.createdAt | date: 'medium' }}</mat-card-subtitle>
+            </mat-card-title-group>             
           </mat-card-header>
+      
           <mat-card-content>
             <p>{{ comment.content }}</p>
           </mat-card-content>
+
+               <!-- Boutons Modifier / Supprimer -->
+               <div class="comment-actions" *ngIf="canEditOrDelete(comment)">
+                <button mat-icon-button color="primary" aria-label="Edit Comment" (click)="editComment(comment)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" aria-label="Delete Comment" (click)="deleteComment(comment)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              
         </mat-card>
       </div>
+      
       
       <p *ngIf="comments.length === 0">No comments yet. Be the first to comment!</p>
     </div>

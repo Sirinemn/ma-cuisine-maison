@@ -106,6 +106,23 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
       );
     }
   }
+  canEditOrDelete(comment: Comment): boolean {
+    const currentUser = this.sessionService.user;
+    if (!currentUser) {
+      return false;
+    }
+    // Vérifier si l'utilisateur est l'auteur du commentaire ou admin
+    const isAuthor = comment.userId === currentUser.id;
+    const isAdmin = currentUser.roles.includes('ADMIN');
+  
+    return isAuthor || isAdmin;
+  }
+  deleteComment( comment: Comment ) {
+
+  }
+  editComment( comment: Comment ) {
+    
+  }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach( sub => sub.unsubscribe());
   }
