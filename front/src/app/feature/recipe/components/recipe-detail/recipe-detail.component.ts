@@ -69,12 +69,10 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
   loadComments(): void {
     const recipeId = this.recipe?.id?.toString();
     if (recipeId) {
-      console.log('loading comments');
       this.httpSubscriptions.push(
         this.commentService.getRecipeComments(recipeId).subscribe(
           (resultat) => {
             this.comments = resultat?.comments || []; 
-            console.log(resultat)
           },
           (error) => {
             console.error('Failed to load comments', error);
