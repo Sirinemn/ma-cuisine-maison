@@ -14,6 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Comment } from '../../interface/comment.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../../components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -45,6 +47,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
     private commentService: CommentService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private sessionService: SessionService
   ){
     this.commentForm = this.formBuilder.group({
@@ -118,10 +121,21 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
     return isAuthor || isAdmin;
   }
   deleteComment( comment: Comment ) {
-
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.afterClosed().subscribe(() => {
+      this.httpSubscriptions.push(this.commentService.deleteComment(comment.id?.toString()!).subscribe(
+        response => {
+          this.snackBar.open(response.message, 'ok', { duration: 2000 });
+          this.loadComments();
+        },
+        error => {
+          this.snackBar.open('Failed to delete comment', 'ok', { duration: 2000 });
+        }
+      ));
+    })  
   }
   editComment( comment: Comment ) {
-    
+
   }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach( sub => sub.unsubscribe());
