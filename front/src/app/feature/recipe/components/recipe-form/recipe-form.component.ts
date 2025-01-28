@@ -43,6 +43,7 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
   categories: string[] = ['ENTREES', 'PLATS_PRINCIPAUX', 'ACCOMPAGNEMENTS', 'DESSERTS', 'BOISSONS', 'PETITS_DEJEUNERS_BRUNCHS', 'CUISINE_DU_MONDE'];
   unities: string[] = ['Tasse', 'Gramme', 'Pièce', 'Cl', 'Ml', 'Litre', 'Cuillère à soupe', 'Cuillère à café', 'Sachet', 'Pincée'];
   ingredientList: { name: string, quantity: number, unit: string }[] = [];
+  disableButton : Boolean = false;
 
   constructor(private fb: FormBuilder,
      private recipeService: RecipeService,
@@ -125,6 +126,7 @@ export class RecipeFormComponent implements OnDestroy, OnInit {
             next: (response) => {
               this.snackBar.open(response.message, 'OK', { duration: 3000 });
               this.resetForm();
+              this.disableButton = true;
               setTimeout(() => this.router.navigate(['recipe/list']), 3000);
             },
             error: (error) => {
