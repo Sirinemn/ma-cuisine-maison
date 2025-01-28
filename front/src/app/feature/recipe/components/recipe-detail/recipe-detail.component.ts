@@ -40,6 +40,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
   public comments: Comment[] = [] ;
   public commentForm: FormGroup;
   public showCommentsSection: boolean = false;
+  public selectedCommentId: number | null = null;
 
   constructor(
     private recipeService: RecipeService,
@@ -94,19 +95,37 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
         userId: this.sessionService.user?.id!,
         userPseudo: this.sessionService.user?.pseudo!
       };
-
-      this.httpSubscriptions.push(
-        this.commentService.addComment(comment).subscribe(
-          response => {
-            this.snackBar.open(response.message, 'ok', { duration: 2000 })
-            this.loadComments(); // Reload comments after adding new one
-            this.commentForm.reset(); // Reset form
-          },
-          error => {
-            this.snackBar.open('something bad happened', 'ok', { duration: 2000 })
-          }
-        )
-      );
+  
+      if (this.selectedCommentId) {
+        // Update existing comment
+        this.httpSubscriptions.push(
+          this.commentService.updateComment(this.selectedCommentId.toString(), comment.content).subscribe(
+            response => {
+              this.snackBar.open(response.message, 'ok', { duration: 2000 });
+              this.loadComments(); // Reload comments after updating
+              this.commentForm.reset(); // Reset form
+              this.selectedCommentId = null; // Clear the selected comment ID
+            },
+            error => {
+              this.snackBar.open('Failed to update comment', 'ok', { duration: 2000 });
+            }
+          )
+        );
+      } else {
+        // Add new comment
+        this.httpSubscriptions.push(
+          this.commentService.addComment(comment).subscribe(
+            response => {
+              this.snackBar.open(response.message, 'ok', { duration: 2000 });
+              this.loadComments(); // Reload comments after adding new one
+              this.commentForm.reset(); // Reset form
+            },
+            error => {
+              this.snackBar.open('Failed to add comment', 'ok', { duration: 2000 });
+            }
+          )
+        );
+      }
     }
   }
   canEditOrDelete(comment: Comment): boolean {
@@ -134,8 +153,12 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
       ));
     })  
   }
-  editComment( comment: Comment ) {
-
+  editComment(comment: Comment): void {
+    this.commentForm.setValue({
+      content: comment.content
+    });
+  
+    this.selectedCommentId = comment.id!;
   }
   ngOnDestroy(): void {
     this.httpSubscriptions.forEach( sub => sub.unsubscribe());

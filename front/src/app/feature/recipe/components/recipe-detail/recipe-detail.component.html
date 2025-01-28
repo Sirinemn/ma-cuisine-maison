@@ -27,18 +27,19 @@
     <div class="comments-section" *ngIf="showCommentsSection">
       <h3>Comments</h3>
       
-      <!-- Add new comment form -->
+      <!-- Add new comment form or edit comment -->
       <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Add a comment</mat-label>
+          <mat-label>{{ selectedCommentId ? 'Edit Comment' : 'Add a comment' }}</mat-label>
           <textarea matInput formControlName="content" rows="1"></textarea>
           <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
             Comment cannot be empty
           </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" id="post-comment">
-          Post Comment
+          {{ selectedCommentId ? 'Update Comment' : 'Post Comment' }}
         </button>
+        <button mat-button *ngIf="selectedCommentId" (click)="commentForm.reset(); selectedCommentId = null;">Cancel</button>
       </form>
 
       <!-- Display comments -->
