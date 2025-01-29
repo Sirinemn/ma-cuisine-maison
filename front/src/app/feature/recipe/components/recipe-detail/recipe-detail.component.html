@@ -58,10 +58,10 @@
 
                <!-- Boutons Modifier / Supprimer -->
                <div class="comment-actions" *ngIf="canEditOrDelete(comment)">
-                <button mat-icon-button color="primary" aria-label="Edit Comment" (click)="editComment(comment)">
+                <button mat-icon-button color="primary" aria-label="Edit Comment" [disabled]="selectedCommentId" (click)="editComment(comment)">
                   <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" aria-label="Delete Comment" (click)="deleteComment(comment)">
+                <button mat-icon-button color="warn" aria-label="Delete Comment" [disabled]="selectedCommentId" (click)="deleteComment(comment)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
