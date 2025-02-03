@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { CommentService } from './comment.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
@@ -23,7 +22,6 @@ describe('CommentService', () => {
       providers: [
         provideHttpClientTesting(), 
         provideHttpClient(),        
-        CommentService,             
       ],
     });
     service = TestBed.inject(CommentService);
@@ -38,7 +36,7 @@ describe('CommentService', () => {
     const commentListMock = [commentMock];
 
     service.getRecipeComments("1").subscribe(response => {
-      expect(response).toEqual(commentListMock); // Vérifie que la réponse correspond aux données simulées
+      expect(response).toEqual(commentListMock); 
     });
 
     const req = httpMock.expectOne(`${service['pathService']}/1`);
@@ -56,6 +54,28 @@ describe('CommentService', () => {
     const req = httpMock.expectOne(`${service['pathService']}`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(commentMock); 
+    req.flush(messageResponse);
+  });
+
+  xit('should delete a comment', () => {
+    service.deleteComment("1").subscribe(response => {
+      expect(response).toBeNull(); // Ou toute autre vérification appropriée
+    });
+    const req = httpMock.expectOne(`${service['pathService']}/1`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
+  });
+
+  xit('should update a comment', () => {
+    const messageResponse: MessageResponse = { message: 'Comment updated with success!' };
+
+    service.updateComment("1", "Updated content").subscribe(response => {
+      expect(response.message).toEqual('Comment updated with success!');
+    });
+
+    const req = httpMock.expectOne(`${service['pathService']}/1`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual("Updated content");
     req.flush(messageResponse);
   });
 
