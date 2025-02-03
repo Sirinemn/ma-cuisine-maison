@@ -8,6 +8,7 @@ import { CommentService } from '../../service/comment.service';
 import { SessionService } from '../../../../service/session.service';
 import { Recipe } from '../../interface/recipe';
 import { MessageResponse } from '../../../../interface/api/messageResponse.interface';
+import { Comment } from '../../interface/comment.interface';
 
 
 describe('RecipeDetailComponent', () => {
@@ -121,7 +122,6 @@ describe('RecipeDetailComponent', () => {
     }])
   });
   it('should add a comment and display the success message', () => {
-    // Mock sessionService to return a logged-in user
     const mockUser = { 
       id: 1, 
       pseudo: 'testUser',  
@@ -133,21 +133,15 @@ describe('RecipeDetailComponent', () => {
     };
     mockSessionService = { user: mockUser };
   
-    // Set up a recipe and bind it to the component
     component.recipe = { id: 123 } as Recipe;
   
-    // Populate the comment form with valid data
     component.commentForm.setValue({ content: 'Test comment' });
   
-    // Mock the addComment method to return a success message
     const mockMessageResponse = { message: 'Comment added successfully' } as MessageResponse;
     mockCommentService.addComment = jest.fn().mockReturnValue(of(mockMessageResponse));
   
-  
-    // Call the addComment method
     component.addComment();
   
-    // Expectations
     expect(mockCommentService.addComment).toHaveBeenCalledWith({
       content: 'Test comment',
       recipeId: 123,
@@ -155,6 +149,35 @@ describe('RecipeDetailComponent', () => {
       userPseudo: mockUser.pseudo,
     });
 
+  });
+  it('should update comment', () => {
+    const mockComment: Comment = {
+      id: 1,
+      userId: 1,
+      recipeId: 1,
+      content: "initial comment",
+    };
+    const mockUser = { 
+      id: 1, 
+      pseudo: 'testUser',  
+      email : 'email.com',
+      roles: [],
+      firstname : 'first', 
+      lastname: 'last',
+      dateOfBirth: ''
+    };
+    mockSessionService = { user: mockUser };
+    component.selectedCommentId = 1;
+    component.recipe = { id: 123 } as Recipe;
+    component.commentForm.setValue({ content: 'new content' });
+
+    const mockMessageResponse = { message: 'Updated with success!' } as MessageResponse;
+    mockCommentService.updateComment = jest.fn().mockReturnValue(of(mockMessageResponse));
+
+    component.addComment();
+
+    expect(mockCommentService.updateComment).toHaveBeenCalledWith("1", "new content" );
+  
   });
   
 });
