@@ -42,9 +42,9 @@ mat-card-actions button:active {
 
 .comment-form {
   display: flex;
-  align-items: center;
-  gap: 10px; 
-  flex-wrap: wrap;
+  align-items: center; 
+  gap: 10px;
+  width: 100%;
 }
 
 .comment-form mat-form-field {
@@ -53,8 +53,10 @@ mat-card-actions button:active {
 }
 
 .comment-form button {
-  min-width: 120px;
+  white-space: nowrap; 
+  margin-bottom: 30px;
 }
+
 
 .comment-actions {
   display: flex;
