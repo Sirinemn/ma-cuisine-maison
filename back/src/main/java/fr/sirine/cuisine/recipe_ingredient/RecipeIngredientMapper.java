@@ -15,4 +15,5 @@ public abstract class RecipeIngredientMapper implements EntityMapper<IngredientD
     @Mapping(source = "recipeIngredient.quantity", target = "quantity")
     @Mapping(source = "recipeIngredient.unit", target = "unit")
     public abstract IngredientDto toDto(RecipeIngredient recipeIngredient);
+
 }

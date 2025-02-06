@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,5 +80,18 @@ public class RecipeService {
     }
     public RecipeDto getRecipeDto(Integer id) {
         return recipeMapper.toDto(recipeRepository.findById(id).orElse(null));
+    }
+
+    public Recipe updateRecipe(RecipeDto recipeDto) {
+        Integer recipeId = recipeDto.getId();
+        Recipe recipe = this.recipeRepository.findById(recipeId).orElse(null);
+        if( recipe != null) {
+            recipe.setDescription(recipeDto.getDescription());
+            recipe.setCookingTime(recipeDto.getCookingTime());
+            recipe.setServings(recipeDto.getServings());
+            recipe.setTitle(recipeDto.getTitle());
+            this.recipeRepository.save(recipe);
+        }
+        return recipe;
     }
 }
