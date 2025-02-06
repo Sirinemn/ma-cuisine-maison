@@ -14,7 +14,6 @@ import fr.sirine.cuisine.payload.MessageResponse;
 import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
-import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.cuisine.recipe.RecipeService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
@@ -106,11 +105,11 @@ public class RecipeController {
         // Supprimer les ingrédients qui ne sont plus utilisés
         List<String> newIngredientNames = ingredientRequests.stream()
                 .map(IngredientRequest::getIngredientName)
-                .collect(Collectors.toList());
+                .toList();
 
         List<RecipeIngredient> toRemove = existingRecipe.getIngredients().stream()
                 .filter(ri -> !newIngredientNames.contains(ri.getIngredient().getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         for (RecipeIngredient ri : toRemove) {
             recipeIngredientService.deleteRecipeIngredient(ri.getRecipeIngredientId());
