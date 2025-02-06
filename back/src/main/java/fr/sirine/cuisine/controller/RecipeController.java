@@ -66,7 +66,7 @@ public class RecipeController {
         return recipeService.getRecipeDto(id);
     }
 
-    @Operation(summary = "Delete recipe by ID", description = "Delete a recipe by their ID")
+    @Operation(summary = "Update recipe by ID", description = "Update a recipe by their ID")
     @PutMapping(value = "/recipe/{id}")
     public ResponseEntity<MessageResponse> updateRecipeById(
             @PathVariable Integer id,
@@ -77,7 +77,7 @@ public class RecipeController {
         RecipeDto recipeDto = this.recipeMapper.toDto(recipe);
         //Delete all ingredient to save new ones
         recipe.getIngredients().forEach(ri -> {
-            recipeIngredientService.deleteRecipeIngredient(recipe.getId());
+            recipeIngredientService.deleteRecipeIngredient(ri.getRecipeIngredientId());
             Ingredient ingredient = ri.getIngredient();
             if (!recipeIngredientService.isShared(ri)) {
                 ingredientService.deleteIngredient(ingredient);
