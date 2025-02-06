@@ -14,6 +14,7 @@ import fr.sirine.cuisine.payload.MessageResponse;
 import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe.Recipe;
 import fr.sirine.cuisine.recipe.RecipeDto;
+import fr.sirine.cuisine.recipe.RecipeMapper;
 import fr.sirine.cuisine.recipe.RecipeService;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredientService;
@@ -44,13 +45,15 @@ public class RecipeController {
     private final IngredientService ingredientService;
     private final CategoryService categoryService;
     private final RecipeIngredientService recipeIngredientService;
+    private final RecipeMapper recipeMapper;
 
-    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService, RecipeIngredientService recipeIngredientService) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService, RecipeIngredientService recipeIngredientService, RecipeMapper recipeMapper) {
         this.recipeService = recipeService;
         this.imageService = imageService;
         this.ingredientService = ingredientService;
         this.categoryService = categoryService;
         this.recipeIngredientService = recipeIngredientService;
+        this.recipeMapper = recipeMapper;
     }
     @Operation(summary = "Get all recipes", description = "Retrieve a list of all recipes")
     @GetMapping(value = "/recipes-list")
@@ -61,6 +64,60 @@ public class RecipeController {
     @GetMapping(value = "/recipe/{id}")
     public RecipeDto getRecipeDtoById(@PathVariable Integer id) {
         return recipeService.getRecipeDto(id);
+    }
+
+    @Operation(summary = "Delete recipe by ID", description = "Delete a recipe by their ID")
+    @PutMapping(value = "/recipe/{id}")
+    public ResponseEntity<MessageResponse> updateRecipeById(
+            @PathVariable Integer id,
+            @Valid @RequestPart("recipeRequest") RecipeRequest recipeRequest,
+            @Valid @RequestPart("ingredientRequests") List<IngredientRequest> ingredientRequests,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+        Recipe recipe = this.recipeService.updateRecipe(recipeRequest, id);
+        RecipeDto recipeDto = this.recipeMapper.toDto(recipe);
+        //Delete all ingredient to save new ones
+        recipe.getIngredients().forEach(ri -> {
+            recipeIngredientService.deleteRecipeIngredient(recipe.getId());
+            Ingredient ingredient = ri.getIngredient();
+            if (!recipeIngredientService.isShared(ri)) {
+                ingredientService.deleteIngredient(ingredient);
+            }
+        });
+        // If there was an image, delete it then save the new one
+        Image image = recipe.getImage();
+        if (image != null) {
+            log.info("Attempting to delete image with ID: {}", image.getId());
+            imageService.deleteImage(image.getId());
+            log.info("Image deleted successfully before recipe deletion");
+        }
+        // Saving new image and new ingredients
+        Image newImage = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                newImage = imageService.saveImage(imageFile);
+                recipeDto.setImageThumbName(newImage.getThumbnailName());
+                recipeDto.setImageName(newImage.getImageName());
+                recipeDto.setImageId(newImage.getId());
+            } catch (ImageProcessingException e) {
+                log.error("Error processing image: ", e);
+                return new ResponseEntity<>(
+                        new MessageResponse("Error processing image: " + e.getMessage()),
+                        HttpStatus.INTERNAL_SERVER_ERROR
+                );
+            }
+        }
+        ingredientService.processIngredients(ingredientRequests);
+        recipeDto.setIngredients(
+                ingredientRequests.stream()
+                        .map(req -> IngredientDto.builder()
+                                .name(req.getIngredientName())
+                                .quantity(req.getQuantity())
+                                .unit(req.getUnit())
+                                .build())
+                        .collect(Collectors.toList())
+        );
+        recipeService.saveRecipe(recipeDto);
+        return new ResponseEntity<>(new MessageResponse("Recipe updated successfully!"), HttpStatus.OK);
     }
     @Operation(summary = "Delete recipe by ID", description = "Delete a recipe by their ID")
     @DeleteMapping(value = "/recipe/{id}")

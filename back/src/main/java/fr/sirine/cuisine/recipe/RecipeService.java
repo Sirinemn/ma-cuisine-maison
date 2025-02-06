@@ -4,6 +4,7 @@ import fr.sirine.cuisine.category.RecipeCategory;
 import fr.sirine.cuisine.image.ImageService;
 import fr.sirine.cuisine.ingredient.Ingredient;
 import fr.sirine.cuisine.ingredient.IngredientService;
+import fr.sirine.cuisine.payload.RecipeRequest;
 import fr.sirine.cuisine.recipe_ingredient.RecipeIngredient;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -82,16 +83,16 @@ public class RecipeService {
         return recipeMapper.toDto(recipeRepository.findById(id).orElse(null));
     }
 
-    public Recipe updateRecipe(RecipeDto recipeDto) {
-        Integer recipeId = recipeDto.getId();
-        Recipe recipe = this.recipeRepository.findById(recipeId).orElse(null);
+    public Recipe updateRecipe(RecipeRequest recipeRequest, Integer id) {
+        Recipe recipe = this.recipeRepository.findById(id).orElse(null);
         if( recipe != null) {
-            recipe.setDescription(recipeDto.getDescription());
-            recipe.setCookingTime(recipeDto.getCookingTime());
-            recipe.setServings(recipeDto.getServings());
-            recipe.setTitle(recipeDto.getTitle());
+            recipe.setDescription(recipeRequest.getDescription());
+            recipe.setCookingTime(recipeRequest.getCookingTime());
+            recipe.setServings(recipeRequest.getServings());
+            recipe.setTitle(recipeRequest.getTitle());
             this.recipeRepository.save(recipe);
         }
         return recipe;
     }
+    public void saveRecipe (RecipeDto recipeDto) { recipeRepository.save(recipeMapper.toEntity(recipeDto)); }
 }
