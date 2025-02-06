@@ -46,4 +46,17 @@ export class RecipeService {
   public deleteRecipe(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.pathService}/recipes/recipe/${id}`);
   }
+  public updateRecipe(id: number,recipeRequest: RecipeRequest, ingredientRequests: IngredientRequest[], imageFile?: File ): Observable<MessageResponse>{
+    const formData: FormData = new FormData();
+    formData.append('recipeRequest', new Blob([JSON.stringify(recipeRequest)], { type: 'application/json' }));
+    formData.append('ingredientRequests', new Blob([JSON.stringify(ingredientRequests)], { type: 'application/json' }));
+
+    if (imageFile) { 
+      formData.append('imageFile', imageFile); 
+    }
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    return this.httpClient.put<MessageResponse>(`${this.pathService}/recipes/recipe/${id}`, formData, {headers});
+  }
+
 }
