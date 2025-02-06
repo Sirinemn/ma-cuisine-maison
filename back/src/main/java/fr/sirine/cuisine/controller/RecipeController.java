@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,15 +46,13 @@ public class RecipeController {
     private final IngredientService ingredientService;
     private final CategoryService categoryService;
     private final RecipeIngredientService recipeIngredientService;
-    private final RecipeMapper recipeMapper;
 
-    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService, RecipeIngredientService recipeIngredientService, RecipeMapper recipeMapper) {
+    public RecipeController(RecipeService recipeService, ImageService imageService, IngredientService ingredientService, CategoryService categoryService, RecipeIngredientService recipeIngredientService) {
         this.recipeService = recipeService;
         this.imageService = imageService;
         this.ingredientService = ingredientService;
         this.categoryService = categoryService;
         this.recipeIngredientService = recipeIngredientService;
-        this.recipeMapper = recipeMapper;
     }
     @Operation(summary = "Get all recipes", description = "Retrieve a list of all recipes")
     @GetMapping(value = "/recipes-list")
@@ -66,59 +65,80 @@ public class RecipeController {
         return recipeService.getRecipeDto(id);
     }
 
-    @Operation(summary = "Update recipe by ID", description = "Update a recipe by their ID")
+    @Operation(summary = "Update recipe by ID", description = "Update a recipe by its ID")
     @PutMapping(value = "/recipe/{id}")
     public ResponseEntity<MessageResponse> updateRecipeById(
             @PathVariable Integer id,
             @Valid @RequestPart("recipeRequest") RecipeRequest recipeRequest,
             @Valid @RequestPart("ingredientRequests") List<IngredientRequest> ingredientRequests,
             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        Recipe recipe = this.recipeService.updateRecipe(recipeRequest, id);
-        RecipeDto recipeDto = this.recipeMapper.toDto(recipe);
-        //Delete all ingredient to save new ones
-        recipe.getIngredients().forEach(ri -> {
+
+        // Récupérer la recette existante
+        Recipe existingRecipe = recipeService.getRecipeById(id);
+        if (existingRecipe == null) {
+            return new ResponseEntity<>(new MessageResponse("Recipe not found!"), HttpStatus.NOT_FOUND);
+        }
+
+        // Mettre à jour les informations de la recette
+        existingRecipe.setTitle(recipeRequest.getTitle());
+        existingRecipe.setDescription(recipeRequest.getDescription());
+        existingRecipe.setCategory(categoryService.findByName(recipeRequest.getCategoryName()));
+
+        // Mise à jour intelligente des ingrédients
+        Map<String, RecipeIngredient> existingIngredientsMap = existingRecipe.getIngredients().stream()
+                .collect(Collectors.toMap(ri -> ri.getIngredient().getName(), ri -> ri));
+
+        for (IngredientRequest newIngredientRequest : ingredientRequests) {
+            String ingredientName = newIngredientRequest.getIngredientName();
+
+            if (existingIngredientsMap.containsKey(ingredientName)) {
+                // L'ingrédient existe déjà, on met à jour la quantité et l'unité
+                RecipeIngredient existingRi = existingIngredientsMap.get(ingredientName);
+                existingRi.setQuantity(newIngredientRequest.getQuantity());
+                existingRi.setUnit(newIngredientRequest.getUnit());
+            } else {
+                // Nouvel ingrédient, on l'ajoute
+                Ingredient newIngredient = ingredientService.createIngredient(newIngredientRequest);
+                recipeIngredientService.addRecipeIngredient(existingRecipe, newIngredient, newIngredientRequest.getQuantity(), newIngredientRequest.getUnit());
+            }
+        }
+
+        // Supprimer les ingrédients qui ne sont plus utilisés
+        List<String> newIngredientNames = ingredientRequests.stream()
+                .map(IngredientRequest::getIngredientName)
+                .collect(Collectors.toList());
+
+        List<RecipeIngredient> toRemove = existingRecipe.getIngredients().stream()
+                .filter(ri -> !newIngredientNames.contains(ri.getIngredient().getName()))
+                .collect(Collectors.toList());
+
+        for (RecipeIngredient ri : toRemove) {
             recipeIngredientService.deleteRecipeIngredient(ri.getRecipeIngredientId());
-            Ingredient ingredient = ri.getIngredient();
             if (!recipeIngredientService.isShared(ri)) {
-                ingredientService.deleteIngredient(ingredient);
+                ingredientService.deleteIngredient(ri.getIngredient());
             }
-        });
-        // If there was an image, delete it then save the new one
-        Image image = recipe.getImage();
-        if (image != null) {
-            log.info("Attempting to delete image with ID: {}", image.getId());
-            imageService.deleteImage(image.getId());
-            log.info("Image deleted successfully before recipe deletion");
         }
-        // Saving new image and new ingredients
-        Image newImage = null;
+
+        // Gestion de l’image : supprimer l’ancienne si une nouvelle est fournie
         if (imageFile != null && !imageFile.isEmpty()) {
+            Image existingImage = existingRecipe.getImage();
+            if (existingImage != null) {
+                imageService.deleteImage(existingImage.getId());
+            }
             try {
-                newImage = imageService.saveImage(imageFile);
-                recipeDto.setImageThumbName(newImage.getThumbnailName());
-                recipeDto.setImageName(newImage.getImageName());
-                recipeDto.setImageId(newImage.getId());
+                Image newImage = imageService.saveImage(imageFile);
+                existingRecipe.setImage(newImage);
             } catch (ImageProcessingException e) {
-                log.error("Error processing image: ", e);
-                return new ResponseEntity<>(
-                        new MessageResponse("Error processing image: " + e.getMessage()),
-                        HttpStatus.INTERNAL_SERVER_ERROR
-                );
+                return new ResponseEntity<>(new MessageResponse("Error processing image: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-        ingredientService.processIngredients(ingredientRequests);
-        recipeDto.setIngredients(
-                ingredientRequests.stream()
-                        .map(req -> IngredientDto.builder()
-                                .name(req.getIngredientName())
-                                .quantity(req.getQuantity())
-                                .unit(req.getUnit())
-                                .build())
-                        .collect(Collectors.toList())
-        );
-        recipeService.saveRecipe(recipeDto);
+
+        // Sauvegarde de la recette mise à jour
+        recipeService.saveRecipe(existingRecipe);
+
         return new ResponseEntity<>(new MessageResponse("Recipe updated successfully!"), HttpStatus.OK);
     }
+
     @Operation(summary = "Delete recipe by ID", description = "Delete a recipe by their ID")
     @DeleteMapping(value = "/recipe/{id}")
     public ResponseEntity<Void> deleteRecipeById(@PathVariable Integer id) {

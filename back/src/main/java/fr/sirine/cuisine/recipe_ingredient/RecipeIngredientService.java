@@ -63,4 +63,12 @@ public class RecipeIngredientService {
         return recipeIngredientRepository.existsByIngredientId(ingredient.getId());
     }
 
+    public void addRecipeIngredient(Recipe recipe, Ingredient ingredient, Double quantity, String unit) {
+        RecipeIngredient recipeIngredient = new RecipeIngredient();
+        recipeIngredient.setRecipe(recipe);
+        recipeIngredient.setIngredient(ingredient);
+        recipeIngredient.setQuantity(quantity);
+        recipeIngredient.setUnit(unit);
+        recipeIngredientRepository.save(recipeIngredient);
+    }
 }

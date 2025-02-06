@@ -79,4 +79,13 @@ public class IngredientService {
     public void deleteIngredient(Ingredient ingredient) {
         ingredientRepository.delete(ingredient);
     }
+
+    public Ingredient createIngredient(IngredientRequest ingredientRequest) {
+        return ingredientRepository.findByName(ingredientRequest.getIngredientName())
+                .orElseGet(() -> {
+                    Ingredient newIngredient = new Ingredient();
+                    newIngredient.setName(ingredientRequest.getIngredientName());
+                    return ingredientRepository.save(newIngredient);
+                });
+    }
 }

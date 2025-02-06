@@ -94,5 +94,5 @@ public class RecipeService {
         }
         return recipe;
     }
-    public void saveRecipe (RecipeDto recipeDto) { recipeRepository.save(recipeMapper.toEntity(recipeDto)); }
+    public void saveRecipe (Recipe recipe) { recipeRepository.save(recipe); }
 }
