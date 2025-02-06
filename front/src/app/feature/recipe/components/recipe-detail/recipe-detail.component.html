@@ -30,14 +30,14 @@
       <!-- Add new comment form or edit comment -->
       <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ selectedCommentId ? 'Modifier un commentaire' : 'Ajouter un commentaire' }}</mat-label>
+          <mat-label>{{ selectedCommentId ? 'Modifier' : 'Ajouter un commentaire' }}</mat-label>
           <textarea matInput formControlName="content" rows="1"></textarea>
           <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
             Le commentaire est vide
           </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" id="post-comment">
-          {{ selectedCommentId ? 'Modifier un commentaire' : 'Ajouter un commentaire'  }}
+          {{ selectedCommentId ? 'Modifier' : 'Ajouter'  }}
         </button>
         <button mat-button *ngIf="selectedCommentId" (click)="commentForm.reset(); selectedCommentId = null;" id="cancel">Annuler</button>
       </form>

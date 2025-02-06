@@ -85,16 +85,29 @@ mat-card-actions button:active {
 }
 
 mat-card-content {
-  flex-grow: 1; /* Permet au contenu de remplir l'espace disponible */
+  flex-grow: 1; 
   p {
     margin: 10px 0;
     font-size: 1em;
     color: #333;
-    word-wrap: break-word; /* Permet au texte long de passer à la ligne */
-    white-space: normal; /* Assure que le texte s'affiche correctement */
+    word-wrap: break-word; 
+    white-space: normal; 
   }
 }
+#post-comment ,#cancel {
+  color: #ffffff;
+      background-color: #1976d2;
 
+      &:hover {
+        background-color: #1565c0;
+      }
+
+      &:active {
+        background-color: #0d47a1;
+      }
+      margin-top: 12px;
+      margin-left: 10px;
+}
 .comment-actions {
   display: flex;
   justify-content: flex-end;
