@@ -6,7 +6,7 @@ import { Recipe } from '../../interface/recipe';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { CommentService } from '../../service/comment.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SessionService } from '../../../../service/session.service';
@@ -24,7 +24,7 @@ import { ConfirmDialogComponent } from '../../../../components/confirm-dialog/co
     CommonModule,
     MatCardModule,
     MatButtonModule,
-    MatIcon,
+    MatIconModule,
     RouterModule,
     MatFormFieldModule,
     CommonModule,
@@ -63,7 +63,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
         resultat => this.recipe = resultat
       )
     );
-    console.log(this.selectedCommentId);
   }
   toggleComments(): void {
     this.showCommentsSection = !this.showCommentsSection;
@@ -137,7 +136,6 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
     // Vérifier si l'utilisateur est l'auteur du commentaire ou admin
     const isAuthor = comment.userId === currentUser.id;
     const isAdmin = currentUser.roles.includes('ADMIN');
-  
     return isAuthor || isAdmin;
   }
   deleteComment( comment: Comment ) {

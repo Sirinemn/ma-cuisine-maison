@@ -37,7 +37,7 @@
           </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" id="post-comment">
-          {{ selectedCommentId ? 'Update Comment' : 'Post Comment' }}
+          {{ selectedCommentId ? 'Modifier un commentaire' : 'Ajouter un commentaire'  }}
         </button>
         <button mat-button *ngIf="selectedCommentId" (click)="commentForm.reset(); selectedCommentId = null;" id="cancel">Annuler</button>
       </form>
@@ -58,11 +58,11 @@
 
                <!-- Boutons Modifier / Supprimer -->
                <div class="comment-actions" *ngIf="canEditOrDelete(comment)">
-                <button mat-icon-button color="primary" aria-label="Edit Comment" [disabled]="!selectedCommentId" (click)="editComment(comment)">
-                  <mat-icon>modifier</mat-icon>
+                <button mat-button color="primary" aria-label="Modifier le commentaire" [disabled]="selectedCommentId" (click)="editComment(comment)">
+                  <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" aria-label="Delete Comment" [disabled]="!selectedCommentId" (click)="deleteComment(comment)">
-                  <mat-icon>supprimer</mat-icon>
+                <button mat-icon-button color="warn" aria-label="Supprimer le commentaire" [disabled]="selectedCommentId" (click)="deleteComment(comment)">
+                  <mat-icon>delete</mat-icon>
                 </button>
               </div>
               

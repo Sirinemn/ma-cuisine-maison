@@ -1,111 +1,116 @@
 .recipe-card {
-    max-width: 600px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    }
-  
-    mat-card-header {
-      mat-card-title {
-        font-size: 1.8em;
-        font-weight: bold;
-      }
-      mat-card-subtitle {
-        font-size: 1.2em;
-        color: #6c757d;
-      }
-    }
-  
-    mat-card-content {
-      p {
-        margin: 10px 0;
-        font-size: 1em;
-        color: #333;
-      }
-      ul {
-        padding-left: 20px;
-        list-style-type: disc;
-      }
-    }
-  
-    img {
-      height: 300px;
-      object-fit: cover;
-      border-radius: 8px 8px 0 0;
-    }
-  
-    mat-card-actions {
-      display: flex;
-      justify-content: flex-end;
-      padding: 8px 16px;
-  
-      button {
-        color: #ffffff;
-        background-color: #1976d2;
-  
-        &:hover {
-          background-color: #1565c0;
-        }
-  
-        &:active {
-          background-color: #0d47a1;
-        }
-      }
-    }
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  padding-bottom: 16px;
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 8px 16px;
+  flex-wrap: wrap; 
+}
+
+mat-card-actions button {
+  color: #ffffff;
+  background-color: #1976d2;
+}
+
+mat-card-actions button:hover {
+  background-color: #1565c0;
+}
+
+mat-card-actions button:active {
+  background-color: #0d47a1;
+}
+
+.toggle-comments {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.comment-form {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  flex-wrap: wrap;
+}
+
+.comment-form mat-form-field {
+  flex: 1; 
+  min-width: 250px;
+}
+
+.comment-form button {
+  min-width: 120px;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.comment-actions button {
+  padding: 5px;
+}
+
+.comments-section {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.comment-card {
+  max-width: 300px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-content {
+  flex-grow: 1; /* Permet au contenu de remplir l'espace disponible */
+  p {
+    margin: 10px 0;
+    font-size: 1em;
+    color: #333;
+    word-wrap: break-word; /* Permet au texte long de passer à la ligne */
+    white-space: normal; /* Assure que le texte s'affiche correctement */
   }
-  img[mat-card-image] {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 8px 8px 0 0; /* Arrondi en haut si nécessaire */
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  padding-top: 10px;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  .comment-form {
-    display: flex;
-    flex-direction: row;
-    margin: 10px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  textarea {
-    border-radius: 10px;
-  }
-  #post-comment ,#cancel {
-    color: #ffffff;
-        background-color: #1976d2;
-  
-        &:hover {
-          background-color: #1565c0;
-        }
-  
-        &:active {
-          background-color: #0d47a1;
-        }
-        margin-top: 12px;
-        margin-left: 10px;
-  }
-  .comments-section {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e0e0e0;
-    
-    // Add animation for smooth transition
-    animation: fadeIn 0.3s ease-in;
-  }
-  .comment-card {
-    margin: 5px;
-  }
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
+}
