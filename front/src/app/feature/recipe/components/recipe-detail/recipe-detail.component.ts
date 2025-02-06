@@ -138,20 +138,24 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
     const isAdmin = currentUser.roles.includes('ADMIN');
     return isAuthor || isAdmin;
   }
-  deleteComment( comment: Comment ) {
+  deleteComment(comment: Comment) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
-    dialogRef.afterClosed().subscribe(() => {
-      this.httpSubscriptions.push(this.commentService.deleteComment(comment.id?.toString()!).subscribe(
-        response => {
-          this.snackBar.open("Comment deleted with success", 'ok', { duration: 2000 });
-          this.loadComments();
-        },
-        error => {
-          this.snackBar.open('Failed to delete comment', 'ok', { duration: 2000 });
-        }
-      ));
-    })  
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) { // Vérifie si l'utilisateur a confirmé
+        this.httpSubscriptions.push(this.commentService.deleteComment(comment.id?.toString()!).subscribe(
+          response => {
+            this.snackBar.open("Comment deleted with success", 'ok', { duration: 2000 });
+            this.loadComments();
+          },
+          error => {
+            this.snackBar.open('Failed to delete comment', 'ok', { duration: 2000 });
+          }
+        ));
+      }
+    });
   }
+  
   editComment(comment: Comment): void {
     this.commentForm.setValue({
       content: comment.content
