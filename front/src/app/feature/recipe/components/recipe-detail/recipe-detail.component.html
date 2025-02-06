@@ -30,10 +30,10 @@
       <!-- Add new comment form or edit comment -->
       <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>{{ selectedCommentId ? 'Edit Comment' : 'Add a comment' }}</mat-label>
+          <mat-label>{{ selectedCommentId ? 'Modifier un commentaire' : 'Ajouter un commentaire' }}</mat-label>
           <textarea matInput formControlName="content" rows="1"></textarea>
           <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
-            Le commentaire ne peut pas être vide
+            Le commentaire est vide
           </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" id="post-comment">
@@ -58,10 +58,10 @@
 
                <!-- Boutons Modifier / Supprimer -->
                <div class="comment-actions" *ngIf="canEditOrDelete(comment)">
-                <button mat-icon-button color="primary" aria-label="Edit Comment" [disabled]="selectedCommentId" (click)="editComment(comment)">
+                <button mat-icon-button color="primary" aria-label="Edit Comment" [disabled]="!selectedCommentId" (click)="editComment(comment)">
                   <mat-icon>modifier</mat-icon>
                 </button>
-                <button mat-icon-button color="warn" aria-label="Delete Comment" [disabled]="selectedCommentId" (click)="deleteComment(comment)">
+                <button mat-icon-button color="warn" aria-label="Delete Comment" [disabled]="!selectedCommentId" (click)="deleteComment(comment)">
                   <mat-icon>supprimer</mat-icon>
                 </button>
               </div>
@@ -70,7 +70,8 @@
       </div>
       
       
-      <p *ngIf="comments.length === 0">No comments yet. Be the first to comment!</p>
+      <p *ngIf="comments.length === 0">
+        Pas encore de commentaires. Soyez le premier à commenter !</p>
     </div>
   </mat-card-content>
     

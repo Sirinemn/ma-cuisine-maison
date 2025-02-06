@@ -63,6 +63,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
         resultat => this.recipe = resultat
       )
     );
+    console.log(this.selectedCommentId);
   }
   toggleComments(): void {
     this.showCommentsSection = !this.showCommentsSection;
