@@ -20,12 +20,12 @@
     </mat-card-actions>
 
     <button mat-button color="primary" (click)="toggleComments()">
-      {{ showCommentsSection ? 'Hide Comments' : 'Show Comments' }}
+      {{ showCommentsSection ? 'Cacher les commentaires' : 'Voir les commentaires' }}
     </button>
     
     <!-- Comments section with *ngIf for toggle -->
     <div class="comments-section" *ngIf="showCommentsSection">
-      <h3>Comments</h3>
+      <h3>Commentaires</h3>
       
       <!-- Add new comment form or edit comment -->
       <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
@@ -33,13 +33,13 @@
           <mat-label>{{ selectedCommentId ? 'Edit Comment' : 'Add a comment' }}</mat-label>
           <textarea matInput formControlName="content" rows="1"></textarea>
           <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
-            Comment cannot be empty
+            Le commentaire ne peut pas être vide
           </mat-error>
         </mat-form-field>
         <button mat-raised-button color="primary" type="submit" [disabled]="!commentForm.valid" id="post-comment">
           {{ selectedCommentId ? 'Update Comment' : 'Post Comment' }}
         </button>
-        <button mat-button *ngIf="selectedCommentId" (click)="commentForm.reset(); selectedCommentId = null;">Cancel</button>
+        <button mat-button *ngIf="selectedCommentId" (click)="commentForm.reset(); selectedCommentId = null;" id="cancel">Annuler</button>
       </form>
 
       <!-- Display comments -->
@@ -59,10 +59,10 @@
                <!-- Boutons Modifier / Supprimer -->
                <div class="comment-actions" *ngIf="canEditOrDelete(comment)">
                 <button mat-icon-button color="primary" aria-label="Edit Comment" [disabled]="selectedCommentId" (click)="editComment(comment)">
-                  <mat-icon>edit</mat-icon>
+                  <mat-icon>modifier</mat-icon>
                 </button>
                 <button mat-icon-button color="warn" aria-label="Delete Comment" [disabled]="selectedCommentId" (click)="deleteComment(comment)">
-                  <mat-icon>delete</mat-icon>
+                  <mat-icon>supprimer</mat-icon>
                 </button>
               </div>
               
