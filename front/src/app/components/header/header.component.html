@@ -1,25 +1,27 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
+    <!-- Lien Accueil toujours visible -->
     <a mat-button routerLink="/reception/welcome">Accueil</a>
+
     <span class="spacer"></span>
-    <a *ngIf="isAdmin" mat-button (click)="navigateToUserList()" id="list">Liste des utilisateurs</a>
-    <a mat-button routerLink="/recipe/add-recipe">Ajouter une recette</a>
-    <a mat-button routerLink="/recipe/list">Liste des recette</a>
-    <mat-select *ngIf="OnRecipeListPage" placeholder="Catégories" class="category-select" (selectionChange)="onCategoryChange($event.value)">
-      <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
-      <mat-option [value]="null">Toutes les catégories</mat-option>
-    </mat-select>
-    <button mat-icon-button aria-label="Search">
-      <mat-icon>search</mat-icon>
+
+    <!-- Menu hamburger pour les petits écrans -->
+    <button mat-icon-button (click)="toggleMenu()" class="menu-button">
+      <mat-icon>menu</mat-icon>
     </button>
-    <a mat-icon-button id = "profile" aria-label="User profile" (click)="navigateToMe()">
-      <mat-icon>account_circle</mat-icon>
-    </a>
   </mat-toolbar-row>
 </mat-toolbar>
 
-
-  
-  
-  
-  
+<!-- Menu déroulant pour petits écrans -->
+<mat-nav-list *ngIf="menuOpen" class="mobile-menu">
+  <a *ngIf="isAdmin" mat-list-item (click)="navigateToUserList()">Liste des utilisateurs</a>
+  <a mat-list-item routerLink="/recipe/add-recipe">Ajouter une recette</a>
+  <a mat-list-item routerLink="/recipe/list">Liste des recettes</a>
+  <mat-list-item *ngIf="OnRecipeListPage">
+    <mat-select placeholder="Catégories" (selectionChange)="onCategoryChange($event.value)">
+      <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
+      <mat-option [value]="null">Toutes les catégories</mat-option>
+    </mat-select>
+  </mat-list-item>
+  <a mat-list-item (click)="navigateToMe()">Profil</a>
+</mat-nav-list>

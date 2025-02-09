@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select'
+import { MatListModule } from '@angular/material/list';
 import { User } from '../../interface/user';
 import { SessionService } from '../../service/session.service';
 
@@ -22,7 +23,8 @@ import { SessionService } from '../../service/session.service';
     MatInputModule,
     MatSelectModule,
     NgIf,
-    RouterModule
+    MatListModule,
+    RouterModule,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -33,11 +35,13 @@ export class HeaderComponent implements OnInit {
   public userRole: string[] = [];
   public isAdmin: boolean = false;
   public OnRecipeListPage: boolean = false;
+  public menuOpen = false;
   @Output() categorySelected = new EventEmitter<string | null>();
 
   constructor(private sessionService: SessionService,
     private router: Router
-  ) { }
+  ) { 
+  }
 
   ngOnInit(): void {
     if (!this.sessionService.user) {
@@ -59,5 +63,9 @@ export class HeaderComponent implements OnInit {
   }
   navigateToUserList() {
     this.router.navigate(['admin/users-list']);
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 }
