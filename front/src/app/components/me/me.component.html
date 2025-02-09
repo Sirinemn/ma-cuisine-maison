@@ -29,7 +29,7 @@
 
 <h2>Mes Recettes</h2>
 <div *ngIf="recipes$ | async as recipes; else loading">
-  <div *ngIf="recipes.length > 0; else noRecipes" class="recipe-list-horizontal" >
+  <div *ngIf="recipes.length > 0; else noRecipes" class="recipe-list-horizontal">
     <mat-card *ngFor="let recipe of recipes" class="recipe-card" (click)="viewDetails(recipe.id)">
       <mat-card-header>
         <mat-card-title>{{ recipe.title }}</mat-card-title>
@@ -55,4 +55,3 @@
 <ng-template #noRecipes>
   <p>Vous n'avez pas encore de recettes.</p>
 </ng-template>
-
