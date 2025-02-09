@@ -17,20 +17,39 @@ a[mat-icon-button], a[mat-button], button[mat-icon-button] {
 
 mat-toolbar-row {
   display: flex;
-  align-items: center; /* S'assurer que tout est aligné verticalement */
+  align-items: center; 
+  flex-wrap: wrap;
 }
 
 mat-toolbar {
-  justify-content: space-between; /* Séparer le contenu à gauche et à droite */
-  background-color: #3f51b5; /* Appliquer la couleur bleue */
-  color: white; /* Assurer que le texte soit en blanc */
+  justify-content: space-between; 
+  background-color: #3f51b5; 
+  color: white; 
 }
 
 a[mat-button] {
-  color: white; /* Assurer que le texte des boutons soit en blanc */
+  color: white; 
 }
 
 mat-select {
-  background-color: white; /* S'assurer que la liste déroulante soit visible */
-  color: black; /* S'assurer que le texte de la liste déroulante soit lisible */
+  background-color: white; 
+  color: black; 
+}
+
+@media (max-width: 600px) {
+  mat-toolbar-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  a[mat-icon-button], a[mat-button], button[mat-icon-button] {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+
+  .category-select {
+    min-width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+  }
 }
