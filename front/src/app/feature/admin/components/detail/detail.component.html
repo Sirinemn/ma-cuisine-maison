@@ -1,15 +1,19 @@
 <div fxLayout="row" fxLayoutAlign="start center">
   <button mat-icon-button (click)="back()">
-      <mat-icon>arrow_back</mat-icon>
+    <mat-icon>arrow_back</mat-icon>
   </button>
-<div class="user-detail">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Profil Utilisateur</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Pseudo:</strong> {{ user?.pseudo }}</p>
-      <p><strong>Prénom:</strong> {{ user?.firstname }}</p>
-      <p><strong>Nom:</strong> {{ user?.lastname }}</p>
-      <p><strong>Date de naissance:</strong> {{ user?.dateOfBirth | date}}
+  <div class="user-detail">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Profil Utilisateur</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Email:</strong> {{ user?.email }}</p>
+        <p><strong>Pseudo:</strong> {{ user?.pseudo }}</p>
+        <p><strong>Prénom:</strong> {{ user?.firstname }}</p>
+        <p><strong>Nom:</strong> {{ user?.lastname }}</p>
+        <p><strong>Date de naissance:</strong> {{ user?.dateOfBirth | date }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
