@@ -83,7 +83,7 @@ public class RecipeController {
         existingRecipe.setDescription(recipeRequest.getDescription());
         existingRecipe.setCategory(categoryService.findByName(recipeRequest.getCategoryName()));
 
-        // Mise à jour intelligente des ingrédients
+        // Mise à jour  des ingrédients
         Map<String, RecipeIngredient> existingIngredientsMap = existingRecipe.getIngredients().stream()
                 .collect(Collectors.toMap(ri -> ri.getIngredient().getName(), ri -> ri));
 
