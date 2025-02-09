@@ -1,74 +1,72 @@
 <div fxLayout="row" fxLayoutAlign="start center">
     <button mat-icon-button (click)="back()">
-        <mat-icon>arrow_back</mat-icon>
+      <mat-icon>arrow_back</mat-icon>
     </button>
-</div>
-
-<mat-card>
+  </div>
+  
+  <mat-card>
     <mat-card-header fxLayoutAlign="center center">
-        <mat-card-title>Ajouter une recette</mat-card-title>
+      <mat-card-title>Ajouter une recette</mat-card-title>
     </mat-card-header>
     <form class="add-recipe-form" [formGroup]="recipeForm" (ngSubmit)="submitForm()">
-        <mat-card-content fxLayout="column">
-            <mat-form-field>
-                <mat-label>Titre</mat-label>
-                <input matInput formControlName="title" class="title">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Description</mat-label>
-                <input matInput formControlName="description" class="description">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Temps de cuisson (minutes)</mat-label>
-                <input matInput type="number" formControlName="cookingTime" class="cookingTime">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Portions</mat-label>
-                <input matInput type="number" formControlName="servings" class="servings">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Catégorie</mat-label>
-                <mat-select formControlName="categoryName">
-                    <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <div class="file-upload">
-                <button mat-raised-button color="primary" type="button" (click)="fileInput.click()">Télécharger une image</button>
-                <input type="file" #fileInput (change)="onFileChange($event)" style="display: none;">
-                <span *ngIf="imageFile">{{ imageFile.name }}</span>
-            </div>
-        </mat-card-content>
+      <mat-card-content fxLayout="column">
+        <mat-form-field>
+          <mat-label>Titre</mat-label>
+          <input matInput formControlName="title" class="title">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" class="description">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Temps de cuisson (minutes)</mat-label>
+          <input matInput type="number" formControlName="cookingTime" class="cookingTime">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Portions</mat-label>
+          <input matInput type="number" formControlName="servings" class="servings">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Catégorie</mat-label>
+          <mat-select formControlName="categoryName">
+            <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="file-upload">
+          <button mat-raised-button color="primary" type="button" (click)="fileInput.click()">Télécharger une image</button>
+          <input type="file" #fileInput (change)="onFileChange($event)" style="display: none;">
+          <span *ngIf="imageFile">{{ imageFile.name }}</span>
+        </div>
+      </mat-card-content>
     </form>
-
+  
     <form class="add-ingredients-form" [formGroup]="ingredientsForm" (ngSubmit)="addIngredient()">
-        <mat-card-content fxLayout="column">
-            <mat-form-field>
-                <mat-label>Nom de l'ingrédient</mat-label>
-                <input type="text" matInput formControlName="ingredientName" [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option *ngFor="let ingredient of filteredIngredients$ | async" [value]="ingredient">
-                    {{ ingredient }}
-                  </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>              
-            <mat-form-field>
-                <mat-label>Quantité</mat-label>
-                <input matInput type="number" formControlName="quantity" class="quantity">
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>Unité</mat-label>
-                <mat-select formControlName="unit">
-                    <mat-option *ngFor="let unit of unities" [value]="unit">{{ unit }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <button mat-raised-button color="primary" type="submit">Ajouter l'ingrédient</button>
-        </mat-card-content>
+      <mat-card-content fxLayout="column">
+        <mat-form-field>
+          <mat-label>Nom de l'ingrédient</mat-label>
+          <input type="text" matInput formControlName="ingredientName" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let ingredient of filteredIngredients$ | async" [value]="ingredient">
+              {{ ingredient }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>              
+        <mat-form-field>
+          <mat-label>Quantité</mat-label>
+          <input matInput type="number" formControlName="quantity" class="quantity">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Unité</mat-label>
+          <mat-select formControlName="unit">
+            <mat-option *ngFor="let unit of unities" [value]="unit">{{ unit }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit">Ajouter l'ingrédient</button>
+      </mat-card-content>
     </form>
-
+  
     <mat-card-actions>
-        <button mat-raised-button color="accent" [disabled]="disableButton" (click)="submitForm()">Ajouter la recette et les ingrédients</button>
+      <button mat-raised-button color="accent" [disabled]="disableButton" (click)="submitForm()">Ajouter la recette et les ingrédients</button>
     </mat-card-actions>
-</mat-card>
-
-
-
+  </mat-card>
+  
