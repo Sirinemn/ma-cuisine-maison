@@ -5,15 +5,30 @@
 
     <span class="spacer"></span>
 
-    <!-- Menu hamburger pour les petits écrans -->
-    <button mat-icon-button (click)="toggleMenu()" class="menu-button">
+    <!-- Affichage de la liste des liens sur grand écran -->
+    <ng-container class="desktop-menu" *ngIf="!isSmallScreen">
+      <a *ngIf="isAdmin" mat-button (click)="navigateToUserList()">Liste des utilisateurs</a>
+      <a mat-button routerLink="/recipe/add-recipe">Ajouter une recette</a>
+      <a mat-button routerLink="/recipe/list">Liste des recettes</a>
+      <mat-select *ngIf="OnRecipeListPage" placeholder="Catégories" class="category-select" 
+                  (selectionChange)="onCategoryChange($event.value)">
+        <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
+        <mat-option [value]="null">Toutes les catégories</mat-option>
+      </mat-select>
+      <a mat-icon-button (click)="navigateToMe()">
+        <mat-icon>account_circle</mat-icon>
+      </a>
+    </ng-container>
+
+    <!-- Menu hamburger pour petits écrans -->
+    <button mat-icon-button (click)="toggleMenu()" class="menu-button" *ngIf="isSmallScreen">
       <mat-icon>menu</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <!-- Menu déroulant pour petits écrans -->
-<mat-nav-list *ngIf="menuOpen" class="mobile-menu">
+<mat-nav-list *ngIf="menuOpen && isSmallScreen" class="mobile-menu">
   <a *ngIf="isAdmin" mat-list-item (click)="navigateToUserList()">Liste des utilisateurs</a>
   <a mat-list-item routerLink="/recipe/add-recipe">Ajouter une recette</a>
   <a mat-list-item routerLink="/recipe/list">Liste des recettes</a>

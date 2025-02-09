@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit {
   public isAdmin: boolean = false;
   public OnRecipeListPage: boolean = false;
   public menuOpen = false;
+  public isSmallScreen = false;
   @Output() categorySelected = new EventEmitter<string | null>();
 
   constructor(private sessionService: SessionService,
@@ -64,7 +65,10 @@ export class HeaderComponent implements OnInit {
   navigateToUserList() {
     this.router.navigate(['admin/users-list']);
   }
-
+  @HostListener('window:resize', ['$event'])
+  checkScreenSize() {
+    this.isSmallScreen = window.innerWidth <= 600;
+  }
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
