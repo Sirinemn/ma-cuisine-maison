@@ -1,8 +1,8 @@
 <div fxLayout="row" fxLayoutAlign="start center">
   <button mat-icon-button (click)="back()">
-      <mat-icon>arrow_back</mat-icon>
+    <mat-icon>arrow_back</mat-icon>
   </button>
-<div class="user-form">
+  <div class="user-form">
     <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
         <mat-label>Email</mat-label>
@@ -23,4 +23,4 @@
       <button mat-raised-button color="primary" type="submit">Mettre à jour</button>
     </form>
   </div>
-  
+</div>
