@@ -15,10 +15,10 @@
 
 mat-card-actions {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 mat-card-actions button {
@@ -42,21 +42,20 @@ mat-card-actions button:active {
 
 .comment-form {
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: 10px;
   width: 100%;
 }
 
 .comment-form mat-form-field {
-  flex: 1; 
+  flex: 1;
   min-width: 250px;
 }
 
 .comment-form button {
-  white-space: nowrap; 
+  white-space: nowrap;
   margin-bottom: 30px;
 }
-
 
 .comment-actions {
   display: flex;
@@ -87,29 +86,30 @@ mat-card-actions button:active {
 }
 
 mat-card-content {
-  flex-grow: 1; 
-  p {
-    margin: 10px 0;
-    font-size: 1em;
-    color: #333;
-    word-wrap: break-word; 
-    white-space: normal; 
-  }
+  flex-grow: 1;
 }
-#post-comment ,#cancel {
+
+mat-card-content p {
+  margin: 10px 0;
+  font-size: 1em;
+  color: #333;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+#post-comment, #cancel {
   color: #ffffff;
-      background-color: #1976d2;
-
-      &:hover {
-        background-color: #1565c0;
-      }
-
-      &:active {
-        background-color: #0d47a1;
-      }
-      margin-top: 12px;
-      margin-left: 10px;
+  background-color: #1976d2;
 }
+
+#post-comment:hover, #cancel:hover {
+  background-color: #1565c0;
+}
+
+#post-comment:active, #cancel:active {
+  background-color: #0d47a1;
+}
+
 .comment-actions {
   display: flex;
   justify-content: flex-end;
@@ -117,7 +117,6 @@ mat-card-content {
   gap: 5px;
   padding-top: 10px;
 }
-
 
 @keyframes fadeIn {
   from {
@@ -127,5 +126,33 @@ mat-card-content {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .recipe-card {
+    padding: 10px;
+  }
+
+  .comment-card {
+    max-width: 100%;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .comment-form button {
+    width: 100%;
+  }
+
+  mat-card-content p {
+    font-size: 0.9em;
+  }
+
+  #post-comment, #cancel {
+    margin-left: 0;
+    margin-top: 10px;
   }
 }
