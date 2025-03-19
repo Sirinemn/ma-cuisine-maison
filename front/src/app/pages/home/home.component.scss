@@ -1,44 +1,116 @@
-.center {
-  height: 100vh;
+$primary-color: #3f51b5;
+$secondary-color: #ffffff;
+$accent-color: #ffcc00;
+$font-family: "Roboto", sans-serif;
+
+/* Style global */
+body {
+  font-family: $font-family;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #eceff1, $primary-color);
+  color: $secondary-color;
+}
+
+/* Section principale */
+.hero-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  text-align: center; /* Centrer le texte */
+  text-align: center;
+  height: 100vh;
   padding: 20px;
+
+  .content {
+    max-width: 600px;
+
+    .logo {
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+  }
 }
 
-.img {
-  height: 400px; /* Taille de l'image ajustée */
-  width: 700px;
-  margin-bottom: 20px; /* Espacement en bas de l'image */
-}
-
-.boutons {
+/* Boutons d'actions */
+.actions {
   display: flex;
-  gap: 20px; /* Espacement entre les boutons */
+  justify-content: center;
+  gap: 20px;
+
+  .btn {
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-size: 16px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+
+    &.connect {
+      background-color: $primary-color;
+      color: $secondary-color;
+
+      &:hover {
+        background-color: lighten($primary-color, 10%);
+        transform: scale(1.1);
+      }
+    }
+
+    &.register {
+      background-color: $accent-color;
+      color: $primary-color;
+
+      &:hover {
+        background-color: lighten($accent-color, 10%);
+        transform: scale(1.1);
+      }
+    }
+  }
 }
 
-.btn1, .btn2 {
-  border-radius: 5px;
-  border: 2px solid #000; /* Ajout d'une bordure */
-  padding: 10px 20px; /* Ajout de padding pour les boutons */
-  font-size: 16px; /* Taille de police ajustée */
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@media (max-width: 550px) {
-  .img {
-    width: 100px; /* Taille de l'image ajustée pour mobile */
-    height: 100px;
-  }
+/* Responsivité */
+@media (max-width: 600px) {
+  .hero-section {
+    padding: 10px;
 
-  .boutons {
-    flex-direction: column;
-    gap: 10px; /* Espacement réduit entre les boutons */
-  }
+    h1 {
+      font-size: 2rem;
+    }
 
-  .btn1, .btn2 {
-    width: 100%; /* Les boutons prennent toute la largeur */
-    padding: 15px 0; /* Padding vertical ajusté */
+    p {
+      font-size: 1rem;
+    }
+
+    .actions {
+      flex-direction: column;
+      gap: 10px;
+
+      .btn {
+        width: 100%;
+        padding: 15px;
+      }
+    }
   }
 }

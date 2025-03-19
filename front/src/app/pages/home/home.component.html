@@ -1,14 +1,20 @@
-<div class="center">
-  <img src="/assets/maison.png" alt="logo" class="img" />
-  <h2>Bienvenue sur notre site</h2>
-  <div class="boutons">
-    <button mat-raised-button class="btn1" (click)="connect()">
-      <mat-icon>login</mat-icon>
-      <span>Se connecter</span>
-    </button>
-    <button mat-raised-button class="btn2" (click)="register()">
-      <mat-icon>app_registration</mat-icon>
-      <span>S'inscrire</span>
-    </button>
+<div class="hero-section">
+  <div class="content">
+    <div class="fullscreen-logo">
+      <img src="/assets/maison.png" alt="logo" class="logo" />
+    </div>    
+    <h1>Bienvenue chez Nous</h1>
+    <p>Explorez nos recettes, découvrez de nouvelles saveurs et laissez-vous inspirer.</p>
+    <div class="actions">
+      <button mat-raised-button class="btn connect" (click)="connect()">
+        <mat-icon>login</mat-icon>
+        <span>Se connecter</span>
+      </button>
+      <button mat-raised-button class="btn register" (click)="register()">
+        <mat-icon>app_registration</mat-icon>
+        <span>S'inscrire</span>
+      </button>
+    </div>
   </div>
 </div>
+
