@@ -2,6 +2,7 @@ package fr.sirine.cuisine.controller;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,7 @@ public class FileController {
     @Value("${app.image.folder_path.thumb}")
     private String IMAGE_DIRECTORY_THUMB;
 
-    @GetMapping("/origin")
+    @GetMapping(value = "/origin", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getOriginFile(@RequestParam String fileName) {
         try {
             File file = ResourceUtils.getFile(IMAGE_DIRECTORY_ORIGIN+"/" + fileName);
@@ -31,7 +32,7 @@ public class FileController {
         }
     }
 
-    @GetMapping("/thumb")
+    @GetMapping(value = "/thumb", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getThumbFile(@RequestParam String fileName) {
         try {
             File file = ResourceUtils.getFile(IMAGE_DIRECTORY_THUMB+"/" + fileName);
