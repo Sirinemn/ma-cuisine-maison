@@ -1,17 +1,15 @@
 package fr.sirine.cuisine.controller;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @RestController
 @RequestMapping("/file")
@@ -24,26 +22,22 @@ public class FileController {
     private String IMAGE_DIRECTORY_THUMB;
 
     @GetMapping("/origin")
-    public ResponseEntity<byte[]> getOriginFile(@RequestParam String fileName) {
+    public byte[] getOriginFile(@RequestParam String fileName) {
         try {
-            Path path = Paths.get(IMAGE_DIRECTORY_ORIGIN, fileName);
-            byte[] data = Files.readAllBytes(path);
-            return ResponseEntity.ok(data);
+            File file = ResourceUtils.getFile(IMAGE_DIRECTORY_ORIGIN+"/" + fileName);
+            return FileUtils.readFileToByteArray(file);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(("Erreur lors de la lecture du fichier : " + e.getMessage()).getBytes());
+            return ("Erreur lors de la lecture du fichier : " + e.getMessage()).getBytes();
         }
     }
 
     @GetMapping("/thumb")
-    public ResponseEntity<byte[]> getThumbFile(@RequestParam String fileName) {
+    public byte[] getThumbFile(@RequestParam String fileName) {
         try {
-            Path path = Paths.get(IMAGE_DIRECTORY_THUMB, fileName);
-            byte[] data = Files.readAllBytes(path);
-            return ResponseEntity.ok(data);
+            File file = ResourceUtils.getFile(IMAGE_DIRECTORY_THUMB+"/" + fileName);
+            return FileUtils.readFileToByteArray(file);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(("Erreur lors de la lecture du fichier : " + e.getMessage()).getBytes());
+            return ("Erreur lors de la lecture du fichier : " + e.getMessage()).getBytes();
         }
     }
 }
