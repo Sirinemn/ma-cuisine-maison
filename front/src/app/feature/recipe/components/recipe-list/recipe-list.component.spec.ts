@@ -61,7 +61,9 @@ describe('RecipeListComponent', () => {
             imageId: 1,
             imageName: 'imageName',
             imageThumbName: 'imageThumb'
-          }]))
+          }])),
+
+          getThumbnailFile: jest.fn().mockReturnValue(of('mockThumbnailUrl'))
         };
     await TestBed.configureTestingModule({
       imports: [RecipeListComponent],

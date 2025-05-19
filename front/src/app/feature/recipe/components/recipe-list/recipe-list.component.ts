@@ -20,6 +20,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class RecipeListComponent implements OnInit{
   public recipeList$!: Observable<Recipe[]>;
+  public imageBlobUrl: string | null = null;
+  public imageBlobUrls: { [key: number]: string } = {}; // Clé : ID de la recette, Valeur : URL de l'image.
 
   constructor(
     private recipeService: RecipeService,
@@ -36,6 +38,9 @@ export class RecipeListComponent implements OnInit{
         this.recipeList$ = this.recipeService.getAllRecipes(); 
       } 
     }); 
+  }
+  public loadRecipeImageURL(fileName: string): void {
+    this.recipeService.getThumbnailFile(fileName);
   }
   public viewDetails(recipeId?: number): void{
     this.router.navigate([`recipe/detail/${recipeId}`]);

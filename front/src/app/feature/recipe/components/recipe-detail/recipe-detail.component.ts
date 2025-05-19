@@ -57,12 +57,22 @@ export class RecipeDetailComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    const id =+ this.activateRoute.snapshot.paramMap.get('id')!;
+    const id = +this.activateRoute.snapshot.paramMap.get('id')!;
     this.httpSubscriptions.push(
-      this.recipeService.getRecipeById(id).subscribe(
-        resultat => this.recipe = resultat
-      )
+      this.recipeService.getRecipeById(id).subscribe({
+        next: (result) => {
+          this.recipe = result;
+          this.loadRecipeImage(this.recipe.imageName); // Chargez l'image associée.
+        },
+        error: (err) => {
+          console.error('Erreur lors du chargement de la recette :', err);
+          this.snackBar.open('Impossible de charger la recette.', 'Fermer', { duration: 3000 });
+        }
+      })
     );
+  }
+  public loadRecipeImage(fileName: string): void {
+    this.recipeService.getOriginFile(fileName);
   }
   toggleComments(): void {
     this.showCommentsSection = !this.showCommentsSection;

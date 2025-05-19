@@ -58,11 +58,11 @@ export class RecipeService {
     headers.append('Content-Type', 'multipart/form-data');
     return this.httpClient.put<MessageResponse>(`${this.pathService}/recipes/recipe/${id}`, formData, {headers});
   }
-  public getOriginFile(fileName: string): Observable<Blob> {
-    return this.httpClient.get(`${this.pathService}/file/origin/${fileName}`, { responseType: 'blob' });
+  public getOriginFile(fileName: string): string {
+    return `api/file/origin/${fileName}`;
   }
-  public getThumbnailFile(fileName: string): Observable<Blob> {
-    return this.httpClient.get(`${this.pathService}/file/thumb/${fileName}`, { responseType: 'blob' });
+  public getThumbnailFile(fileName: string): string {
+    return `api/file/thumb/${fileName}`;
   }
 
 }

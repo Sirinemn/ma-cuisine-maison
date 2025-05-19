@@ -8,7 +8,7 @@
         <mat-card-title>{{ recipe.title }}</mat-card-title>
         <mat-card-subtitle>{{ recipe.categoryName }}</mat-card-subtitle>
       </mat-card-header>
-      <img mat-card-image [src]="'/assets/uploads/images/thumb/' + recipe.imageThumbName" alt="{{ recipe.title }}" (error)="imgError($event)">
+      <img mat-card-image [src]="loadRecipeImageURL(recipe.imageThumbName)" alt="{{ recipe.title }}" (error)="imgError($event)">
       <mat-card-content>
         <p> Recette ajoutée par : {{ recipe.userPseudo }} </p>
         <p><strong>Temps de cuisson:</strong> {{ recipe.cookingTime }} minutes</p>
